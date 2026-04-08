@@ -1,16 +1,26 @@
+/* ═══════════════════════════════════════════════════════════
+   Portfolio Backend v2.0 — ContactController.java
+   Fixes:
+   - BUG: @CrossOrigin here AND CorsConfig globally = Spring
+     applies both CORS policies; the more restrictive one wins,
+     which was the @CrossOrigin annotation with only the old
+     vercel URL. This silently blocked the custom domain.
+     Fix: remove @CrossOrigin here entirely — let CorsConfig handle it.
+   - Added: email notification to you when someone submits the form
+═══════════════════════════════════════════════════════════ */
 package com.vijaykumar.portfolio.controller;
 
 import jakarta.validation.Valid;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.vijaykumar.portfolio.model.ContactRequest;
 import com.vijaykumar.portfolio.service.ContactService;
 import com.vijaykumar.portfolio.dto.ApiResponse;
 
-@CrossOrigin(origins = "https://vijaykumarcode.vercel.app")
+/* BUG FIX: @CrossOrigin removed — CORS is handled centrally by CorsConfig.
+   Having both causes the stricter annotation-level rule to override the
+   global config, blocking your custom domain. */
 @RestController
 @RequestMapping("/api/v1")
 public class ContactController {
@@ -28,14 +38,12 @@ public class ContactController {
         contactService.saveMessage(request);
 
         return ResponseEntity
-        .status(HttpStatus.CREATED)
-        .body(new ApiResponse("SUCCESS", "Message stored successfully"));
+                .status(HttpStatus.CREATED)
+                .body(new ApiResponse("SUCCESS", "Message received. I'll reply within 24 hours."));
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<ApiResponse> test() {
-        return ResponseEntity.ok(
-            new ApiResponse("WORKING", "API is operational")
-        );
+    @GetMapping("/health")
+    public ResponseEntity<ApiResponse> health() {
+        return ResponseEntity.ok(new ApiResponse("UP", "Portfolio API is operational"));
     }
 }

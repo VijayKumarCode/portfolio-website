@@ -1,21 +1,29 @@
-/* Problem No. #N/A (Security Configuration)
-Difficulty: Easy
-Description: CORS Configuration for local and production frontend-backend communication
-Link: https://github.com/VijayKumarCode/Portfolio_web
-Time Complexity: O(1)
-Space Complexity: O(1)
-*/
-
+/* ═══════════════════════════════════════════════════════════
+   Portfolio Backend v2.0 — CorsConfig.java
+   Fixes:
+   - BUG CRITICAL: Only allowed vijaykumarcode.vercel.app,
+     NOT the custom domain vijaykumarcode.space — every contact
+     form submission from the live site returned CORS error.
+   - BUG: @CrossOrigin on ContactController conflicted with this
+     global config. Removed @CrossOrigin from controller.
+   - Added: environment variable support so origins can change
+     without a code deploy.
+═══════════════════════════════════════════════════════════ */
 package com.vijaykumar.portfolio.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.lang.NonNull;
 
 @Configuration
 public class CorsConfig {
+
+    /* Read from env var — no code change needed when domain changes */
+    @Value("${cors.allowed-origin:https://vijaykumarcode.space}")
+    private String allowedOrigin;
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -24,13 +32,18 @@ public class CorsConfig {
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/api/**")
                         .allowedOrigins(
-                            "http://127.0.0.1:5500",      // Local Development (Python Server)
-                            "http://localhost:5500",       // Alternative local address
-                            "https://vijaykumarcode.vercel.app" // Production Vercel URL
+                            "http://127.0.0.1:5500",
+                            "http://localhost:5500",
+                            "http://localhost:3000",
+                            "https://vijaykumarcode.vercel.app",   // legacy
+                            "https://vijaykumarcode.space",        // BUG FIX: custom domain
+                            "https://www.vijaykumarcode.space",    // www variant
+                            allowedOrigin                          // env override
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(true)
+                        .maxAge(3600);  // cache preflight for 1 hour
             }
         };
     }

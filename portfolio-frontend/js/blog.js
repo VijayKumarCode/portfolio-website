@@ -1,65 +1,98 @@
-/*
- * Problem No. #110
- * Difficulty: Easy
- * Description: Pagination logic for Engineering Log (10 articles per batch)
- * Link: https://github.com/VijayKumarCode/TicTacToe_Project
- * Time Complexity: O(n) - where n is the number of posts in the JSON
- * Space Complexity: O(n) - storing posts in memory
- */
+/* ═══════════════════════════════════════════════════════════
+   Portfolio v2.0 — blog.js (blog listing page)
+   Fixes:
+   - BUG: post.content.substring(0,120) cut raw HTML mid-tag,
+     rendering broken/visible HTML entities in the excerpt.
+     Fix: strip HTML first, then substring the plain text.
+   - BUG: No empty state / error state handling
+   - BUG: Load More hid itself before the last batch was confirmed
+═══════════════════════════════════════════════════════════ */
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const blogList = document.getElementById("blog-list");
-    const loadMoreBtn = document.getElementById("load-more-btn");
-    const emptyState = document.getElementById("empty-state");
+'use strict';
 
-    let allPosts = [];
-    let displayedCount = 0;
-    const LIMIT = 10;
+document.addEventListener('DOMContentLoaded', async () => {
+  const blogList  = document.getElementById('blog-list');
+  const loadBtn   = document.getElementById('load-more-btn');
+  const emptyEl   = document.getElementById('empty-state');
 
+  const LIMIT     = 10;
+  let allPosts    = [];
+  let shown       = 0;
+
+  /* ── Load data ─────────────────────────────────────────── */
+  try {
+    const res = await fetch('data/posts.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    allPosts = await res.json();
+
+    // Sort newest first
+    allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if (allPosts.length === 0) {
+      if (emptyEl) emptyEl.style.display = 'block';
+      if (loadBtn) loadBtn.style.display = 'none';
+      return;
+    }
+
+    renderBatch();
+    if (loadBtn) loadBtn.addEventListener('click', renderBatch);
+
+  } catch (err) {
+    console.error('[blog.js] Failed to load posts:', err);
+    if (blogList) {
+      blogList.innerHTML = '<p style="color:var(--text-3);text-align:center;padding:3rem;">Failed to load entries. Please refresh.</p>';
+    }
+    if (loadBtn) loadBtn.style.display = 'none';
+  }
+
+  /* ── Render next batch ─────────────────────────────────── */
+  function renderBatch() {
+    const batch = allPosts.slice(shown, shown + LIMIT);
+
+    batch.forEach(post => {
+      /* BUG FIX: strip HTML before excerpting */
+      const plain   = stripHtml(post.content || '');
+      const excerpt = plain.split(/\s+/).slice(0, 25).join(' ') + '…';
+
+      const card    = document.createElement('article');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <span class="category-tag">${escHtml(post.category || 'Engineering')}</span>
+        <h2>${escHtml(post.title || 'Untitled')}</h2>
+        <p>${escHtml(excerpt)}</p>
+        <div class="meta">${escHtml(post.date || '')} · ${escHtml(post.readTime || '')}</div>
+        <a href="post.html?slug=${encodeURIComponent(post.slug)}"
+           class="read-more"
+           aria-label="Read ${escHtml(post.title || 'entry')}">
+          Read Entry →
+        </a>
+      `;
+      blogList.appendChild(card);
+    });
+
+    shown += batch.length;
+
+    /* Hide button only after confirming nothing left */
+    if (loadBtn) {
+      loadBtn.style.display = shown >= allPosts.length ? 'none' : 'block';
+    }
+  }
+
+  /* ── Helpers ─────────────────────────────────────────── */
+  function stripHtml(html) {
     try {
-        const response = await fetch("data/posts.json");
-        allPosts = await response.json();
-
-        if (allPosts.length === 0) {
-            emptyState.style.display = "block";
-            loadMoreBtn.style.display = "none";
-            return;
-        }
-
-        renderBatch();
-
-        loadMoreBtn.addEventListener("click", renderBatch);
-
-    } catch (err) {
-        console.error("Fetch failed:", err);
-        blogList.innerHTML = "<p>Error loading logs. Please try again later.</p>";
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return doc.body.textContent || '';
+    } catch {
+      return html.replace(/<[^>]*>/g, '');
     }
+  }
 
-    function renderBatch() {
-        const nextBatch = allPosts.slice(displayedCount, displayedCount + LIMIT);
-        
-        nextBatch.forEach(post => {
-            const card = document.createElement("article");
-            card.className = "blog-card"; // Uses your existing card styles
-            card.innerHTML = `
-                <div class="blog-content">
-                    <span class="category-tag">${post.category}</span>
-                    <h2>${post.title}</h2>
-                    <p>${post.content.substring(0, 120)}...</p>
-                    <div class="meta">${post.date} • ${post.readTime}</div>
-                    <a href="post.html?slug=${post.slug}" class="read-more">Read Entry →</a>
-                </div>
-            `;
-            blogList.appendChild(card);
-        });
-
-        displayedCount += nextBatch.length;
-
-        // Requirement: Hide button if no more posts exist
-        if (displayedCount >= allPosts.length) {
-            loadMoreBtn.style.display = "none";
-        } else {
-            loadMoreBtn.style.display = "block";
-        }
-    }
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 });
