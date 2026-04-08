@@ -42,7 +42,7 @@ public class ContactController {
                 .body(new ApiResponse("SUCCESS", "Message received. I'll reply within 24 hours."));
     }
 
-    @GetMapping("/health")
+    @RequestMapping(value = "/health", method = {RequestMethod.GET, RequestMethod.HEAD})
     public ResponseEntity<ApiResponse> health() {
         return ResponseEntity.ok(new ApiResponse("UP", "Portfolio API is operational"));
     }
