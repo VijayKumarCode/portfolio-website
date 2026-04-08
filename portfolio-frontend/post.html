@@ -1,68 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading... | Engineering Log</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/blog.css" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Dynamic title set by post.js -->
+  <title>Loading… | Engineering Log</title>
+
+  <link rel="icon" type="image/png" href="assets/profilePic.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/blog-v2.css">
 </head>
 
 <body class="single-post-page">
 
-    <nav id="desktop-nav">
-         <a href="/" class="logo-container">
-            <img src="assets/logo.png" alt="Vijay Kumar Logo" class="logo-img">
-            <!--<span class="logo-text">Vijay Kumar</span>-->
-        </a>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-           <!-- <li><a href="blog.html">Articles</a></li> -->
-        </ul>
+  <!-- ── Navigation ───────────────────────────────────────── -->
+  <header id="site-header" role="banner">
+    <nav id="blog-nav" aria-label="Post navigation">
+      <a href="/" class="logo-container" aria-label="Back to portfolio">
+        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img">
+      </a>
+      <div class="blog-nav-right">
+        <a href="/blog" class="nav-back">← All entries</a>
+      </div>
     </nav>
+  </header>
 
-   <main class="blog-main-container">
+  <main>
+    <article class="post-wrap" id="post-article">
 
-    <article class="blog-post">
-        <ol class="breadcrumb">
-        <li><a href="blog.html">Articles</a></li>
-        <li>/</li>
-        <li id="breadcrumb-title">Loading...</li>
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol role="list">
+          <li><a href="/blog">Engineering Log</a></li>
+          <li aria-hidden="true">/</li>
+          <li id="breadcrumb-title" aria-current="page">Loading…</li>
         </ol>
+      </nav>
 
-        <header class="blog-header">
-            <span class="category-tag" id="post-category"></span>
-
-            <h1 class="blog-title" id="post-title"></h1>
-
-            <div class="post-meta">
-                <span>👤 <strong>Vijay Kumar</strong></span> • 
-                <span id="post-date"></span> • 
-                <span id="post-read-time"></span>
-            </div>
-        </header>
-
-        <section class="blog-content" id="post-content">
-            <hr class="content-divider">
-            <!-- Dynamic blog content will be injected here -->
-        </section>
-
-        <div class="post-navigation" id="post-navigation"></div>
-
-        <div class="author-box">
-            <h3>About the Author</h3>
-            <p>
-                Vijay Kumar is a Java-focused software engineering enthusiast 
-                passionate about open source, DSA, backend systems, and contributing 
-                to projects like 
-            <strong>Linux Approach</strong>.
-            </p>
+      <!-- Post header -->
+      <header class="post-header">
+        <span class="category-tag" id="post-category"></span>
+        <h1 class="post-title" id="post-title"></h1>
+        <div class="post-meta" aria-label="Post metadata">
+          <span class="post-meta-author">
+            <img src="assets/profilePic.png" alt="" class="post-avatar" aria-hidden="true">
+            Vijay Kumar
+          </span>
+          <span class="post-meta-sep" aria-hidden="true">·</span>
+          <time id="post-date"></time>
+          <span class="post-meta-sep" aria-hidden="true">·</span>
+          <span id="post-read-time"></span>
         </div>
+      </header>
+
+      <!-- Post content -->
+      <div class="post-divider" aria-hidden="true"></div>
+      <div class="post-content" id="post-content" role="main"></div>
+      <div class="post-divider" aria-hidden="true"></div>
+
+      <!-- Prev / Next -->
+      <nav class="post-navigation" id="post-navigation" aria-label="Navigate between posts"></nav>
+
+      <!-- Author -->
+      <aside class="author-box" aria-label="About the author">
+        <div class="author-box-inner">
+          <img src="assets/profilePic.png"
+               alt="Vijay Kumar"
+               class="author-avatar"
+               width="52" height="52">
+          <div class="author-info">
+            <p class="author-name">Vijay Kumar</p>
+            <p class="author-bio">
+              Backend engineer building real-time systems with Java 17 and Spring Boot 3.
+              Currently shipping <a href="https://nexusgame.space" target="_blank" rel="noopener">Nexus</a>
+              and writing about the problems I run into.
+            </p>
+            <div class="author-links">
+              <a href="https://github.com/VijayKumarCode" target="_blank" rel="noopener">GitHub</a>
+              <a href="https://linkedin.com/in/vijaykumarcode" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
     </article>
+  </main>
 
-</main>
+  <footer class="blog-footer" role="contentinfo">
+    <div class="blog-footer-inner">
+      <p class="footer-copy">© 2026 Vijay Kumar</p>
+      <nav aria-label="Footer links">
+        <ul role="list">
+          <li><a href="/">Portfolio</a></li>
+          <li><a href="/blog">All entries</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
 
-    <script src="js/post.js"></script>
+  <script src="js/post.js" defer></script>
 
 </body>
 </html>

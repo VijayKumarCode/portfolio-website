@@ -1,66 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Engineering Log – Articles by Vijay Kumar</title>
+  <title>Engineering Log | Vijay Kumar</title>
+  <meta name="description" content="Engineering articles on Java, Spring Boot, DSA, and backend systems by Vijay Kumar.">
+  <meta name="author" content="Vijay Kumar">
 
-    <!-- SEO -->
-    <meta name="description" content="Engineering articles on Java, DSA, Linux, and software engineering by Vijay Kumar.">
-    <meta name="author" content="Vijay Kumar">
+  <link rel="canonical" href="https://vijaykumarcode.space/blog">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/style.css" /> 
-    <link rel="stylesheet" href="css/blog.css" />
-    
-   
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="Engineering Log | Vijay Kumar">
+  <meta property="og:description" content="Engineering articles on Java, Spring Boot, DSA, and backend systems.">
+  <meta property="og:url"         content="https://vijaykumarcode.space/blog">
+
+  <link rel="icon" type="image/png" href="assets/profilePic.png">
+
+  <!-- Same fonts as main portfolio -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/blog-v2.css">
 </head>
 
 <body class="blog-list-page">
 
-    <!-- Navigation -->
-    <nav id="desktop-nav">
-         <a href="/" class="logo-container">
-            <img src="assets/logo.png" alt="Vijay Kumar Logo" class="logo-img">
-            <!--<span class="logo-text">Vijay Kumar</span>-->
+  <!-- ── Navigation ───────────────────────────────────────── -->
+  <header id="site-header" role="banner">
+    <nav id="blog-nav" aria-label="Blog navigation">
+      <a href="/" class="logo-container" aria-label="Back to portfolio">
+        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img">
+      </a>
+      <div class="blog-nav-right">
+        <a href="/" class="nav-back">
+          ← Portfolio
         </a>
-        <ul class="nav-links">
-            <li><a href="index.html">Back to portfolio</a></li>
-        </ul>
+      </div>
     </nav>
+  </header>
 
-    <!-- Main Content -->
-    <main class="blog-main-container">
+  <main>
 
-        <!-- Blog Header -->
-        <header class="blog-hero">
-            <h1 class="blog-page-title">Engineering Log</h1>
-            <p class="blog-subtitle">
-                Thoughts on Java, DSA, Linux, and software engineering.
-            </p>
-        </header>
+    <!-- ── Blog hero ─────────────────────────────────────── -->
+    <section class="blog-hero" aria-labelledby="blog-hero-title">
+      <div class="blog-hero-inner">
+        <p class="blog-eyebrow">Writing</p>
+        <h1 id="blog-hero-title" class="blog-hero-title">Engineering Log</h1>
+        <p class="blog-hero-sub">
+          Practical notes on Java, Spring Boot, DSA, and backend systems.
+          Things I built, broke, and fixed.
+        </p>
+      </div>
+    </section>
 
-        <!-- Blog List (Dynamic Injection) -->
-        <section class="blog-list" id="blog-list">
-            <!-- Blog cards will be injected dynamically via blog.js -->
-        </section>
-        <!-- Load More Button -->
-        <div class="load-more-container">
-            <button id="load-more-btn" class="load-more-btn">
-                Load More
-            </button>
+    <!-- ── Article list ──────────────────────────────────── -->
+    <section class="blog-content-section" aria-label="Article list">
+      <div class="blog-list-wrap">
+
+        <!-- Filter bar -->
+        <div class="blog-filter-bar" role="search">
+          <input type="text"
+                 id="blog-search"
+                 class="blog-search-input"
+                 placeholder="Search entries…"
+                 aria-label="Search engineering log">
+          <div class="blog-filter-tags" id="filter-tags" role="list" aria-label="Filter by category">
+            <button class="filter-tag active" data-category="all">All</button>
+          </div>
         </div>
 
-        <!-- Optional: Empty State -->
-        <div class="empty-state" id="empty-state" style="display: none;">
-            <p>No articles published yet.</p>
+        <!-- Articles injected here -->
+        <div class="blog-list" id="blog-list" role="list" aria-live="polite">
+          <div class="blog-skeleton" aria-label="Loading…">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
         </div>
 
-    </main>
+        <!-- Empty state -->
+        <div class="blog-empty" id="empty-state" style="display:none;">
+          <p>No entries published yet.</p>
+        </div>
 
-    <!-- Scripts -->
-    <script src="js/blog.js" defer></script>
+        <!-- Load more -->
+        <div class="load-more-wrap">
+          <button id="load-more-btn" class="btn btn-ghost" style="display:none;">
+            Load more entries
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="blog-footer" role="contentinfo">
+    <div class="blog-footer-inner">
+      <p class="footer-copy">© 2026 Vijay Kumar</p>
+      <nav aria-label="Footer links">
+        <ul role="list">
+          <li><a href="/">Portfolio</a></li>
+          <li><a href="https://github.com/VijayKumarCode" target="_blank" rel="noopener">GitHub</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/blog.js" defer></script>
 
 </body>
 </html>
