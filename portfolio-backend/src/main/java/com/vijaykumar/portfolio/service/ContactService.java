@@ -1,25 +1,18 @@
-/* ═══════════════════════════════════════════════════════════
-   Portfolio Backend v2.0 — ContactService.java
-   Added: email notification to you when contact form submitted.
-   Uses the same OtpService/Resend HTTP API pattern from Nexus.
-   Message is STILL saved to PostgreSQL (contact_messages table).
-═══════════════════════════════════════════════════════════ */
 package com.vijaykumar.portfolio.service;
 
-import com.vijaykumar.portfolio.model.ContactRequest;
 import com.vijaykumar.portfolio.entity.ContactMessage;
+import com.vijaykumar.portfolio.model.ContactRequest;
 import com.vijaykumar.portfolio.repository.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -29,20 +22,37 @@ public class ContactService {
     private final ContactRepository repository;
     private final RestTemplate restTemplate;
 
-    @Value("${RESEND_API_KEY}")
+    /*
+     * BUG FIX: Added default values to all @Value fields.
+     *
+     * Without defaults, if the property is missing in the active
+     * profile (e.g. running locally without prod profile, or a
+     * missing Render env var), Spring throws:
+     *   PlaceholderResolutionException: Could not resolve placeholder
+     *
+     * With defaults:
+     * - Local dev: uses the dummy/fallback values; email send will
+     *   fail gracefully (logged, not rethrown), message still saved.
+     * - Production: Render env vars override the defaults correctly.
+     *
+     * app.mail-from is hardcoded to onboarding@resend.dev because
+     * the Resend free tier only allows ONE verified domain, which is
+     * already used by nexusgame.space. No code change is needed if
+     * the domain changes later — just update the property file.
+     */
+    @Value("${RESEND_API_KEY:re_dummy_local_key}")
     private String resendApiKey;
 
-    /* Your email — change this to your real address */
-    @Value("${app.notify-email}")
+    @Value("${app.notify-email:vkumar.kumar31@gmail.com}")
     private String notifyEmail;
 
-    /* The from address — must match your Resend verified domain */
-    @Value("${app.mail-from}")
+    @Value("${app.mail-from:onboarding@resend.dev}")
     private String mailFrom;
 
-    public void saveMessage(ContactRequest request) {
+    /* ── Public API ──────────────────────────────────── */
 
-        /* 1. Save to database — always first, never skip */
+    public void saveMessage(ContactRequest request) {
+        // Step 1: Always save to DB first — never skip or reorder
         ContactMessage entity = new ContactMessage(
                 request.name(),
                 request.email(),
@@ -51,44 +61,44 @@ public class ContactService {
         repository.save(entity);
         log.info("Contact message saved — from={}", request.email());
 
-        /* 2. Send notification email to you */
+        // Step 2: Send email notification — failure never blocks the response
         try {
             sendNotification(request);
         } catch (Exception e) {
-            /* Do NOT rethrow — if email fails, message is still saved.
-               The frontend still gets 201 and the data is in Neon. */
-            log.error("Notification email failed (message was saved): {}", e.getMessage());
+            log.error("Email notification failed (message is saved in DB): {}", e.getMessage());
         }
     }
 
-   private void sendNotification(ContactRequest req) {
+    /* ── Private helpers ─────────────────────────────── */
+
+    private void sendNotification(ContactRequest req) {
         String subject = "Portfolio contact from " + req.name();
-        
-        // Plain text version
+
         String text = String.format(
-                "New message via vijaykumarcode.space\n\nFrom: %s\nEmail: %s\n\nMessage:\n%s",
+                "New message via vijaykumarcode.space\n\n" +
+                "From:    %s\nEmail:   %s\n\nMessage:\n%s",
                 req.name(), req.email(), req.message()
         );
-        
-        // HTML version
+
         String html = String.format(
-                "<h3>New contact form submission</h3>" +
+                "<h3>New contact via vijaykumarcode.space</h3>" +
                 "<p><strong>Name:</strong> %s</p>" +
-                "<p><strong>Email:</strong> <a href='mailto:%s'>%s</a></p>" +
-                "<p><strong>Message:</strong></p><p>%s</p>" +
-                "<hr><p><small>Sent from vijaykumarcode.space</small></p>",
+                "<p><strong>Reply to:</strong> <a href='mailto:%s'>%s</a></p>" +
+                "<p><strong>Message:</strong></p>" +
+                "<blockquote>%s</blockquote>",
                 escHtml(req.name()),
                 escHtml(req.email()), escHtml(req.email()),
                 escHtml(req.message()).replace("\n", "<br>")
         );
 
-        // Safely build the JSON body using a Map
+        // Map<String,Object> — Jackson serialises this safely.
+        // Never build JSON strings manually (escaping bugs).
         Map<String, Object> body = new HashMap<>();
-        body.put("from", mailFrom);
-        body.put("to", List.of(notifyEmail)); // Resend API expects an array for 'to'
+        body.put("from",    mailFrom);
+        body.put("to",      List.of(notifyEmail));
         body.put("subject", subject);
-        body.put("text", text);
-        body.put("html", html);
+        body.put("text",    text);
+        body.put("html",    html);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -99,7 +109,7 @@ public class ContactService {
                 new HttpEntity<>(body, headers),
                 String.class
         );
-        log.info("Notification sent — status={}", resp.getStatusCode());
+        log.info("Email notification sent — status={}", resp.getStatusCode());
     }
 
     private String escHtml(String s) {
