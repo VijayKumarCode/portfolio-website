@@ -49,11 +49,6 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!--
-      BUG FIX — CRITICAL: Lombok was completely missing from pom.xml.
-      @Slf4j and @RequiredArgsConstructor in ContactService would
-      fail at compile time with "cannot find symbol" errors.
-    -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

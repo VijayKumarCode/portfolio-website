@@ -1,0 +1,21 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/blog",         "destination": "/blog.html"         },
+    { "source": "/blog/:slug",   "destination": "/post.html?slug=:slug" }
+  ],
+  "redirects": [
+    { "source": "/blog.html",    "destination": "/blog",  "permanent": true },
+    { "source": "/post.html",    "destination": "/blog",  "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff"                      },
+        { "key": "X-Frame-Options",        "value": "DENY"                         },
+        { "key": "Referrer-Policy",        "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}
