@@ -17,11 +17,11 @@ I am a software engineering enthusiast with a strong focus on **Java** and **Dat
 
 ## 📁 Project Structure
 
-* **`portfolio-frontend/`**: The static UI built with a focus on responsive, justified typography.
+* **`frontend/`**: The static UI built with a focus on responsive, justified typography.
     * `index.html`: Main entry point.
     * `css/`: Stylesheets including `mediaqueries.css` for 768px and 480px breakpoints.
     * `assets/`: Optimized images and professional PDF resume.
-* **`portfolio-backend/`**: Spring Boot application handling API logic and contact form persistence.
+* **`backend/`**: Spring Boot application handling API logic and contact form persistence.
     * `src/main/java/`: Core Java logic following industry-standard naming conventions.
     * `src/main/resources/`: Configuration and static resource mapping.
 * `README.md`: Project overview and documentation.
@@ -41,7 +41,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 ### 2. Backend Setup (Spring Boot)
       1. Navigate to the backend directory:
        ```bash
-         cd portfolio-backend
+         cd backend
       2. Configure your database credentials in src/main/resources/application.properties.
 
       3. Run the application using the Maven Wrapper:
@@ -51,7 +51,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 ### 3. Frontend Setup (Static Server)
       1. Navigate to the frontend directory:
          ```bash
-         cd portfolio-frontend
+         cd frontend
       2. Start a local Python server:
          python3 -m http.server 5500
       3. Access the UI at http://localhost:5500.
@@ -70,4 +70,4 @@ To avoid CORS issues and test the responsive design:
 - **X (Twitter):** [@VijayKumarCode](https://x.com/VijayKumarCode)
 
 ---
-*Last Updated: 2026-03-05*
+*Last Updated: 2026-04-10*
