@@ -118,10 +118,11 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ── SECTIONS — shared ─────────────────────────────────────── */
 section {
-  padding: 5rem 2rem;
-  max-width: var(--max-w);
-  margin: 0 auto;
+  display: block;
   width: 100%;
+  box-sizing: border-box;
+  padding: 5rem 2rem;
+  overflow: hidden;
 }
 
 .section__text__p1 {
@@ -359,13 +360,22 @@ section {
 .about-text strong { color: var(--text); font-weight: 600; }
 
 /* ── SKILLS ─────────────────────────────────────────────────── */
-#skills { background: var(--surface); border-radius: var(--radius-lg); }
-
+#skills {
+  background: var(--surface);
+  padding-left:  2rem;
+  padding-right: 2rem;
+}
+ 
+/* ── The skills GRID inside #skills is what gets constrained ── */
 .skills-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
+  max-width: var(--max-w);   /* ← max-width on the GRID, not the section */
+  margin: 0 auto;
+  width: 100%;
 }
+
 .skills-group-title {
   font-family: var(--font-mono);
   font-size: 0.78rem;
