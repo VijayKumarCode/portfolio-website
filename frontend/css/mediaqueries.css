@@ -1,8 +1,24 @@
 /* ═══════════════════════════════════════════════════════════
-   PORTFOLIO v2.0 — mediaqueries.css
-   Breakpoints: 1200 / 900 / 640 / 400
+   PORTFOLIO v2.1 — mediaqueries.css
+   Tested against:
+     Laptop : 1366 × 768 px
+     Phone  : 411 × 914 px  (Samsung Galaxy S23, Android 14)
+   Breakpoints: 1200 / 900 / 640 / 480 / 400
 ═══════════════════════════════════════════════════════════ */
 
+/*
+ * Global baseline — must be outside every @media.
+ * These rules reinforce the overflow fix from style.css.
+ * Redundancy is intentional — specificity battles on mobile
+ * browsers make belt + suspenders necessary.
+ */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Every section is a full-width block, no exceptions */
 section {
   display: block;
   width: 100%;
@@ -10,131 +26,170 @@ section {
   overflow: hidden;
 }
 
+/*
+ * Skills section: no border-radius, full viewport width.
+ * border-radius on a coloured section creates a visual gap
+ * between it and adjacent sections on mobile browsers.
+ */
 #skills {
   border-radius: 0;
   max-width: 100%;
-  margin-left: 0;
+  margin-left:  0;
   margin-right: 0;
 }
 
-/* ── 1200px — Collapse desktop nav ────────────────────────── */
+/* ── 1200px — collapse desktop nav ─────────────────────── */
 @media screen and (max-width: 1200px) {
   #desktop-nav   { display: none; }
   #hamburger-nav { display: flex; }
 
   .skills-grid { gap: 2rem; }
+  #skills {
+    padding-left:  1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 
-/* ── 900px — Two-col → single col layouts ─────────────────── */
+/* ── 900px — two-col → single col ──────────────────────── */
 @media screen and (max-width: 900px) {
-
-  /* About */
   .about-grid {
     grid-template-columns: 1fr;
+    gap: 2rem;
     text-align: center;
   }
-  .about-pic-wrap {
-    display: flex;
-    justify-content: center;
-  }
-  .about-pic { max-width: 300px; }
+  .about-pic-wrap { display: flex; justify-content: center; }
+  .about-pic      { max-width: 300px; }
+  .about-text     { text-align: left; }
 
-  /* Skills */
   .skills-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  .skill-name  { min-width: 140px; }
+  .skill-name  { min-width: 130px; }
 
-  /* Projects — featured stays full width, rest become single col */
-  .projects-grid { grid-template-columns: 1fr; }
-  .project-featured {
-    flex-direction: column;
-  }
-  .project-featured .project-img-wrap {
-    flex: none;
-    height: 220px;
-  }
+  .projects-grid  { grid-template-columns: 1fr; }
+  .project-featured { flex-direction: column; }
+  .project-featured .project-img-wrap { flex: none; height: 220px; }
 
-  /* Blog */
+  .contact-grid   { grid-template-columns: 1fr; gap: 2.5rem; }
+
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
   .blog-loading { grid-column: span 2; }
 
-  /* Contact */
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+  .footer-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  .contact-tagline { font-size: 1rem; }
+  .footer-links { justify-content: center; }
 }
 
-/* ── 640px — Mobile ───────────────────────────────────────── */
+/* ── 640px — mobile ─────────────────────────────────────── */
 @media screen and (max-width: 640px) {
- 
-  section {
-    padding: 3rem 1.25rem;
-  }
- 
-  /* Skills: no radius, full-width padding for mobile */
+
+  /* Reduce all section padding */
+  section { padding: 3rem 1.25rem; }
+
   #skills {
-    border-radius: 0;
     padding-left:  1.25rem;
     padding-right: 1.25rem;
   }
- 
-  /* Prevent iOS/Android zoom on input focus */
-  .form-group input,
-  .form-group textarea {
-    font-size: 16px;
-  }
- 
+
+  /* Navigation */
+  #hamburger-nav { padding: 0 1.25rem; }
+
   /* Hero */
   #profile {
     gap: 1rem;
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
   }
- 
+
   .profile-pic {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
   }
- 
+
+  .hero-name { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+  .hero-role { font-size: 0.9rem; }
+  .hero-sub  { font-size: 0.75rem; letter-spacing: 0.02em; }
+
+  .btn-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
   /* About */
-  .about-cards {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
- 
+  #about { padding-top: 3rem; }
+  .about-cards  { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .about-pic    { max-width: 220px; }
+
+  /* Skills */
+  .skills-grid  { grid-template-columns: 1fr; gap: 2rem; }
+  .skill-item   { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .skill-name   { min-width: unset; font-size: 0.85rem; }
+  .skill-bar    { width: 100%; }
+
   /* Projects */
   .projects-grid { grid-template-columns: 1fr; gap: 1rem; }
   .project-featured { flex-direction: column; }
-  .project-featured .project-img-wrap { flex: none; height: 200px; }
- 
+  .project-featured .project-img-wrap { flex: none; height: 180px; }
+  .project-img-wrap:not(.project-featured .project-img-wrap) { height: 160px; }
+  .project-info  { padding: 1.25rem; }
+
   /* Blog */
-  .blog-grid { grid-template-columns: 1fr; gap: 1rem; }
- 
+  .blog-grid    { grid-template-columns: 1fr; gap: 1rem; }
+  .blog-loading { grid-column: span 1; }
+
   /* Contact */
   .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
   .contact-form-wrap { padding: 1.25rem 1rem; }
- 
+  .contact-tagline   { font-size: 0.95rem; }
+
+  /*
+   * FIX — prevent iOS/Android auto-zoom on input focus.
+   * Font-size below 16px triggers auto-zoom on mobile browsers.
+   * Setting exactly 16px disables this behaviour.
+   */
+  .form-group input,
+  .form-group textarea { font-size: 16px; }
+
   /* Footer */
-  .footer-inner {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.75rem;
-  }
+  footer { padding: 1.5rem 1.25rem; }
+  .footer-inner  { flex-direction: column; align-items: center; text-align: center; gap: 0.75rem; }
+  .footer-links  { justify-content: center; flex-wrap: wrap; }
+  .footer-copy   { font-size: 0.72rem; }
 }
 
-/* ── 400px — Small phones ─────────────────────────────────── */
+/* ── 480px — mid-small phones ───────────────────────────── */
+@media screen and (max-width: 480px) {
+  .profile-pic  { width: 130px; height: 130px; }
+  .hero-name    { font-size: clamp(1.6rem, 8vw, 2rem); }
+  .section-title { font-size: 1.65rem; }
+  .about-cards  { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+}
 
+/* ── 400px — smallest common Android phones ─────────────── */
 @media screen and (max-width: 400px) {
   section { padding: 2.5rem 1rem; }
- 
-  .profile-pic { width: 120px; height: 120px; }
-  .hero-name   { font-size: 1.6rem; }
-  .section-title { font-size: 1.5rem; }
- 
-  .about-cards { grid-template-columns: 1fr; }
- 
+
+  #profile { padding-top: 2rem; }
+  .profile-pic  { width: 110px; height: 110px; }
+  .hero-name    { font-size: 1.55rem; letter-spacing: -0.03em; }
+  .hero-role    { font-size: 0.82rem; }
+  .hero-sub     { font-size: 0.72rem; }
+  .hero-tag     { font-size: 0.72rem; padding: 0.25rem 0.75rem; }
+
   .btn-container { flex-direction: column; align-items: stretch; }
   .btn-container .btn { text-align: center; justify-content: center; }
+
+  .section-title { font-size: 1.45rem; margin-bottom: 1.75rem; }
+  .section__text__p1 { font-size: 0.72rem; }
+
+  #socials-container { gap: 0.5rem; }
+  .social-icon  { width: 24px; height: 24px; }
+
+  .about-cards  { grid-template-columns: 1fr; }
+
+  .contact-form-wrap { padding: 1rem 0.75rem; }
 }
