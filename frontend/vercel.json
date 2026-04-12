@@ -1,5 +1,6 @@
 {
-  "cleanUrls": true,
+  "rootDirectory": "frontend",
+  "cleanUrls": false,
   "rewrites": [
     { "source": "/blog", "destination": "/blog.html" },
     { "source": "/blog/", "destination": "/blog.html" },
@@ -16,3 +17,4 @@
     }
   ]
 }
+
