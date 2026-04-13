@@ -14,7 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.vijaykumar.portfolio.model.ContactRequest;
+import com.vijaykumar.portfolio.dto.ContactRequest;
 import com.vijaykumar.portfolio.service.ContactService;
 import com.vijaykumar.portfolio.dto.ApiResponse;
 

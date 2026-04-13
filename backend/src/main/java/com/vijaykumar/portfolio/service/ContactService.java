@@ -1,7 +1,7 @@
 package com.vijaykumar.portfolio.service;
 
 import com.vijaykumar.portfolio.entity.ContactMessage;
-import com.vijaykumar.portfolio.model.ContactRequest;
+import com.vijaykumar.portfolio.dto.ContactRequest;
 import com.vijaykumar.portfolio.repository.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
