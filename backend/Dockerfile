@@ -1,28 +1,37 @@
-# --- STAGE 1: Build Stage ---
-# We use Maven to compile the code and package it into a .jar file.
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
+# ── Stage 1: Build ──────────────────────────────────────────
+FROM eclipse-temurin:17-jdk-alpine AS builder
 
-# 1. Copy only the pom.xml to cache dependencies. 
-# This speeds up future builds if your dependencies haven't changed.
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
+WORKDIR /build
 
-# 2. Copy the source code and build the application.
+# Copy Maven wrapper and pom first (layer caching — only re-downloads
+# dependencies when pom.xml changes, not on every source change)
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline -q
+
+# Copy source and build
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests -q
 
-# --- STAGE 2: Runtime Stage ---
-# We use an Ubuntu-based JRE image (Jammy Jellyfish) for the final container.
-FROM eclipse-temurin:17-jre-jammy
+# ── Stage 2: Runtime ─────────────────────────────────────────
+# eclipse-temurin:17-jre-alpine is ~80MB — much smaller than JDK
+FROM eclipse-temurin:17-jre-alpine
+
+# Non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
 WORKDIR /app
 
-# 3. Copy only the built .jar file from the build stage.
-# This keeps the final image size very small.
-COPY --from=build /app/target/*.jar app.jar
+# Copy only the built JAR (not the entire build context)
+COPY --from=builder /build/target/portfolio-service-*.jar app.jar
 
-# 4. Expose the port (Render will use the PORT environment variable).
+# JVM tuning for Render free tier (512 MB RAM):
+# - UseSerialGC: lower overhead than G1 for single-CPU containers
+# - Xms/Xmx: prevents OOM while leaving headroom for the OS
+# - MaxMetaspaceSize: limits Spring Boot's class loading overhead
+ENV JAVA_OPTS="-Xms96m -Xmx400m -XX:+UseSerialGC -XX:MaxMetaspaceSize=96m -Djava.security.egd=file:/dev/./urandom"
+
 EXPOSE 8080
 
-# 5. Run the application.
-ENTRYPOINT ["java", "-Xmx512m", "-Dserver.port=${PORT:8080}", "-jar", "app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

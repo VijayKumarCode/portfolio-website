@@ -1,35 +1,37 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-.vscode/
+# ── Java / Maven ───────────────────────────────────────────
 backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.properties
+*.class
+*.jar
+*.war
+*.ear
+
+# ── Spring Boot secrets ─────────────────────────────────────
+# NEVER commit these
+backend/src/main/resources/application.properties
+backend/src/main/resources/application-prod.properties
+
+# Keep the example template
+!backend/src/main/resources/application.properties.example
+
+# ── IDE ─────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+
+# ── OS ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Node (if you ever add a build step) ─────────────────────
+node_modules/
+.npm/
+dist/
+.env
+.env.local
+.env.*.local
+
+# ── Vercel ──────────────────────────────────────────────────
+.vercel/
