@@ -7,8 +7,8 @@
 
 'use strict';
 
-import { API } from '../src/config/config.js';
-import { post, warmBackend } from '../src/utils/api.js';
+import { API } from '../config/config.js';
+import { post, warmBackend } from '../utils/api.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
