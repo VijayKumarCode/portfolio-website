@@ -1,22 +1,32 @@
 /* ═══════════════════════════════════════════════════════════
-   Portfolio v2.0 — post.js
-   Fixes:
-   - BUG CRITICAL: post.content injected directly via innerHTML — XSS
-     If an attacker modified posts.json they could run arbitrary JS.
-     Fix: only known safe fields are injected; content rendered via
-     a sanitised approach (DOMPurify if available, else textContent
-     fallback for untrusted fields). For self-hosted data this is
-     acceptable — note the known limitation in the comment below.
-   - BUG: document.title set before post found — caused "Loading..."
-     to briefly flash as the tab title even on 404
-   - Added: prev/next navigation built from full posts list
-   - Added: reading time calculation
+   Portfolio v2.1 — post.js
+
+   BUG FIXED (was a hard SyntaxError — page would never load):
+   ──────────────────────────────────────────────────────────
+   SYMPTOM : Every blog post page showed a blank screen.
+             DevTools console: "SyntaxError: Identifier
+             'escHtml' has already been declared"
+
+   ROOT CAUSE:
+     Line 4 imported `escHtml` from helpers.js.
+     Line ~60 declared `function escHtml(str) { ... }`.
+     In ES modules, re-declaring an imported binding at module
+     scope is a hard parse-time SyntaxError. The browser never
+     executes a single line of this file.
+
+   FIX:
+     1. Removed the local `function escHtml()` declaration.
+        The import from helpers.js is the single definition.
+     2. Removed unused import `DATA` (config.js) — the fetch
+        already uses the correct hardcoded path `/data/posts.json`.
+     3. Removed unused import `readingTime` (helpers.js) —
+        reading time is calculated inline below.
 ═══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-import { DATA } from '../src/config/config.js';
-import { escHtml, readingTime } from '../src/utils/helpers.js';
+/* FIX: import only what is actually used in this module */
+import { escHtml } from '../src/utils/helpers.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
@@ -34,39 +44,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!post) { showNotFound(); return; }
 
-    // ── Page metadata (set AFTER post found) ──
+    /* Set title AFTER post is found — prevents "Loading…" flashing in tab */
     document.title = `${post.title} | Engineering Log`;
 
-    // ── Breadcrumb ──
+    /* Breadcrumb */
     const bc = document.getElementById('breadcrumb-title');
     if (bc) {
       bc.textContent = post.title;
       bc.setAttribute('title', post.title);
     }
 
-    // ── Header fields (safe — these are plain strings) ──
+    /* Safe plain-text fields */
     setTextContent('post-category', post.category);
     setTextContent('post-title',    post.title);
     setTextContent('post-date',     post.date);
 
-    // Reading time
-    const words   = (post.content || '').replace(/<[^>]*>/g, '').split(/\s+/).length;
+    /* Reading time — derived from content, not trusting posts.json value */
+    const words   = (post.content || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
     const minutes = Math.max(1, Math.ceil(words / 200));
     setTextContent('post-read-time', `${minutes} min read`);
 
-    // ── Content ──
-    /* SECURITY NOTE: post.content is HTML authored by you in posts.json.
-       Because you control posts.json entirely this is acceptable.
-       If posts.json ever comes from user input, add DOMPurify:
-         import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify/+esm';
-         contentEl.innerHTML = DOMPurify.sanitize(post.content);
-    */
+    /*
+     * Content injection.
+     * SECURITY NOTE: post.content is HTML you authored in posts.json.
+     * This is acceptable because you control the data source entirely.
+     * If posts.json ever comes from user input, sanitise first:
+     *   import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify/+esm';
+     *   contentEl.innerHTML = DOMPurify.sanitize(post.content);
+     */
     const contentEl = document.getElementById('post-content');
-    if (contentEl) {
-      contentEl.innerHTML = post.content || '';
-    }
+    if (contentEl) contentEl.innerHTML = post.content || '';
 
-    // ── Prev / Next navigation ──
+    /* Prev / Next navigation */
     buildNavigation(posts, idx);
 
   } catch (err) {
@@ -75,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-/* ── helpers ─────────────────────────────────────────────── */
+/* ── Helpers ──────────────────────────────────────────────── */
 function setTextContent(id, value) {
   const el = document.getElementById(id);
   if (el && value != null) el.textContent = value;
@@ -85,8 +94,8 @@ function buildNavigation(posts, currentIdx) {
   const nav = document.getElementById('post-navigation');
   if (!nav) return;
 
-  const prev = posts[currentIdx + 1];   // older = higher index
-  const next = posts[currentIdx - 1];   // newer = lower index
+  const prev = posts[currentIdx + 1];   // older entry = higher array index
+  const next = posts[currentIdx - 1];   // newer entry = lower array index
 
   nav.innerHTML = `
     <div class="nav-prev">
@@ -108,22 +117,14 @@ function buildNavigation(posts, currentIdx) {
 
 function showNotFound() {
   document.title = 'Not Found | Engineering Log';
-  const article = document.querySelector('.blog-post');
+  const article = document.querySelector('.post-wrap');
   if (article) {
     article.innerHTML = `
-      <h2 style="margin-bottom:1rem;">Post not found</h2>
-      <p style="color:var(--text-2);margin-bottom:1.5rem;">
+      <h2 style="margin-bottom:1rem; color:var(--text);">Post not found</h2>
+      <p style="color:var(--text-2); margin-bottom:1.5rem;">
         The article you are looking for does not exist.
       </p>
       <a href="/blog" class="btn btn-ghost">← Back to articles</a>
     `;
   }
-}
-
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
 }
