@@ -15,6 +15,9 @@
 
 'use strict';
 
+import { DATA } from '../src/config/config.js';
+import { escHtml, readingTime } from '../src/utils/helpers.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const slug   = params.get('slug');
