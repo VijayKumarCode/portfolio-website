@@ -1,9 +1,8 @@
 {
   "rootDirectory": "frontend",
-  "cleanUrls": false,
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/blog", "destination": "/blog.html" },
-    { "source": "/blog/", "destination": "/blog.html" },
     { "source": "/blog/:slug", "destination": "/post.html?slug=:slug" }
   ],
   "headers": [
