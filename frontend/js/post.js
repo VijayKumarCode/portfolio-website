@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!slug) { showNotFound(); return; }
 
   try {
-    const res   = await fetch('data/posts.json');
+    const res = await fetch('/data/posts.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const posts = await res.json();
 
@@ -91,14 +91,14 @@ function buildNavigation(posts, currentIdx) {
   nav.innerHTML = `
     <div class="nav-prev">
       ${prev
-        ? `<a href="post.html?slug=${encodeURIComponent(prev.slug)}" class="post-nav-link">
+        ? `<a href="/blog/${encodeURIComponent(prev.slug)}" class="post-nav-link">
              ← ${escHtml(prev.title)}
            </a>`
         : ''}
     </div>
     <div class="nav-next">
       ${next
-        ? `<a href="post.html?slug=${encodeURIComponent(next.slug)}" class="post-nav-link">
+        ? `<a href="/blog/${encodeURIComponent(next.slug)}" class="post-nav-link">
              ${escHtml(next.title)} →
            </a>`
         : ''}
@@ -115,7 +115,7 @@ function showNotFound() {
       <p style="color:var(--text-2);margin-bottom:1.5rem;">
         The article you are looking for does not exist.
       </p>
-      <a href="blog.html" class="btn btn-ghost">← Back to articles</a>
+      <a href="/blog" class="btn btn-ghost">← Back to articles</a>
     `;
   }
 }

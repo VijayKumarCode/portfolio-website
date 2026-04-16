@@ -11,7 +11,8 @@ export class BlogManager {
 
   async fetchAndRender() {
     try {
-      const res   = await fetch(this.dataPath);
+      const path = this.dataPath.startsWith('/') ? this.dataPath : `/${this.dataPath}`;
+      const res  = await fetch(path);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const posts = await res.json();
 

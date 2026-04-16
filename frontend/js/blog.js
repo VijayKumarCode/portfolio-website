@@ -1,11 +1,4 @@
-/* ═══════════════════════════════════════════════════════════
-   Portfolio v2.0 — blog.js (blog listing page)
-   Fixes from v1:
-   - New card HTML structure matching dark theme
-   - Search + category filter working live
-   - Skeleton loading state
-   - Excerpt strips HTML before substring
-═══════════════════════════════════════════════════════════ */
+
 'use strict';
 
 const LIMIT = 10;
@@ -21,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const tagsEl    = document.getElementById('filter-tags');
 
   try {
-    const res = await fetch('data/posts.json');
+    const res = await fetch('/data/posts.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     allPosts = await res.json();
     allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -95,7 +88,7 @@ function renderBatch(list, btn) {
 
     const card = document.createElement('a');
     card.className  = 'blog-card';
-    card.href       = `post.html?slug=${encodeURIComponent(post.slug)}`;
+    card.href       = `/blog/${encodeURIComponent(post.slug)}`;
     card.setAttribute('role', 'article');
     card.innerHTML  = `
       <span class="category-tag">${esc(post.category || 'Engineering')}</span>

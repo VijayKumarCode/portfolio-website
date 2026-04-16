@@ -1,98 +1,87 @@
-/* ═══════════════════════════════════════════════════════════
-   Portfolio v2.0 — contact.js
-   Fixes:
-   - BUG: hardcoded old Render URL — now uses env-aware constant
-   - BUG: no client-side validation before sending request
-   - BUG: status div always visible (now toggled via CSS class)
-   - BUG: no loading state on button
-   - Added: field-level error messages
-═══════════════════════════════════════════════════════════ */
+/**
+ * contact.js — Contact form handler.
+ *
+ * Uses the config and api utility modules.
+ * Validates input, calls the backend, shows feedback.
+ */
 
 'use strict';
 
-/* BUG FIX: define the backend URL in one place.
-   The URL now points to the live domain instead of the
-   old hardcoded Render URL. Update this when you migrate to Oracle. */
-const CONTACT_API = 'https://portfolio-backend-v17c.onrender.com/api/v1/contact';
+import { API } from '../src/config/config.js';
+import { post, warmBackend } from '../src/utils/api.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('contact-form');
+
+  // Warm the Render backend on page load so by the time
+  // the user fills and submits the form, it's already awake
+  warmBackend();
+
+  const form      = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const statusDiv = document.getElementById('form-status');
+
   if (!form) return;
+
+  // Clear field error on input
+  ['name', 'email', 'message'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      el.classList.remove('invalid');
+      const err = document.getElementById(`${id}-error`);
+      if (err) err.textContent = '';
+    });
+  });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const nameEl    = document.getElementById('name');
-    const emailEl   = document.getElementById('email');
-    const messageEl = document.getElementById('message');
-    const submitBtn = document.getElementById('submit-btn');
-    const statusDiv = document.getElementById('form-status');
-
-    // Clear previous errors
     clearErrors();
-    statusDiv.style.display   = 'none';
-    statusDiv.className       = '';
-    statusDiv.textContent     = '';
+    hideStatus();
+
+    const name    = document.getElementById('name')?.value.trim()    ?? '';
+    const email   = document.getElementById('email')?.value.trim()   ?? '';
+    const message = document.getElementById('message')?.value.trim() ?? '';
 
     // Client-side validation
     let valid = true;
-
-    const name    = nameEl.value.trim();
-    const email   = emailEl.value.trim();
-    const message = messageEl.value.trim();
-
     if (!name || name.length < 2) {
-      showFieldError('name-error', nameEl, 'Please enter your name (min 2 characters).');
+      showFieldError('name-error', 'name', 'Please enter your name (min 2 characters).');
       valid = false;
     }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      showFieldError('email-error', emailEl, 'Please enter a valid email address.');
+      showFieldError('email-error', 'email', 'Please enter a valid email address.');
       valid = false;
     }
     if (!message || message.length < 10) {
-      showFieldError('message-error', messageEl, 'Message must be at least 10 characters.');
+      showFieldError('message-error', 'message', 'Message must be at least 10 characters.');
       valid = false;
     }
-
     if (!valid) return;
 
     // Loading state
-    submitBtn.disabled     = true;
-    submitBtn.textContent  = 'Sending…';
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
 
-    try {
-      const res = await fetch(CONTACT_API, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ name, email, message }),
-      });
+    const result = await post(API.contact, { name, email, message });
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(errorText || `Server error (${res.status})`);
-      }
-
+    if (result.ok) {
       showStatus('Message sent. I\'ll reply within 24 hours.', 'success');
       form.reset();
-
-    } catch (err) {
-      console.error('Contact form error:', err);
+    } else {
       showStatus(
-        'Could not send message — the server may be starting up (free tier cold start). ' +
-        'Please try again in 30 seconds or email me directly.',
+        result.error || 'Could not send message. Please try again or email me directly.',
         'error'
       );
-    } finally {
-      submitBtn.disabled    = false;
-      submitBtn.textContent = 'Send Message';
     }
+
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send Message'; }
   });
 
-  // ── helpers ────────────────────────────────────────────
-  function showFieldError(errorId, inputEl, message) {
-    const el = document.getElementById(errorId);
-    if (el) el.textContent = message;
-    if (inputEl) inputEl.classList.add('invalid');
+  // ── Helpers ──────────────────────────────────────────────
+  function showFieldError(errorId, inputId, message) {
+    const err = document.getElementById(errorId);
+    if (err) err.textContent = message;
+    const input = document.getElementById(inputId);
+    if (input) input.classList.add('invalid');
   }
 
   function clearErrors() {
@@ -104,21 +93,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showStatus(message, type) {
-    const el = document.getElementById('form-status');
-    if (!el) return;
-    el.textContent  = message;
-    el.className    = type;   // CSS handles display via .success / .error
+    if (!statusDiv) return;
+    statusDiv.textContent = message;
+    statusDiv.className   = type;
   }
 
-  // Clear field error on input
-  ['name', 'email', 'message'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('input', () => {
-        el.classList.remove('invalid');
-        const errEl = document.getElementById(`${id}-error`);
-        if (errEl) errEl.textContent = '';
-      });
-    }
-  });
+  function hideStatus() {
+    if (!statusDiv) return;
+    statusDiv.textContent = '';
+    statusDiv.className   = '';
+  }
 });
