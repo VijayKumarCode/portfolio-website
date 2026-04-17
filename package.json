@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "vercel dev --cwd frontend",
+    "deploy:frontend": "vercel --cwd frontend",
+    "deploy:frontend:prod": "vercel --cwd frontend --prod --confirm",
+    "dev:backend": "cd backend && npm run dev",
+    "start:backend": "cd backend && npm run start"
+  }
+}
