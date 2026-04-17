@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/blog", "destination": "/blog.html" },
-    { "source": "/blog/(.*)", "destination": "/post.html?slug=$1" }
+    { "source": "/blog/:slug", "destination": "/post.html?slug=:slug" }
   ],
   "headers": [
     {
