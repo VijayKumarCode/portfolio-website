@@ -1,4 +1,5 @@
 {
+  "rootDirectory": "frontend",
   "cleanUrls": true,
   "rewrites": [
     {
