@@ -102,7 +102,9 @@ public class ContactService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(resendApiKey);
+        if (resendApiKey != null) {
+            headers.setBearerAuth(resendApiKey);
+        }
 
         ResponseEntity<String> resp = restTemplate.postForEntity(
                 "https://api.resend.com/emails",
