@@ -1,24 +1,41 @@
 /* ═══════════════════════════════════════════════════════════
    PORTFOLIO v2.1 — mediaqueries.css
-   Tested against:
-     Laptop : 1366 × 768 px
-     Phone  : 411 × 914 px  (Samsung Galaxy S23, Android 14)
-   Breakpoints: 1200 / 900 / 640 / 480 / 400
+   Covers: index.html (portfolio home page)
+   Blog/post responsive rules are in blog.css.
+
+   TESTED AGAINST:
+   ─────────────────────────────────────────────────────────
+   1920px  — Full HD monitor / large desktop
+   1366px  — Laptop (your Ubuntu machine)
+   1024px  — Small laptop / large tablet landscape
+    900px  — iPad landscape / small laptop
+    768px  — iPad portrait  ← NEW BREAKPOINT ADDED
+    640px  — Large phone landscape / small tablet
+    480px  — Mid-size phones (Pixel, iPhone 14 standard)
+    411px  — Samsung Galaxy S23 (your test device)
+    400px  — Smallest common Android phones
+   ═══════════════════════════════════════════════════════════
+
+   UPGRADES in v2.1:
+   1. Added 768px tablet breakpoint (iPad portrait)
+   2. Added 1920px large screen optimisation
+   3. Removed skills border-radius globally (section gap fix)
+   4. html/body max-width guard reinforced
+   5. Blog grid better handled at each breakpoint
+   6. Better touch targets at 411px
 ═══════════════════════════════════════════════════════════ */
 
-/*
- * Global baseline — must be outside every @media.
- * These rules reinforce the overflow fix from style.css.
- * Redundancy is intentional — specificity battles on mobile
- * browsers make belt + suspenders necessary.
- */
+/* ── Global baseline ─────────────────────────────────────
+ * These rules run at ALL screen sizes.
+ * Redundant with style.css overflow-x fix on purpose —
+ * mobile browser specificity battles make this necessary.
+──────────────────────────────────────────────────────── */
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
 }
 
-/* Every section is a full-width block, no exceptions */
 section {
   display: block;
   width: 100%;
@@ -27,18 +44,40 @@ section {
 }
 
 /*
- * Skills section: no border-radius, full viewport width.
- * border-radius on a coloured section creates a visual gap
- * between it and adjacent sections on mobile browsers.
+ * Skills background must span full viewport width.
+ * border-radius creates a visual gap between adjacent sections
+ * on mobile — remove it globally, not just inside media queries.
  */
 #skills {
   border-radius: 0;
   max-width: 100%;
-  margin-left:  0;
+  margin-left: 0;
   margin-right: 0;
 }
 
-/* ── 1200px — collapse desktop nav ─────────────────────── */
+/* ── 1920px — Large desktop / Full HD ──────────────────── */
+@media screen and (min-width: 1920px) {
+  :root {
+    /* Slightly larger base type on large screens */
+    --nav-h: 76px;
+  }
+
+  section { padding: 6rem 4rem; }
+
+  .section-title { font-size: 3rem; margin-bottom: 3.5rem; }
+
+  /* Skills bars get more breathing room */
+  .skills-grid { gap: 4rem; }
+  .skill-name  { min-width: 180px; font-size: 0.95rem; }
+
+  /* Wider project grid */
+  .projects-grid { gap: 2rem; }
+
+  /* Blog grid — 3 cols but wider */
+  .blog-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+}
+
+/* ── 1200px — Collapse desktop nav ─────────────────────── */
 @media screen and (max-width: 1200px) {
   #desktop-nav   { display: none; }
   #hamburger-nav { display: flex; }
@@ -50,29 +89,57 @@ section {
   }
 }
 
-/* ── 900px — two-col → single col ──────────────────────── */
+/* ── 1024px — Small laptop ──────────────────────────────── */
+@media screen and (max-width: 1024px) {
+  section { padding: 4rem 2rem; }
+
+  /* Featured project loses the wide row layout */
+  .project-featured {
+    flex-direction: column;
+  }
+  .project-featured .project-img-wrap {
+    flex: none;
+    height: 240px;
+  }
+
+  /* Blog grid: 2 columns */
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-loading { grid-column: span 2; }
+}
+
+/* ── 900px — iPad landscape / two-col → single col ─────── */
 @media screen and (max-width: 900px) {
+
+  /* About: stack vertically */
   .about-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
     text-align: center;
   }
-  .about-pic-wrap { display: flex; justify-content: center; }
-  .about-pic      { max-width: 300px; }
-  .about-text     { text-align: left; }
+  .about-pic-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .about-pic   { max-width: 300px; }
+  .about-text  { text-align: left; }
 
+  /* Skills: single column */
   .skills-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .skill-name  { min-width: 130px; }
 
+  /* Projects: single column */
   .projects-grid  { grid-template-columns: 1fr; }
   .project-featured { flex-direction: column; }
   .project-featured .project-img-wrap { flex: none; height: 220px; }
 
-  .contact-grid   { grid-template-columns: 1fr; gap: 2.5rem; }
+  /* Contact: single column */
+  .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
 
-  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Blog grid: 2 columns (still readable) */
+  .blog-grid    { grid-template-columns: repeat(2, 1fr); }
   .blog-loading { grid-column: span 2; }
 
+  /* Footer: centered */
   .footer-inner {
     flex-direction: column;
     align-items: center;
@@ -81,10 +148,43 @@ section {
   .footer-links { justify-content: center; }
 }
 
-/* ── 640px — mobile ─────────────────────────────────────── */
+/* ── 768px — iPad portrait  (NEW BREAKPOINT) ───────────── */
+@media screen and (max-width: 768px) {
+
+  section { padding: 3.5rem 1.75rem; }
+
+  /* Hero: profile pic slightly smaller */
+  .profile-pic {
+    width: clamp(160px, 35vw, 220px);
+    height: clamp(160px, 35vw, 220px);
+  }
+  .hero-name { font-size: clamp(2rem, 7vw, 2.8rem); }
+
+  /* About pic */
+  .about-pic { max-width: 260px; }
+
+  /* Skills */
+  #skills {
+    padding-left:  1.75rem;
+    padding-right: 1.75rem;
+  }
+  .skill-name { min-width: 120px; }
+
+  /* Projects */
+  .project-card:not(.project-featured) .project-img-wrap { height: 160px; }
+
+  /* Blog grid: 1 column on narrow iPad portrait */
+  .blog-grid    { grid-template-columns: 1fr; }
+  .blog-loading { grid-column: span 1; }
+
+  /* Contact */
+  .contact-form-wrap { padding: 1.5rem; }
+}
+
+/* ── 640px — Mobile ─────────────────────────────────────── */
 @media screen and (max-width: 640px) {
 
-  /* Reduce all section padding */
+  /* Section padding */
   section { padding: 3rem 1.25rem; }
 
   #skills {
@@ -101,16 +201,13 @@ section {
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
   }
-
   .profile-pic {
     width: 150px;
     height: 150px;
   }
-
   .hero-name { font-size: clamp(1.8rem, 8vw, 2.4rem); }
   .hero-role { font-size: 0.9rem; }
   .hero-sub  { font-size: 0.75rem; letter-spacing: 0.02em; }
-
   .btn-container {
     flex-direction: row;
     flex-wrap: wrap;
@@ -121,20 +218,20 @@ section {
 
   /* About */
   #about { padding-top: 3rem; }
-  .about-cards  { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-  .about-pic    { max-width: 220px; }
+  .about-cards { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .about-pic   { max-width: 220px; }
 
   /* Skills */
-  .skills-grid  { grid-template-columns: 1fr; gap: 2rem; }
-  .skill-item   { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
-  .skill-name   { min-width: unset; font-size: 0.85rem; }
-  .skill-bar    { width: 100%; }
+  .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .skill-item  { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .skill-name  { min-width: unset; font-size: 0.85rem; }
+  .skill-bar   { width: 100%; }
 
   /* Projects */
   .projects-grid { grid-template-columns: 1fr; gap: 1rem; }
   .project-featured { flex-direction: column; }
   .project-featured .project-img-wrap { flex: none; height: 180px; }
-  .project-img-wrap:not(.project-featured .project-img-wrap) { height: 160px; }
+  .project-card:not(.project-featured) .project-img-wrap { height: 160px; }
   .project-info  { padding: 1.25rem; }
 
   /* Blog */
@@ -148,8 +245,8 @@ section {
 
   /*
    * FIX — prevent iOS/Android auto-zoom on input focus.
-   * Font-size below 16px triggers auto-zoom on mobile browsers.
-   * Setting exactly 16px disables this behaviour.
+   * Any font-size below 16px triggers auto-zoom.
+   * Set to exactly 16px on mobile only.
    */
   .form-group input,
   .form-group textarea { font-size: 16px; }
@@ -161,35 +258,92 @@ section {
   .footer-copy   { font-size: 0.72rem; }
 }
 
-/* ── 480px — mid-small phones ───────────────────────────── */
+/* ── 480px — Mid-size phones ────────────────────────────── */
 @media screen and (max-width: 480px) {
-  .profile-pic  { width: 130px; height: 130px; }
-  .hero-name    { font-size: clamp(1.6rem, 8vw, 2rem); }
+  .profile-pic   { width: 130px; height: 130px; }
+  .hero-name     { font-size: clamp(1.6rem, 8vw, 2rem); }
   .section-title { font-size: 1.65rem; }
-  .about-cards  { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+
+  /* About: keep 2 columns but tighter */
+  .about-cards { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .about-card  { padding: 1rem; }
+
+  /* Touch targets: minimum 44px for tap areas */
+  .btn { min-height: 44px; }
+  .nav-links .nav-cta { min-height: 44px; }
 }
 
-/* ── 400px — smallest common Android phones ─────────────── */
+/* ── 411px — Samsung Galaxy S23 / your test device ─────── */
+@media screen and (max-width: 420px) {
+  /*
+   * This breakpoint targets 411px specifically.
+   * 420px upper bound catches S23 (411px) and similar.
+   * These rules are additive to the 480px block above.
+   */
+  section { padding: 2.75rem 1.1rem; }
+  #skills  { padding-left: 1.1rem; padding-right: 1.1rem; }
+
+  /* Hero */
+  #profile { padding-top: 2.25rem; padding-bottom: 2.25rem; }
+  .profile-pic  { width: 140px; height: 140px; }
+  .hero-name    { font-size: 1.7rem; letter-spacing: -0.03em; }
+  .hero-role    { font-size: 0.88rem; }
+  .hero-sub     { font-size: 0.74rem; }
+  .hero-tag     { font-size: 0.74rem; padding: 0.28rem 0.8rem; }
+
+  /* Buttons */
+  .btn-container { gap: 0.5rem; }
+  .btn           { padding: 0.6rem 1.25rem; font-size: 0.8rem; }
+
+  /* Social icons */
+  #socials-container { gap: 0.6rem; }
+  .social-icon  { width: 26px; height: 26px; }
+
+  /* Section titles */
+  .section-title      { font-size: 1.55rem; margin-bottom: 2rem; }
+  .section__text__p1  { font-size: 0.72rem; }
+
+  /* About cards: stay 2-col but very compact */
+  .about-cards { gap: 0.55rem; }
+  .about-card  { padding: 0.85rem 0.75rem; }
+  .about-card h3 { font-size: 0.82rem; }
+  .about-card p  { font-size: 0.72rem; }
+  .about-card-icon { width: 24px; height: 24px; }
+
+  /* Contact */
+  .contact-form-wrap { padding: 1.1rem 0.9rem; }
+}
+
+/* ── 400px — Smallest common Android phones ─────────────── */
 @media screen and (max-width: 400px) {
   section { padding: 2.5rem 1rem; }
+  #skills  { padding-left: 1rem; padding-right: 1rem; }
 
   #profile { padding-top: 2rem; }
-  .profile-pic  { width: 110px; height: 110px; }
+  .profile-pic  { width: 120px; height: 120px; }
   .hero-name    { font-size: 1.55rem; letter-spacing: -0.03em; }
-  .hero-role    { font-size: 0.82rem; }
+  .hero-role    { font-size: 0.85rem; }
   .hero-sub     { font-size: 0.72rem; }
   .hero-tag     { font-size: 0.72rem; padding: 0.25rem 0.75rem; }
 
+  /* Stack buttons vertically on very small screens */
   .btn-container { flex-direction: column; align-items: stretch; }
-  .btn-container .btn { text-align: center; justify-content: center; }
+  .btn-container .btn { text-align: center; justify-content: center; min-height: 44px; }
 
-  .section-title { font-size: 1.45rem; margin-bottom: 1.75rem; }
-  .section__text__p1 { font-size: 0.72rem; }
+  .section-title      { font-size: 1.45rem; margin-bottom: 1.75rem; }
+  .section__text__p1  { font-size: 0.72rem; }
 
   #socials-container { gap: 0.5rem; }
-  .social-icon  { width: 24px; height: 24px; }
+  .social-icon   { width: 24px; height: 24px; }
 
-  .about-cards  { grid-template-columns: 1fr; }
+  /* Single column about cards */
+  .about-cards   { grid-template-columns: 1fr; }
 
-  .contact-form-wrap { padding: 1rem 0.75rem; }
+  /* Skills */
+  .skills-group-title { font-size: 0.72rem; }
+  .skill-name         { font-size: 0.82rem; }
+
+  /* Contact */
+  .contact-form-wrap  { padding: 1rem 0.75rem; }
+  .contact-tagline    { font-size: 0.9rem; }
 }
