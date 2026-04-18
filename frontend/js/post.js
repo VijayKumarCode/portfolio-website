@@ -1,36 +1,55 @@
 /* ═══════════════════════════════════════════════════════════
-   Portfolio v2.1 — post.js
+   Portfolio v2.2 — post.js
 
-   BUG FIXED (was a hard SyntaxError — page would never load):
+   PRIME BUG FIXED:
    ──────────────────────────────────────────────────────────
-   SYMPTOM : Every blog post page showed a blank screen.
-             DevTools console: "SyntaxError: Identifier
-             'escHtml' has already been declared"
+   SYMPTOM : vijaykumarcode.space/blog/websocket-stomp-spring-boot
+             showed a blank page. The URL never loaded the post.
+             Browser was redirecting to /post?slug=... instead.
 
    ROOT CAUSE:
-     Line 4 imported `escHtml` from helpers.js.
-     Line ~60 declared `function escHtml(str) { ... }`.
-     In ES modules, re-declaring an imported binding at module
-     scope is a hard parse-time SyntaxError. The browser never
-     executes a single line of this file.
+     Vercel's rewrite rule converts:
+       /blog/:slug  →  /post.html?slug=:slug  (internal)
+
+     Rewrites are transparent to the browser — the URL bar
+     always stays as /blog/websocket-stomp-spring-boot.
+
+     Therefore:
+       window.location.search  = ""   (empty — no ? in the URL)
+       window.location.pathname = "/blog/websocket-stomp-spring-boot"
+
+     The old code only read from window.location.search:
+       const slug = new URLSearchParams(window.location.search).get('slug');
+     This returned null → showNotFound() fired every time.
 
    FIX:
-     1. Removed the local `function escHtml()` declaration.
-        The import from helpers.js is the single definition.
-     2. Removed unused import `DATA` (config.js) — the fetch
-        already uses the correct hardcoded path `/data/posts.json`.
-     3. Removed unused import `readingTime` (helpers.js) —
-        reading time is calculated inline below.
+     Read slug from window.location.pathname first.
+     Keep query string as fallback for local dev where
+     you might open post.html?slug=... directly.
+
+   BREADCRUMB BUG FIXED (CSS):
+     The breadcrumb was truncating long post titles with
+     white-space:nowrap + text-overflow:ellipsis.
+     That rule is removed from blog.css so the title wraps.
 ═══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-/* FIX: import only what is actually used in this module */
 import { escHtml } from '../src/utils/helpers.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const params = new URLSearchParams(window.location.search);
-  const slug   = params.get('slug');
+
+  /*
+   * PRIME FIX — slug extraction.
+   *
+   * Priority 1: pathname   → /blog/websocket-stomp-spring-boot
+   *   parts = ['', 'blog', 'websocket-stomp-spring-boot']
+   *   slug  = parts[2]
+   *
+   * Priority 2: query string → ?slug=websocket-stomp-spring-boot
+   *   Fallback for local dev: open post.html?slug=... directly
+   */
+  const slug = getSlug();
 
   if (!slug) { showNotFound(); return; }
 
@@ -44,38 +63,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!post) { showNotFound(); return; }
 
-    /* Set title AFTER post is found — prevents "Loading…" flashing in tab */
+    /* Set title AFTER post is found — prevents "Loading…" flash in tab */
     document.title = `${post.title} | Engineering Log`;
 
-    /* Breadcrumb */
+    /* Breadcrumb — full title, no truncation */
     const bc = document.getElementById('breadcrumb-title');
-    if (bc) {
-      bc.textContent = post.title;
-      bc.setAttribute('title', post.title);
-    }
+    if (bc) bc.textContent = post.title;
 
-    /* Safe plain-text fields */
-    setTextContent('post-category', post.category);
-    setTextContent('post-title',    post.title);
-    setTextContent('post-date',     post.date);
+    /* Plain-text fields */
+    setTextContent('post-category',  post.category);
+    setTextContent('post-title',     post.title);
+    setTextContent('post-date',      post.date);
 
-    /* Reading time — derived from content, not trusting posts.json value */
+    /* Reading time calculated from actual content */
     const words   = (post.content || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
     const minutes = Math.max(1, Math.ceil(words / 200));
     setTextContent('post-read-time', `${minutes} min read`);
 
     /*
      * Content injection.
-     * SECURITY NOTE: post.content is HTML you authored in posts.json.
-     * This is acceptable because you control the data source entirely.
-     * If posts.json ever comes from user input, sanitise first:
-     *   import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify/+esm';
-     *   contentEl.innerHTML = DOMPurify.sanitize(post.content);
+     * post.content is HTML authored by you in posts.json.
+     * You control the data — innerHTML is acceptable here.
+     * If posts.json ever comes from user input, add DOMPurify.
      */
     const contentEl = document.getElementById('post-content');
     if (contentEl) contentEl.innerHTML = post.content || '';
 
-    /* Prev / Next navigation */
+    /* Prev / Next */
     buildNavigation(posts, idx);
 
   } catch (err) {
@@ -83,6 +97,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     showNotFound();
   }
 });
+
+/* ── Slug extraction ──────────────────────────────────────── */
+function getSlug() {
+  /*
+   * Clean URL pattern: /blog/some-post-slug
+   *   pathname = '/blog/some-post-slug'
+   *   parts    = ['', 'blog', 'some-post-slug']
+   */
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  if (parts.length >= 2 && parts[0] === 'blog' && parts[1]) {
+    return decodeURIComponent(parts[1]);
+  }
+
+  /* Fallback: ?slug=some-post-slug (local dev / direct file access) */
+  return new URLSearchParams(window.location.search).get('slug') || null;
+}
 
 /* ── Helpers ──────────────────────────────────────────────── */
 function setTextContent(id, value) {
@@ -94,8 +124,8 @@ function buildNavigation(posts, currentIdx) {
   const nav = document.getElementById('post-navigation');
   if (!nav) return;
 
-  const prev = posts[currentIdx + 1];   // older entry = higher array index
-  const next = posts[currentIdx - 1];   // newer entry = lower array index
+  const prev = posts[currentIdx + 1];   /* older  = higher array index */
+  const next = posts[currentIdx - 1];   /* newer  = lower  array index */
 
   nav.innerHTML = `
     <div class="nav-prev">

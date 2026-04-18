@@ -1,17 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════
-   PORTFOLIO v2.1 — blog.css
+   PORTFOLIO v1.0 — blog.css
    Covers: blog.html (listing) + post.html (single article)
-   Load order: style.css → blog.css
-   Inherits all CSS variables from style.css.
-
-   UPGRADES in v2.1:
-   1. pre/code blocks: max-width + overflow-x fixed for mobile
-   2. post-wrap horizontal padding tightened on 411px
-   3. blog-hero typography refined for small screens
-   4. filter bar: All tag gets accent style
-   5. post-content img: responsive inside article body
-   6. Touch scroll (-webkit-overflow-scrolling) on code blocks
-   7. Focus-visible outlines for keyboard nav accessibility
+   Must be loaded AFTER style.css (inherits all CSS variables)
 ═══════════════════════════════════════════════════════════════ */
 
 /* ── Blog nav ─────────────────────────────────────────────── */
@@ -25,11 +15,7 @@
   justify-content: space-between;
 }
 
-.blog-nav-right {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
+.blog-nav-right { display: flex; align-items: center; gap: 1.5rem; }
 
 .nav-back {
   font-family: var(--font-mono);
@@ -39,7 +25,6 @@
   border: 1px solid var(--border, rgba(255,255,255,0.08));
   border-radius: 8px;
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-  white-space: nowrap;
 }
 .nav-back:hover {
   color: var(--accent, #2f81f7);
@@ -64,10 +49,9 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 0.75rem;
-  display: block;
 }
 .blog-hero-title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text, #e8edf5);
@@ -88,15 +72,10 @@
   margin: 0 auto;
   padding: 3rem 2rem 5rem;
   width: 100%;
-  /* FIX: prevents wide filter bar from creating horizontal scroll */
-  box-sizing: border-box;
 }
-.blog-list-wrap {
-  max-width: 760px;
-  margin: 0 auto;
-}
+.blog-list-wrap { max-width: 760px; margin: 0 auto; }
 
-/* ── Filter bar ──────────────────────────────────────────── */
+/* Filter bar */
 .blog-filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -113,8 +92,7 @@
   padding: 0.6rem 1rem;
   color: var(--text, #e8edf5);
   font-family: var(--font-body);
-  /* FIX: 16px prevents iOS/Android auto-zoom on focus */
-  font-size: 16px;
+  font-size: 0.9rem;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -123,16 +101,8 @@
   border-color: var(--accent, #2f81f7);
   box-shadow: 0 0 0 3px rgba(47,129,247,0.12);
 }
-.blog-search-input:focus-visible {
-  outline: 2px solid var(--accent, #2f81f7);
-  outline-offset: 2px;
-}
 
-.blog-filter-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
+.blog-filter-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .filter-tag {
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -143,43 +113,26 @@
   color: var(--text-2, #8b96a8);
   cursor: pointer;
   transition: all 0.15s ease;
-  /* FIX: prevent tap highlight on Android */
-  -webkit-tap-highlight-color: transparent;
 }
-.filter-tag:hover {
-  color: var(--text);
-  border-color: var(--border-2, rgba(255,255,255,0.14));
-}
+.filter-tag:hover { color: var(--text); border-color: var(--border-2, rgba(255,255,255,0.14)); }
 .filter-tag.active {
   background: var(--accent-dim, rgba(47,129,247,0.12));
   color: var(--accent, #2f81f7);
   border-color: rgba(47,129,247,0.3);
 }
-.filter-tag:focus-visible {
-  outline: 2px solid var(--accent, #2f81f7);
-  outline-offset: 2px;
-}
 
-/* ── Article cards ─────────────────────────────────────── */
-.blog-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
+/* Article cards */
+.blog-list { display: flex; flex-direction: column; gap: 1px; }
 
 .blog-card {
   display: block;
   padding: 1.75rem 0;
   border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
   text-decoration: none;
-  transition: padding-left 0.15s ease;
+  transition: all 0.15s ease;
   cursor: pointer;
-  /* FIX: prevent tap highlight on Android */
-  -webkit-tap-highlight-color: transparent;
 }
-.blog-card:first-child {
-  border-top: 1px solid var(--border, rgba(255,255,255,0.08));
-}
+.blog-card:first-child { border-top: 1px solid var(--border, rgba(255,255,255,0.08)); }
 .blog-card:hover { padding-left: 0.5rem; }
 
 .blog-card .category-tag {
@@ -202,7 +155,6 @@
   transition: color 0.15s ease;
 }
 .blog-card:hover .blog-card-title { color: var(--accent, #2f81f7); }
-
 .blog-card-excerpt {
   font-size: 0.9rem;
   color: var(--text-2, #8b96a8);
@@ -210,6 +162,7 @@
   margin-bottom: 0.75rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -220,7 +173,6 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-3, #545f6e);
-  flex-wrap: wrap;
 }
 .blog-card-meta .sep { opacity: 0.4; }
 .blog-card-read {
@@ -233,7 +185,7 @@
 }
 .blog-card:hover .blog-card-read { opacity: 1; }
 
-/* ── Skeleton loading ──────────────────────────────────── */
+/* Skeleton loading */
 .skeleton-card {
   height: 100px;
   background: linear-gradient(90deg,
@@ -250,7 +202,7 @@
   100% { background-position: -200% 0; }
 }
 
-/* ── Empty / load more ─────────────────────────────────── */
+/* Empty / load more */
 .blog-empty {
   text-align: center;
   padding: 4rem 0;
@@ -260,26 +212,23 @@
 }
 .load-more-wrap { text-align: center; margin-top: 2.5rem; }
 
-/* ── Single post ──────────────────────────────────────── */
+/* ── Single post ──────────────────────────────────────────── */
 .post-wrap {
   max-width: 720px;
   margin: 0 auto;
   padding: 2.5rem 2rem 5rem;
   width: 100%;
-  /* FIX: prevents code blocks from escaping the container */
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
-/* ── Breadcrumb ────────────────────────────────────────── */
+/* Breadcrumb */
 .breadcrumb ol {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  flex-wrap: wrap;
   gap: 0.4rem;
   list-style: none;
   padding: 0;
   margin-bottom: 2.5rem;
-  flex-wrap: wrap;
 }
 .breadcrumb li {
   font-family: var(--font-mono);
@@ -293,14 +242,17 @@
 .breadcrumb a:hover { opacity: 0.75; }
 .breadcrumb li[aria-current="page"] {
   color: var(--text-2, #8b96a8);
-  /* FIX: long titles truncate rather than overflow */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 260px;
+  /* FIX: full title wraps — never truncate with ellipsis.
+     Previous version had white-space:nowrap + max-width:260px
+     which cut "Building Real-Time Multiplayer wit…" */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  max-width: 100%;
+  line-height: 1.4;
 }
 
-/* ── Post header ───────────────────────────────────────── */
+/* Post header */
 .post-header { margin-bottom: 2rem; }
 .post-header .category-tag {
   display: inline-block;
@@ -313,15 +265,12 @@
   margin-bottom: 0.75rem;
 }
 .post-title {
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
   color: var(--text, #e8edf5);
   margin-bottom: 1.25rem;
-  /* FIX: long words (URLs, tech terms) wrap on narrow screens */
-  overflow-wrap: break-word;
-  word-break: break-word;
 }
 .post-meta {
   display: flex;
@@ -343,41 +292,34 @@
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid var(--border);
-  flex-shrink: 0;
 }
 .post-meta-sep { opacity: 0.4; }
 
-/* ── Divider ───────────────────────────────────────────── */
+/* Divider */
 .post-divider {
   height: 1px;
   background: var(--border, rgba(255,255,255,0.08));
   margin: 2rem 0;
 }
 
-/* ── Post content ─────────────────────────────────────── */
+/* Post content — the actual article body */
 .post-content {
   font-size: 1rem;
   line-height: 1.85;
   color: var(--text-2, #8b96a8);
-  /* FIX: ensures content never breaks out of its container */
-  overflow-wrap: break-word;
-  word-break: break-word;
 }
-
 .post-content h2 {
   font-size: 1.35rem;
   font-weight: 600;
   color: var(--text, #e8edf5);
   margin: 2.5rem 0 0.75rem;
   letter-spacing: -0.02em;
-  line-height: 1.3;
 }
 .post-content h3 {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text, #e8edf5);
   margin: 2rem 0 0.5rem;
-  line-height: 1.3;
 }
 .post-content p  { margin-bottom: 1.4rem; }
 .post-content ul,
@@ -386,18 +328,12 @@
   margin-bottom: 1.4rem;
 }
 .post-content li { margin-bottom: 0.5rem; }
-
 .post-content a {
   color: var(--accent, #2f81f7);
   text-decoration: underline;
   text-underline-offset: 3px;
-  /* FIX: long URLs wrap instead of overflow */
-  overflow-wrap: break-word;
-  word-break: break-all;
 }
 .post-content a:hover { opacity: 0.8; }
-
-/* Inline code */
 .post-content code {
   font-family: var(--font-mono);
   font-size: 0.88em;
@@ -406,30 +342,14 @@
   border-radius: 4px;
   padding: 0.15em 0.45em;
   color: var(--text, #e8edf5);
-  /* FIX: inline code doesn't cause overflow */
-  overflow-wrap: break-word;
-  word-break: break-all;
 }
-
-/*
- * Code blocks — CRITICAL FIX for mobile:
- * pre must be contained and scrollable, not clipped.
- * The post-wrap has overflow:hidden, so pre needs
- * its own overflow-x:auto with a negative margin trick
- * to allow full-width scroll on mobile.
- */
 .post-content pre {
   background: var(--surface, #13181f);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
-  /* FIX: scroll horizontally, never clip */
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;   /* smooth scroll on iOS */
   margin-bottom: 1.4rem;
-  /* FIX: max-width ensures pre never breaks out of container */
-  max-width: 100%;
-  box-sizing: border-box;
 }
 .post-content pre code {
   background: none;
@@ -437,12 +357,7 @@
   padding: 0;
   font-size: 0.88rem;
   line-height: 1.7;
-  /* FIX: code inside pre should not wrap — scroll instead */
-  overflow-wrap: normal;
-  word-break: normal;
-  white-space: pre;
 }
-
 .post-content blockquote {
   border-left: 3px solid var(--accent, #2f81f7);
   padding: 0.75rem 1.25rem;
@@ -452,16 +367,6 @@
   color: var(--text-2);
   font-style: italic;
 }
-
-/* FIX: images inside post content are responsive */
-.post-content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--radius, 10px);
-  border: 1px solid var(--border);
-  margin: 1rem 0;
-}
-
 .post-content strong { color: var(--text, #e8edf5); font-weight: 600; }
 .post-content em     { color: var(--text, #e8edf5); }
 .post-content hr {
@@ -470,7 +375,7 @@
   margin: 2rem 0;
 }
 
-/* ── Prev / Next ───────────────────────────────────────── */
+/* Prev / Next */
 .post-navigation {
   display: flex;
   justify-content: space-between;
@@ -489,8 +394,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  /* FIX: tap highlight removed on Android */
-  -webkit-tap-highlight-color: transparent;
 }
 .post-nav-link:hover {
   color: var(--accent, #2f81f7);
@@ -498,7 +401,7 @@
   background: var(--accent-dim, rgba(47,129,247,0.06));
 }
 
-/* ── Author box ────────────────────────────────────────── */
+/* Author box */
 .author-box {
   background: var(--surface, #13181f);
   border: 1px solid var(--border);
@@ -532,7 +435,10 @@
   margin-bottom: 0.75rem;
 }
 .author-bio a { color: var(--accent); }
-.author-links { display: flex; gap: 1rem; }
+.author-links {
+  display: flex;
+  gap: 1rem;
+}
 .author-links a {
   font-family: var(--font-mono);
   font-size: 0.78rem;
@@ -541,7 +447,7 @@
 }
 .author-links a:hover { opacity: 0.7; }
 
-/* ── Blog footer ──────────────────────────────────────── */
+/* ── Blog footer ──────────────────────────────────────────── */
 .blog-footer {
   border-top: 1px solid var(--border, rgba(255,255,255,0.08));
   padding: 2rem;
@@ -555,7 +461,10 @@
   gap: 1rem;
   flex-wrap: wrap;
 }
-.blog-footer ul { display: flex; gap: 1.5rem; }
+.blog-footer ul {
+  display: flex;
+  gap: 1.5rem;
+}
 .blog-footer a {
   font-family: var(--font-mono);
   font-size: 0.8rem;
@@ -564,100 +473,19 @@
 }
 .blog-footer a:hover { color: var(--text); }
 
-/* ══════════════════════════════════════════════════════
-   RESPONSIVE — blog/post specific
-   Main breakpoints in mediaqueries.css handle the portfolio.
-   These handle blog.html + post.html only.
-══════════════════════════════════════════════════════ */
-
-/* ── Tablet 900px ──────────────────────────────────────── */
-@media screen and (max-width: 900px) {
-  .blog-hero { padding: 3rem 2rem 2.5rem; }
-  .blog-content-section { padding: 2.5rem 2rem 4rem; }
-  .post-wrap { padding: 2rem 2rem 4rem; }
-}
-
-/* ── Mobile 640px ──────────────────────────────────────── */
+/* ── Responsive ─────────────────────────────────────────────── */
 @media screen and (max-width: 640px) {
-  /* Nav */
-  #blog-nav { padding: 0 1.25rem; }
-  .nav-back  { font-size: 0.78rem; }
+  .blog-hero    { padding: 3rem 1.25rem 2.5rem; }
+  .blog-content-section { padding: 2rem 1.25rem 4rem; }
+  .post-wrap    { padding: 2rem 1.25rem 4rem; }
 
-  /* Hero */
-  .blog-hero         { padding: 2.5rem 1.25rem 2rem; }
-  .blog-hero-title   { font-size: clamp(1.75rem, 8vw, 2.4rem); }
-  .blog-hero-sub     { font-size: 0.9rem; }
+  .blog-filter-bar  { flex-direction: column; align-items: stretch; }
+  .blog-search-input { min-width: unset; }
 
-  /* Listing */
-  .blog-content-section { padding: 1.75rem 1.25rem 3rem; }
-  .blog-filter-bar  { flex-direction: column; align-items: stretch; gap: 0.6rem; }
-  .blog-search-input { min-width: unset; width: 100%; }
-  .blog-filter-tags  { gap: 0.35rem; }
+  .post-navigation  { flex-direction: column; }
+  .post-nav-link    { max-width: 100%; }
 
-  /* Card */
-  .blog-card          { padding: 1.25rem 0; }
-  .blog-card-title    { font-size: 1rem; }
-  .blog-card-excerpt  { font-size: 0.85rem; -webkit-line-clamp: 3; }
-  /* Show "Read →" always on mobile (no hover state) */
-  .blog-card-read     { opacity: 0.6; }
+  .author-box-inner { flex-direction: column; }
 
-  /* Post */
-  /* FIX: tighter horizontal padding on 411px leaves more reading width */
-  .post-wrap          { padding: 1.5rem 1rem 3rem; }
-  .post-title         { font-size: clamp(1.4rem, 7vw, 2rem); }
-  .post-meta          { font-size: 0.75rem; gap: 0.35rem; }
-
-  .post-content       { font-size: 0.95rem; }
-  .post-content h2    { font-size: 1.2rem; margin: 2rem 0 0.6rem; }
-  .post-content h3    { font-size: 1rem; margin: 1.5rem 0 0.5rem; }
-
-  /*
-   * Code blocks on mobile:
-   * Use negative margin to allow the pre to be full-width
-   * even though post-wrap has 1rem padding.
-   * The scrollable area extends edge-to-edge.
-   */
-  .post-content pre {
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    margin-left: -1rem;
-    margin-right: -1rem;
-    padding: 1rem 1rem;
-    font-size: 0.82rem;
-  }
-
-  /* Breadcrumb */
-  .breadcrumb li[aria-current="page"] { max-width: 180px; }
-
-  /* Prev/Next */
-  .post-navigation    { flex-direction: column; gap: 0.5rem; }
-  .post-nav-link      { max-width: 100%; }
-
-  /* Author */
-  .author-box-inner   { flex-direction: column; }
-
-  /* Footer */
-  .blog-footer        { padding: 1.5rem 1.25rem; }
-  .blog-footer-inner  { flex-direction: column; align-items: center; text-align: center; }
-  .blog-footer ul     { justify-content: center; }
-}
-
-/* ── Small phones 400px ────────────────────────────────── */
-@media screen and (max-width: 400px) {
-  .blog-hero { padding: 2rem 1rem 1.75rem; }
-  .blog-hero-title  { font-size: 1.6rem; }
-  .blog-hero-sub    { font-size: 0.85rem; }
-  .blog-content-section { padding: 1.5rem 1rem 2.5rem; }
-
-  .post-wrap        { padding: 1.25rem 0.85rem 2.5rem; }
-  .post-title       { font-size: 1.35rem; }
-  .post-content pre {
-    margin-left: -0.85rem;
-    margin-right: -0.85rem;
-    padding: 0.85rem;
-  }
-  .author-avatar    { width: 40px; height: 40px; }
-  .author-name      { font-size: 0.9rem; }
-  .author-bio       { font-size: 0.82rem; }
+  .blog-footer-inner { flex-direction: column; align-items: center; text-align: center; }
 }
