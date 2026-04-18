@@ -1,13 +1,13 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    {  
+    {
       "source": "/blog/:slug",
-      "destination": "/post.html"
+      "destination": "/post"
     },
     {
       "source": "/blog",
-      "destination": "/blog.html"
+      "destination": "/blog"
     }
   ],
   "headers": [

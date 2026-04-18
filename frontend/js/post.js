@@ -1,37 +1,3 @@
-/* ═══════════════════════════════════════════════════════════
-   Portfolio v2.2 — post.js
-
-   PRIME BUG FIXED:
-   ──────────────────────────────────────────────────────────
-   SYMPTOM : vijaykumarcode.space/blog/websocket-stomp-spring-boot
-             showed a blank page. The URL never loaded the post.
-             Browser was redirecting to /post?slug=... instead.
-
-   ROOT CAUSE:
-     Vercel's rewrite rule converts:
-       /blog/:slug  →  /post.html?slug=:slug  (internal)
-
-     Rewrites are transparent to the browser — the URL bar
-     always stays as /blog/websocket-stomp-spring-boot.
-
-     Therefore:
-       window.location.search  = ""   (empty — no ? in the URL)
-       window.location.pathname = "/blog/websocket-stomp-spring-boot"
-
-     The old code only read from window.location.search:
-       const slug = new URLSearchParams(window.location.search).get('slug');
-     This returned null → showNotFound() fired every time.
-
-   FIX:
-     Read slug from window.location.pathname first.
-     Keep query string as fallback for local dev where
-     you might open post.html?slug=... directly.
-
-   BREADCRUMB BUG FIXED (CSS):
-     The breadcrumb was truncating long post titles with
-     white-space:nowrap + text-overflow:ellipsis.
-     That rule is removed from blog.css so the title wraps.
-═══════════════════════════════════════════════════════════ */
 
 'use strict';
 

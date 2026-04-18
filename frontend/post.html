@@ -5,19 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!--
-    FIX PRIME BUG: <base href="/"> forces ALL relative paths to resolve
-    from the domain root, regardless of the current URL path.
-
-    Without this, when Vercel serves post.html for /blog/slug,
-    the browser resolves relative paths under /blog/:
-      css/style.css  → /blog/css/style.css  → 404 (page unstyled)
-      assets/logo.png → /blog/assets/logo.png → 404
-
-    With <base href="/">, they resolve correctly:
-      css/style.css  → /css/style.css  ✓
-      assets/logo.png → /assets/logo.png ✓
-  -->
+ 
   <base href="/">
 
   <title>Loading… | Engineering Log</title>
