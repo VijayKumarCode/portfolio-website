@@ -5,9 +5,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Dynamic title set by post.js -->
-  <title>Loading… | Engineering Log</title>
+  <!--
+    FIX PRIME BUG: <base href="/"> forces ALL relative paths to resolve
+    from the domain root, regardless of the current URL path.
 
+    Without this, when Vercel serves post.html for /blog/slug,
+    the browser resolves relative paths under /blog/:
+      css/style.css  → /blog/css/style.css  → 404 (page unstyled)
+      assets/logo.png → /blog/assets/logo.png → 404
+
+    With <base href="/">, they resolve correctly:
+      css/style.css  → /css/style.css  ✓
+      assets/logo.png → /assets/logo.png ✓
+  -->
+  <base href="/">
+
+  <title>Loading… | Engineering Log</title>
+  <meta name="description" content="Engineering Log | Vijay Kumar">
   <link rel="icon" type="image/png" href="assets/profilePic.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +34,6 @@
 
 <body class="single-post-page">
 
-  <!-- ── Navigation ───────────────────────────────────────── -->
   <header id="site-header" role="banner">
     <nav id="blog-nav" aria-label="Post navigation">
       <a href="/" class="logo-container" aria-label="Back to portfolio">
@@ -35,7 +48,6 @@
   <main>
     <article class="post-wrap" id="post-article">
 
-      <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol role="list">
           <li><a href="/blog">Engineering Log</a></li>
@@ -44,7 +56,6 @@
         </ol>
       </nav>
 
-      <!-- Post header -->
       <header class="post-header">
         <span class="category-tag" id="post-category"></span>
         <h1 class="post-title" id="post-title"></h1>
@@ -60,15 +71,12 @@
         </div>
       </header>
 
-      <!-- Post content -->
       <div class="post-divider" aria-hidden="true"></div>
       <div class="post-content" id="post-content" role="main"></div>
       <div class="post-divider" aria-hidden="true"></div>
 
-      <!-- Prev / Next -->
       <nav class="post-navigation" id="post-navigation" aria-label="Navigate between posts"></nav>
 
-      <!-- Author -->
       <aside class="author-box" aria-label="About the author">
         <div class="author-box-inner">
           <img src="assets/profilePic.png"
@@ -104,7 +112,10 @@
       </nav>
     </div>
   </footer>
-<script type="module" src="/js/post.js"></script>
+
+  <!-- FIX: Removed stray "git" text that was rendered as visible content.
+       Script uses absolute path — not affected by <base href="/"> -->
+  <script type="module" src="/js/post.js"></script>
 
 </body>
 </html>
