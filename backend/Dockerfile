@@ -16,22 +16,41 @@ RUN ./mvnw clean package -DskipTests -q
 # ── Stage 2: Runtime ─────────────────────────────────────────
 # eclipse-temurin:17-jre-alpine is ~80MB — much smaller than JDK
 FROM eclipse-temurin:17-jre-alpine
+# ── Stage 1: Build ─────────────────────────────────────────
+FROM eclipse-temurin:17-jdk-alpine AS builder
+WORKDIR /build
 
-# Non-root user for security
+# Copy Maven wrapper and POM first for layer caching
+COPY .mvn/ .mvn/
+COPY mvnw pom.xml ./
+
+# Ensure the Maven wrapper has execution permissions
+RUN chmod +x mvnw
+
+# Download dependencies (cached if pom.xml doesn't change)
+RUN ./mvnw dependency:go-offline -B
+
+# Copy the actual source code and build the JAR
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
+
+# ── Stage 2: Runtime ───────────────────────────────────────
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+# Security: Run as a non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-WORKDIR /app
+# Copy ONLY the built JAR from the builder stage
+COPY --from=builder /build/target/*.jar app.jar
 
-# Copy only the built JAR (not the entire build context)
-COPY --from=builder /build/target/portfolio-service-*.jar app.jar
+# JVM Tuning for Render's 512MB Free Tier
+# Note: Max RAM is 512MB. -Xmx is set to 300m to leave room for the OS and JVM Metaspace.
+ENV JAVA_OPTS="-Xms96m -Xmx300m -XX:+UseSerialGC -XX:MaxMetaspaceSize=128m -Djava.security.egd=file:/dev/./urandom"
 
-# JVM tuning for Render free tier (512 MB RAM):
-# - UseSerialGC: lower overhead than G1 for single-CPU containers
-# - Xms/Xmx: prevents OOM while leaving headroom for the OS
-# - MaxMetaspaceSize: limits Spring Boot's class loading overhead
-ENV JAVA_OPTS="-Xms96m -Xmx400m -XX:+UseSerialGC -XX:MaxMetaspaceSize=96m -Djava.security.egd=file:/dev/./urandom"
-
+# Expose the port
 EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Execute the application, forcing the prod profile and utilizing Render's PORT variable
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:8080} -Dspring.profiles.active=prod -jar app.jar"]
