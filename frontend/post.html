@@ -5,7 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
- 
+  <!--
+    <base href="/"> forces all relative asset paths to resolve from
+    the domain root even when served at /blog/:slug
+  -->
   <base href="/">
 
   <title>Loading… | Engineering Log</title>
@@ -36,6 +39,7 @@
   <main>
     <article class="post-wrap" id="post-article">
 
+      <!-- Breadcrumb -->
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol role="list">
           <li><a href="/blog">Engineering Log</a></li>
@@ -44,6 +48,7 @@
         </ol>
       </nav>
 
+      <!-- Post header -->
       <header class="post-header">
         <span class="category-tag" id="post-category"></span>
         <h1 class="post-title" id="post-title"></h1>
@@ -57,14 +62,31 @@
           <span class="post-meta-sep" aria-hidden="true">·</span>
           <span id="post-read-time"></span>
         </div>
+
+        <!--
+          SHARE BAR — injected here, between post-meta and the divider.
+          post.js populates #share-bar with correct URL + title after
+          the post is found. Platform links open in a new tab.
+        -->
+        <div class="share-bar" id="share-bar" aria-label="Share this article">
+          <span class="share-label">Share</span>
+          <!-- Buttons populated by post.js with correct slug URL -->
+        </div>
       </header>
 
-      <div class="post-divider" aria-hidden="true"></div>
-      <div class="post-content" id="post-content" role="main"></div>
+      <!-- Divider -->
       <div class="post-divider" aria-hidden="true"></div>
 
+      <!-- Article body -->
+      <div class="post-content" id="post-content" role="main"></div>
+
+      <!-- Divider -->
+      <div class="post-divider" aria-hidden="true"></div>
+
+      <!-- Prev / Next -->
       <nav class="post-navigation" id="post-navigation" aria-label="Navigate between posts"></nav>
 
+      <!-- Author -->
       <aside class="author-box" aria-label="About the author">
         <div class="author-box-inner">
           <img src="assets/profilePic.png"
@@ -75,7 +97,8 @@
             <p class="author-name">Vijay Kumar</p>
             <p class="author-bio">
               Backend engineer building real-time systems with Java 17 and Spring Boot 3.
-              Currently shipping <a href="https://nexusgame.space" target="_blank" rel="noopener">Nexus</a>
+              Currently shipping
+              <a href="https://nexusgame.space" target="_blank" rel="noopener">Nexus</a>
               and writing about the problems I run into.
             </p>
             <div class="author-links">
@@ -101,8 +124,6 @@
     </div>
   </footer>
 
-  <!-- FIX: Removed stray "git" text that was rendered as visible content.
-       Script uses absolute path — not affected by <base href="/"> -->
   <script type="module" src="/js/post.js"></script>
 
 </body>
