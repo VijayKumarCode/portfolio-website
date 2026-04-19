@@ -367,21 +367,49 @@
 .post-navigation {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 1rem;
   margin: 2.5rem 0;
 }
+
+/*
+ * FIX — post nav overflow (advanced):
+ *
+ * post.js wraps each link in div.nav-prev / div.nav-next.
+ * In flexbox, the default min-width:auto means items cannot
+ * shrink below their content width — a long title forces the
+ * div wider than 50%, overflowing the container.
+ *
+ * Solution:
+ *   1. Give each wrapper exactly half the container minus half gap
+ *   2. min-width:0 — overrides the auto, allows shrinking
+ *   3. Link fills wrapper (width:100%) and truncates with ellipsis
+ *
+ * This is the correct CSS algorithm for constrained flex text.
+ */
+.nav-prev,
+.nav-next {
+  flex: 0 1 calc(50% - 0.5rem);
+  min-width: 0;            /* KEY: allows item to shrink below content width */
+}
+.nav-next { text-align: right; }
+
 .post-nav-link {
+  display: block;
+  width: 100%;
   font-family: var(--font-mono);
   font-size: 0.82rem;
   color: var(--text-2, #8b96a8);
   padding: 0.65rem 1rem;
   border: 1px solid var(--border);
   border-radius: 8px;
+  box-sizing: border-box;
   transition: all 0.15s ease;
-  max-width: 48%;
+  /* Truncate with ellipsis — correct for nav links */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
 }
 .post-nav-link:hover {
   color: var(--accent, #2f81f7);
@@ -470,8 +498,10 @@
   .blog-filter-bar  { flex-direction: column; align-items: stretch; }
   .blog-search-input { min-width: unset; }
 
-  .post-navigation  { flex-direction: column; }
-  .post-nav-link    { max-width: 100%; }
+  .post-navigation  { flex-direction: column; align-items: stretch; }
+  .nav-prev,
+  .nav-next         { flex: 0 0 100%; min-width: 0; text-align: left; }
+  .post-nav-link    { width: 100%; }
 
   .author-box-inner { flex-direction: column; }
 
