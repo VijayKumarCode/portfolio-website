@@ -84,7 +84,14 @@ section {
   width: 100%;
   box-sizing: border-box;
   padding: 5rem 2rem;
-  overflow: hidden;
+  /*
+   * FIX: overflow-x:clip replaces overflow:hidden.
+   * overflow:hidden clips BOTH axes — project cards that extend below
+   * the section's computed height become invisible on mobile.
+   * overflow-x:clip only contains horizontal overflow (prevents mobile
+   * horizontal scroll bleed) without ever clipping vertical content.
+   */
+  overflow-x: clip;
 }
 
 /* ── NAVIGATION ─────────────────────────────────────────────── */
@@ -374,9 +381,6 @@ section {
   color: var(--accent);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
 }
 .skills-list { display: flex; flex-direction: column; gap: 0.85rem; }
 .skill-item  { display: flex; align-items: center; gap: 0.75rem; }
@@ -401,6 +405,30 @@ section {
   transition: transform 0.9s var(--ease);
 }
 #skills.animate .skill-bar::after { transform: scaleX(1); }
+
+/*
+ * Skills group card — matches project card visual language.
+ * Each group (Core & Backend / Tools & Infrastructure) gets its own
+ * rounded card with border and inner padding. Same border-radius and
+ * surface background as .project-card.
+ */
+.skills-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);   /* matches project-card corner radius */
+  padding: 1.75rem 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--fast) var(--ease);
+}
+.skills-group:hover {
+  border-color: var(--border-2);
+}
+.skills-group-title {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+}
 
 /* ── PROJECTS ─────────────────────────────────────────────── */
 .projects-grid {

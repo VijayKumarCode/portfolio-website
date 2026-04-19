@@ -64,7 +64,7 @@ section {
   display: block;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: clip;     /* horizontal containment only, not vertical */
+  overflow-x: clip;   /* horizontal containment only — never clips vertical */
 }
 
 /*
@@ -83,8 +83,6 @@ section {
   max-width: 100%;
   margin-left: 0;
   margin-right: 0;
-  /* FIX: skills section must NOT clip overflow — bars animate via transform */
-  overflow: visible;
 }
 
 /* ── 1920px — Large desktop / Full HD ──────────────────── */
@@ -345,4 +343,74 @@ section {
 
   .contact-form-wrap  { padding: 1rem 0.75rem; }
   .contact-tagline    { font-size: 0.9rem; }
+}
+
+/* ── Skills group cards on mobile ──────────────────────────
+ * On single-column layout, cards should stack cleanly and fill
+ * the full container width, matching project card behaviour.
+──────────────────────────────────────────────────────────*/
+@media screen and (max-width: 900px) {
+  .skills-group {
+    padding: 1.5rem;           /* slightly tighter padding on tablet */
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .skills-group {
+    padding: 1.25rem;
+    border-radius: var(--radius, 10px);  /* slightly tighter radius on mobile */
+  }
+}
+
+/* ── Projects grid — complete mobile rearrangement ──────────
+ *
+ * Problem: .project-featured has grid-column:span 2. When grid
+ * collapses to 1 column, span 2 is meaningless but the card
+ * stays as a row-direction flex — image on left, text on right —
+ * which on a 411px screen gives each column ~180px. Too narrow.
+ *
+ * Solution: On mobile, all cards stack vertically, full width.
+ * Featured card loses its row direction and becomes column like
+ * the others. This makes all 4 projects visible and readable.
+──────────────────────────────────────────────────────────*/
+@media screen and (max-width: 640px) {
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* FIX: featured card collapses to single column layout */
+  .project-featured {
+    grid-column: span 1;          /* no longer spans 2 cols */
+    flex-direction: column;       /* stack image above text */
+  }
+
+  /* Image area heights on single column */
+  .project-featured .project-img-wrap {
+    flex: none;
+    width: 100%;
+    height: 200px;                /* generous but not too tall on mobile */
+    min-height: unset;
+  }
+
+  .project-card:not(.project-featured) .project-img-wrap {
+    height: 160px;
+  }
+
+  .project-info { padding: 1.25rem; }
+
+  /* Badge repositioned for narrow layout */
+  .project-badge {
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.68rem;
+    padding: 0.15rem 0.5rem;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .project-featured .project-img-wrap { height: 170px; }
+  .project-card:not(.project-featured) .project-img-wrap { height: 140px; }
+  .project-info { padding: 1rem; }
 }

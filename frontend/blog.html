@@ -73,14 +73,22 @@
           </div>
         </div>
 
-        <!-- Articles injected here -->
-        <div class="blog-list" id="blog-list" role="list" aria-live="polite">
-          <div class="blog-skeleton" aria-label="Loading…">
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-            <div class="skeleton-card"></div>
-          </div>
+        <!--
+          FIX: Skeleton is OUTSIDE blog-list.
+          blog-list is display:flex;flex-direction:column with gap:1px.
+          When skeleton was inside it, the 3 skeleton-cards appeared as
+          3 near-invisible dark flex rows (shimmer colors are close to bg).
+          Moving skeleton outside means blog-list starts empty, JS fills
+          it, and the skeleton shows independently with proper spacing.
+        -->
+        <div class="blog-skeleton" id="blog-skeleton" aria-label="Loading entries…" aria-live="polite">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
         </div>
+
+        <!-- Articles injected here by blog.js -->
+        <div class="blog-list" id="blog-list" role="list" aria-live="polite"></div>
 
         <!-- Empty state -->
         <div class="blog-empty" id="empty-state" style="display:none;">

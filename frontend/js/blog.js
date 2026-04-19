@@ -1,4 +1,3 @@
-
 'use strict';
 
 const LIMIT = 10;
@@ -18,6 +17,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     allPosts = await res.json();
     allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    /* FIX: hide skeleton once data is ready */
+    const skeletonEl = document.getElementById('blog-skeleton');
+    if (skeletonEl) skeletonEl.style.display = 'none';
 
     buildCategoryTags(tagsEl, allPosts);
 
@@ -52,6 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   } catch (err) {
     console.error('[blog.js]', err);
+    const skeletonEl = document.getElementById('blog-skeleton');
+    if (skeletonEl) skeletonEl.style.display = 'none';
     blogList.innerHTML = `<p style="color:var(--text-3);text-align:center;padding:3rem;">Could not load entries. Please refresh.</p>`;
   }
 });
