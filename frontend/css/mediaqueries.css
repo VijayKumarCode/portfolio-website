@@ -65,8 +65,15 @@ section {
   width: 100%;
   box-sizing: border-box;
   overflow-x: clip;   /* horizontal containment only — never clips vertical */
+  
+  /* NEW: Fluid margin for all sections (scales between 2.5rem and 5rem) */
+  margin-bottom: clamp(2.5rem, 5vw, 5rem); 
 }
 
+/* NEW: Extra separation specifically for the Hero/Profile section */
+#profile {
+  margin-bottom: clamp(4rem, 8vw, 8rem);
+}
 /*
  * FIX 3 — Section bottom separation
  * Without margin-bottom, adjacent sections share a border.
