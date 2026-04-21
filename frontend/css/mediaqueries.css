@@ -1,102 +1,108 @@
-/* ═══════════════════════════════════════════════════════════
-   PORTFOLIO v2.2 — mediaqueries.css
+/* Upgraded PORTFOLIO — mediaqueries.css
+   - Fallback ordering for overflow
+   - Gradient-based hero glow (no oversized pseudo-element)
+   - aspect-ratio for project images
+   - Robust mobile skill-bar with .skill-fill for smooth animations
+   - Preserves original breakpoints and intent
+*/
 
-   FIXES in this version:
-   ──────────────────────────────────────────────────────────
-   1. Section overflow changed from hidden → clip
-      overflow:hidden was clipping project cards and creating
-      visible bleed from the next section's background.
-      overflow:clip does the same horizontal containment
-      without clipping vertical content.
+/* ── Global baseline ─────────────────────────────────────── */
+:root{
+  --accent: #3c78ff;
+  --accent-2: #6fb1ff;
+  --skill-track: #e6e9ef;
+  --radius: 10px;
+}
 
-   2. Skill bar width fixed on mobile
-      flex:1 on a column-direction flex item grows vertically.
-      Added explicit width:100% on .skill-bar for mobile.
-
-   3. Section bottom separation
-      Added margin-bottom to section so adjacent sections
-      don't bleed into each other visually.
-
-   4. #skills section: removed overflow that clipped the bars
-      from animating / showing in viewport.
-
-   TESTED AGAINST:
-   ─────────────────────────────────────────────────────────
-   1920px  — Full HD monitor
-   1366px  — Your Ubuntu laptop
-   1024px  — Small laptop / large tablet landscape
-    900px  — iPad landscape
-    768px  — iPad portrait
-    640px  — Large phone landscape
-    480px  — Standard Android / iPhone
-    420px  — Samsung Galaxy S23 (411px)
-    400px  — Smallest Android phones
-═══════════════════════════════════════════════════════════ */
-
-/* ── Global baseline ───────────────────────────────────────
- * These run at ALL screen sizes.
- * Redundant with style.css on purpose — mobile browser
- * specificity battles make belt + suspenders necessary.
-──────────────────────────────────────────────────────────*/
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: hidden; /* global horizontal fallback */
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/*
- * FIX 1 — overflow:clip instead of overflow:hidden
- *
- * overflow:hidden on a section does two things:
- *   A) Prevents horizontal child overflow (good — stops mobile bleed)
- *   B) Creates a new block formatting context that clips ALL overflow,
- *      including vertical — this was clipping project cards that
- *      extended beyond the computed section height.
- *
- * overflow:clip (supported in all modern browsers since 2022) only
- * clips at the padding box, does not create a new BFC, so vertically
- * tall content (project grids, skill lists) is never cut off.
- *
- * Fallback for older browsers: the overflow-x:hidden on html/body
- * already handles the horizontal mobile bleed.
- */
+/* Section containment: explicit fallback then modern clip */
 section {
   display: block;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: clip;   /* horizontal containment only — never clips vertical */
-  
-  /* NEW: Fluid margin for all sections (scales between 2.5rem and 5rem) */
-  margin-bottom: clamp(2.5rem, 5vw, 5rem); 
+  overflow-x: hidden; /* fallback for older engines */
+  overflow-x: clip;   /* modern browsers: clip horizontal only */
+  margin-bottom: clamp(2.5rem, 5vw, 5rem);
+  -webkit-overflow-scrolling: touch;
 }
 
-/* NEW: Extra separation specifically for the Hero/Profile section */
+/* Profile / Hero: replace heavy pseudo-element with performant gradient */
 #profile {
+  position: relative;
   margin-bottom: clamp(4rem, 8vw, 8rem);
+  background-image: radial-gradient(closest-side at 50% 30%, rgba(60,120,255,0.12), transparent 45%);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: min(360px, 88vw);
+  isolation: isolate; /* prevents blending with adjacent backgrounds */
+  padding-top: 3rem;
 }
-/*
- * FIX 3 — Section bottom separation
- * Without margin-bottom, adjacent sections share a border.
- * The hero section's background bleeds into the about section.
- * 0 margin is correct here because sections use padding for spacing —
- * the issue is that #skills has a background:var(--surface) which
- * appears to bleed. The real fix is ensuring each section has enough
- * padding so backgrounds don't visually merge.
- * Using padding-bottom on the section (already 5rem in style.css)
- * is the correct approach — just ensure #skills doesn't use overflow:hidden.
- */
+
+/* Keep a minimal pseudo-element (disabled) to avoid accidental overflow */
+#profile::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Skills container base */
 #skills {
   border-radius: 0;
   max-width: 100%;
   margin-left: 0;
   margin-right: 0;
+  background-clip: padding-box;
+}
+
+/* Projects image wrapper: prefer aspect-ratio over fixed heights */
+.project-img-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  min-height: 120px; /* graceful fallback for older browsers */
+  overflow: hidden;
+  border-radius: var(--radius, 8px);
+}
+
+/* Featured project default layout */
+.project-featured {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  flex-direction: row;
+}
+
+/* Skill bar base (desktop/tablet) */
+.skill-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--skill-track);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.skill-bar > .skill-fill {
+  display: block;
+  height: 100%;
+  width: var(--skill-percent, 60%);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 420ms cubic-bezier(.2,.9,.2,1);
+  transform-origin: left center;
 }
 
 /* ── 1920px — Large desktop / Full HD ──────────────────── */
 @media screen and (min-width: 1920px) {
-  :root {
-    --nav-h: 76px;
-  }
+  :root { --nav-h: 76px; }
 
   section { padding: 6rem 4rem; }
   .section-title { font-size: 3rem; margin-bottom: 3.5rem; }
@@ -124,7 +130,7 @@ section {
   section { padding: 4rem 2rem; }
 
   .project-featured { flex-direction: column; }
-  .project-featured .project-img-wrap { flex: none; height: 240px; }
+  .project-featured .project-img-wrap { flex: none; height: 240px; aspect-ratio: auto; }
 
   .blog-grid    { grid-template-columns: repeat(2, 1fr); }
   .blog-loading { grid-column: span 2; }
@@ -145,16 +151,12 @@ section {
   .skills-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .skill-name  { min-width: 130px; }
 
-  /*
-   * FIX 2 — skill bar width in single-column layout
-   * When skills-grid collapses to 1 column, skill-item stays row.
-   * skill-bar needs explicit width so it fills its parent.
-   */
+  /* Ensure skill-bar fills parent in single-column layout */
   .skill-bar { width: 100%; }
 
   .projects-grid  { grid-template-columns: 1fr; }
   .project-featured { flex-direction: column; }
-  .project-featured .project-img-wrap { flex: none; height: 220px; }
+  .project-featured .project-img-wrap { flex: none; height: 220px; aspect-ratio: auto; }
 
   .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
 
@@ -173,9 +175,13 @@ section {
   .profile-pic {
     width: clamp(160px, 35vw, 220px);
     height: clamp(160px, 35vw, 220px);
+    border-radius: 50%;
+    object-fit: cover;
   }
-  /* At 768px #profile is ~400px — reduce glow to fit */
-  #profile::before { width: min(360px, 88vw); height: min(360px, 88vw); }
+
+  /* Reduce gradient size to fit */
+  #profile { background-size: min(360px, 88vw); }
+
   .hero-name { font-size: clamp(2rem, 7vw, 2.8rem); }
 
   .about-pic { max-width: 260px; }
@@ -211,25 +217,12 @@ section {
     gap: 1rem;
     padding-top: 5rem;
     padding-bottom: 2.5rem;
+    background-size: min(320px, 85vw);
   }
-  /*
-   * FIX — Hero/About section bleed on mobile.
-   *
-   * ROOT CAUSE:
-   * #profile::before is position:absolute centered inside #profile.
-   * Its height is min(480px, 90vw). On a 640px screen: min(480, 576) = 480px.
-   * But #profile at 640px is only ~370px tall (padding + pic + text).
-   * The ::before overflows ~55px below #profile into #about, making
-   * the blue glow appear inside the about section.
-   *
-   * FIX: Scale ::before down at each mobile breakpoint so its height
-   * always fits within the computed section height. The glow is still
-   * visible — just sized to its container rather than exceeding it.
-   */
-  #profile::before {
-    width: min(320px, 85vw);
-    height: min(320px, 85vw);
-  }
+
+  /* Scale gradient to fit mobile */
+  #profile { background-size: min(320px, 85vw); }
+
   .profile-pic { width: 150px; height: 150px; }
   .hero-name   { font-size: clamp(1.8rem, 8vw, 2.4rem); }
   .hero-role   { font-size: 0.9rem; }
@@ -248,31 +241,35 @@ section {
 
   /*
    * FIX 2 — skill bars on mobile (main fix)
-   *
-   * skill-item becomes column direction here.
-   * In a column flex container:
-   *   - flex:1 on skill-bar means "grow in block direction" = height
-   *   - width stays at auto (content width) = essentially 0 for an empty div
-   *
-   * Solution: set explicit width:100% AND flex:none so the bar
-   * spans the full width of the skill-item column.
+   * explicit width + flex:none so the bar spans full width in column flow
    */
   .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
   .skill-item  {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.35rem;
   }
   .skill-name  { min-width: unset; font-size: 0.85rem; }
   .skill-bar   {
-    width: 100%;   /* explicit — flex:1 doesn't mean wide in column context */
-    flex: none;    /* don't grow/shrink — just be 100% wide */
+    width: 100%;
+    flex: none;
     height: 4px;
+    border-radius: 2px;
+    background-color: var(--skill-track);
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-bar > .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    width: var(--skill-percent, 60%);
+    transition: width 420ms cubic-bezier(.2,.9,.2,1);
   }
 
   .projects-grid { grid-template-columns: 1fr; gap: 1rem; }
   .project-featured { flex-direction: column; }
-  .project-featured .project-img-wrap { flex: none; height: 180px; }
+  .project-featured .project-img-wrap { flex: none; height: 180px; aspect-ratio: auto; }
   .project-card:not(.project-featured) .project-img-wrap { height: 160px; }
   .project-info  { padding: 1.25rem; }
 
@@ -314,8 +311,7 @@ section {
   #skills  { padding-left: 1.1rem; padding-right: 1.1rem; }
 
   #profile { padding-top: 2.25rem; padding-bottom: 2.25rem; }
-  /* #profile is ~300px tall at 411px — keep ::before well within */
-  #profile::before { width: min(240px, 80vw); height: min(240px, 80vw); }
+  #profile { background-size: min(240px, 80vw); }
   .profile-pic  { width: 140px; height: 140px; }
   .hero-name    { font-size: 1.7rem; letter-spacing: -0.03em; }
   .hero-role    { font-size: 0.88rem; }
@@ -339,6 +335,7 @@ section {
 
   /* Skill bars — ensure visible on S23 */
   .skill-bar { width: 100%; flex: none; height: 4px; }
+  .skill-bar > .skill-fill { height: 100%; }
 
   .contact-form-wrap { padding: 1.1rem 0.9rem; }
 }
@@ -349,7 +346,7 @@ section {
   #skills  { padding-left: 1rem; padding-right: 1rem; }
 
   #profile { padding-top: 2rem; }
-  #profile::before { width: min(210px, 78vw); height: min(210px, 78vw); }
+  #profile { background-size: min(210px, 78vw); }
   .profile-pic  { width: 120px; height: 120px; }
   .hero-name    { font-size: 1.55rem; letter-spacing: -0.03em; }
   .hero-role    { font-size: 0.85rem; }
@@ -375,34 +372,21 @@ section {
   .contact-tagline    { font-size: 0.9rem; }
 }
 
-/* ── Skills group cards on mobile ──────────────────────────
- * On single-column layout, cards should stack cleanly and fill
- * the full container width, matching project card behaviour.
-──────────────────────────────────────────────────────────*/
+/* ── Skills group cards on mobile ────────────────────────── */
 @media screen and (max-width: 900px) {
   .skills-group {
-    padding: 1.5rem;           /* slightly tighter padding on tablet */
+    padding: 1.5rem;
   }
 }
 
 @media screen and (max-width: 640px) {
   .skills-group {
     padding: 1.25rem;
-    border-radius: var(--radius, 10px);  /* slightly tighter radius on mobile */
+    border-radius: var(--radius, 10px);
   }
 }
 
-/* ── Projects grid — complete mobile rearrangement ──────────
- *
- * Problem: .project-featured has grid-column:span 2. When grid
- * collapses to 1 column, span 2 is meaningless but the card
- * stays as a row-direction flex — image on left, text on right —
- * which on a 411px screen gives each column ~180px. Too narrow.
- *
- * Solution: On mobile, all cards stack vertically, full width.
- * Featured card loses its row direction and becomes column like
- * the others. This makes all 4 projects visible and readable.
-──────────────────────────────────────────────────────────*/
+/* ── Projects grid — complete mobile rearrangement ────────── */
 @media screen and (max-width: 640px) {
 
   .projects-grid {
@@ -410,18 +394,17 @@ section {
     gap: 1rem;
   }
 
-  /* FIX: featured card collapses to single column layout */
   .project-featured {
-    grid-column: span 1;          /* no longer spans 2 cols */
-    flex-direction: column;       /* stack image above text */
+    grid-column: span 1;
+    flex-direction: column;
   }
 
-  /* Image area heights on single column */
   .project-featured .project-img-wrap {
     flex: none;
     width: 100%;
-    height: 200px;                /* generous but not too tall on mobile */
+    height: 200px;
     min-height: unset;
+    aspect-ratio: auto;
   }
 
   .project-card:not(.project-featured) .project-img-wrap {
@@ -430,7 +413,6 @@ section {
 
   .project-info { padding: 1.25rem; }
 
-  /* Badge repositioned for narrow layout */
   .project-badge {
     top: 0.75rem;
     right: 0.75rem;
@@ -444,3 +426,16 @@ section {
   .project-card:not(.project-featured) .project-img-wrap { height: 140px; }
   .project-info { padding: 1rem; }
 }
+
+/* Utility: reduce paint cost for animated fills (use transform where possible) */
+.skill-fill--transform {
+  transform-origin: left center;
+  will-change: transform;
+  transition: transform 420ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* Accessibility helpers */
+:focus { outline: 3px solid rgba(60,120,255,0.18); outline-offset: 2px; }
+button, .btn { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+/* End of upgraded mediaqueries.css */
