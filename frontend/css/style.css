@@ -362,7 +362,13 @@ section {
  * Background must span full viewport. Inner grid is constrained.
 ──────────────────────────────────────────────────────────── */
 #skills {
-  background: var(--surface);
+  /*
+   * FIX: Background removed from section itself.
+   * Only the two .skills-group cards have background:var(--surface).
+   * The section now blends with the page background (#0c0f14),
+   * giving a clean card-on-dark-background appearance identical
+   * to the projects section layout.
+   */
   padding-left:  2rem;
   padding-right: 2rem;
 }

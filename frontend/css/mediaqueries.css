@@ -167,6 +167,8 @@ section {
     width: clamp(160px, 35vw, 220px);
     height: clamp(160px, 35vw, 220px);
   }
+  /* At 768px #profile is ~400px — reduce glow to fit */
+  #profile::before { width: min(360px, 88vw); height: min(360px, 88vw); }
   .hero-name { font-size: clamp(2rem, 7vw, 2.8rem); }
 
   .about-pic { max-width: 260px; }
@@ -202,6 +204,24 @@ section {
     gap: 1rem;
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
+  }
+  /*
+   * FIX — Hero/About section bleed on mobile.
+   *
+   * ROOT CAUSE:
+   * #profile::before is position:absolute centered inside #profile.
+   * Its height is min(480px, 90vw). On a 640px screen: min(480, 576) = 480px.
+   * But #profile at 640px is only ~370px tall (padding + pic + text).
+   * The ::before overflows ~55px below #profile into #about, making
+   * the blue glow appear inside the about section.
+   *
+   * FIX: Scale ::before down at each mobile breakpoint so its height
+   * always fits within the computed section height. The glow is still
+   * visible — just sized to its container rather than exceeding it.
+   */
+  #profile::before {
+    width: min(320px, 85vw);
+    height: min(320px, 85vw);
   }
   .profile-pic { width: 150px; height: 150px; }
   .hero-name   { font-size: clamp(1.8rem, 8vw, 2.4rem); }
@@ -287,6 +307,8 @@ section {
   #skills  { padding-left: 1.1rem; padding-right: 1.1rem; }
 
   #profile { padding-top: 2.25rem; padding-bottom: 2.25rem; }
+  /* #profile is ~300px tall at 411px — keep ::before well within */
+  #profile::before { width: min(240px, 80vw); height: min(240px, 80vw); }
   .profile-pic  { width: 140px; height: 140px; }
   .hero-name    { font-size: 1.7rem; letter-spacing: -0.03em; }
   .hero-role    { font-size: 0.88rem; }
@@ -320,6 +342,7 @@ section {
   #skills  { padding-left: 1rem; padding-right: 1rem; }
 
   #profile { padding-top: 2rem; }
+  #profile::before { width: min(210px, 78vw); height: min(210px, 78vw); }
   .profile-pic  { width: 120px; height: 120px; }
   .hero-name    { font-size: 1.55rem; letter-spacing: -0.03em; }
   .hero-role    { font-size: 0.85rem; }
