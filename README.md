@@ -49,7 +49,7 @@ portfolio-website/
 │   ├── css/
 │   │   ├── style.css             # Design tokens, component styles
 │   │   ├── mediaqueries.css      # Responsive breakpoints (400–1920px)
-│   │   └── blog-v2.css           # Blog/post page styles
+│   │   └── blog.css              # Blog/post page styles
 │   ├── js/
 │   │   ├── script.js             # Scroll-reveal, hamburger, skill bars
 │   │   ├── contact.js            # Form validation + API call
