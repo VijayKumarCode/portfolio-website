@@ -15,24 +15,24 @@ Personal portfolio website with a Spring Boot backend for contact form persisten
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                    Frontend (Vercel)                  │
-│   Vanilla HTML · CSS (IBM Plex Mono / DM Sans)        │
-│   Dark theme · Responsive (411px – 1920px)            │
-│   vercel.json → cleanUrls · /blog/:slug rewrites      │
+│                    Frontend (Vercel)                │
+│   Vanilla HTML · CSS (IBM Plex Mono / DM Sans)      │
+│   Dark theme · Responsive (411px – 1920px)          │
+│   vercel.json → cleanUrls · /blog/:slug rewrites    │
 └────────────────────────┬────────────────────────────┘
                          │ POST /api/v1/contact
                          ▼
 ┌─────────────────────────────────────────────────────┐
-│               Backend (Render Free Tier)              │
-│   Spring Boot 3 · Java 17 · Port 8080                 │
-│   Kept warm by cron-job.org (5-min ping)              │
+│               Backend (Render Free Tier)            │
+│   Spring Boot 3 · Java 17 · Port 8080               │
+│   Kept warm by cron-job.org (5-min ping)            │
 └──────────┬──────────────────────┬───────────────────┘
            │                      │
            ▼                      ▼
 ┌─────────────────┐    ┌─────────────────────────────┐
-│  PostgreSQL      │    │  Resend HTTP API             │
-│  Neon (cloud)    │    │  Email notification on       │
-│  contact_messages│    │  every form submission       │
+│  PostgreSQL      │    │  Resend HTTP API           │
+│  Neon (cloud)    │    │  Email notification on     │
+│  contact_messages│    │  every form submission     │
 └─────────────────┘    └─────────────────────────────┘
 ```
 
