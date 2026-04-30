@@ -98,63 +98,78 @@
 
   <main>
 
-    <!-- ══════════════════════════════════════════
-         HERO
-    ══════════════════════════════════════════ -->
-    <section id="profile" aria-labelledby="hero-name">
-      <div class="hero-tag">
-        <span class="tag-dot"></span>
-        <span>Open to remote backend roles</span>
-      </div>
+   <!-- ── HERO ──────────────────────────────────────── -->
+<section id="profile">
 
-      <div class="section__pic-container">
-        <img src="assets/profilePic.png"
-             alt="Vijay Kumar — Java Backend Engineer"
-             class="profile-pic"
-             width="270" height="270">
-      </div>
+  <!-- Left: content block -->
+  <div class="hero-content">
 
-      <div class="section__text">
-        <p class="section__text__p1">Hello, I'm</p>
-        <h1 class="hero-name" id="hero-name">Vijay Kumar</h1>
-        <p class="hero-role">Java Backend Engineer</p>
-        <p class="hero-sub">Spring Boot · WebSocket · PostgreSQL</p>
+    <span class="hero-tag">
+      <span class="tag-dot" aria-hidden="true"></span>
+      Open to remote backend roles
+    </span>
 
-        <div class="btn-container">
-          <!-- BUG FIX: CV filename aligned with actual resume file -->
-          <a href="assets/VijayKumar.pdf"
-             class="btn btn-primary"
-             target="_blank"
-             rel="noopener"
-             download>
-            Download CV
-          </a>
-          <a href="#contact" class="btn btn-ghost">Contact</a>
-        </div>
+    <h1 class="hero-name">Vijay Kumar</h1>
 
-        <div id="socials-container" role="list" aria-label="Social links">
-          <a href="https://linkedin.com/in/vijaykumarcode"
-             target="_blank" rel="noopener"
-             aria-label="LinkedIn profile"
-             role="listitem">
-            <img src="assets/linkedin.png" alt="LinkedIn" class="social-icon">
-          </a>
-          <a href="https://github.com/VijayKumarCode"
-             target="_blank" rel="noopener"
-             aria-label="GitHub profile"
-             role="listitem">
-            <img src="assets/github.png" alt="GitHub" class="social-icon">
-          </a>
-          <a href="https://x.com/VijayKumarCode"
-             target="_blank" rel="noopener"
-             aria-label="X (Twitter) profile"
-             role="listitem">
-            <img src="assets/x.png" alt="X" class="social-icon">
-          </a>
-        </div>
-      </div>
-    </section>
+    <p class="hero-role">
+      <span class="hero-role-text">Java Backend Engineer</span>
+    </p>
 
+    <p class="hero-stack">
+      Spring Boot 3 · WebSocket · PostgreSQL · Java 17
+    </p>
+
+    <!-- THE DIFFERENTIATOR — one sentence with a live link -->
+    <p class="hero-proof">
+      Built <a href="https://nexusgame.space" target="_blank" rel="noopener" class="hero-proof-link">Nexus</a>
+      — a live real-time multiplayer platform with STOMP WebSocket sessions,
+      concurrent game state, and automated CI/CD to Oracle Cloud.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://nexusgame.space"
+         target="_blank"
+         rel="noopener"
+         class="btn btn-primary">
+        View Live Project ↗
+      </a>
+      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+    </div>
+
+    <!-- Socials visible in hero, no scroll needed -->
+    <div id="socials-container" aria-label="Social profiles">
+      <a href="https://github.com/VijayKumarCode"
+         target="_blank" rel="noopener" aria-label="GitHub">
+        <img src="assets/github.png" alt="GitHub" class="social-icon">
+      </a>
+      <a href="https://linkedin.com/in/vijaykumarcode"
+         target="_blank" rel="noopener" aria-label="LinkedIn">
+        <img src="assets/linkedin.png" alt="LinkedIn" class="social-icon">
+      </a>
+      <a href="https://x.com/VijayKumarCode"
+         target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <img src="assets/x.png" alt="X" class="social-icon">
+      </a>
+      <a href="assets/VijayKumar_Resume_v5.pdf"
+         download
+         aria-label="Download resume">
+        <span class="social-cv-link">CV ↓</span>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Right: profile photo -->
+  <div class="hero-photo-wrap">
+    <div class="hero-photo-frame">
+      <img src="assets/profilePic.png"
+           alt="Vijay Kumar — Java Backend Engineer"
+           class="profile-pic"
+           width="340" height="340">
+    </div>
+  </div>
+
+</section>
     <!-- ══════════════════════════════════════════
          ABOUT
     ══════════════════════════════════════════ -->
@@ -233,152 +248,138 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════
-         PROJECTS
-    ══════════════════════════════════════════ -->
-    <section id="projects" aria-labelledby="projects-heading">
-      <p class="section__text__p1">What I've Built</p>
-      <h2 class="section-title" id="projects-heading">Projects</h2>
+   <!-- Projects section — replace the entire grid -->
+<section id="projects" aria-labelledby="projects-heading">
+  <p class="section__text__p1">What I've Built</p>
+  <h2 class="section-title" id="projects-heading">Projects</h2>
 
-      <div class="projects-grid">
+  <!-- ── FEATURED: Nexus ──────────────────────────── -->
+  <article class="project-card project-featured" aria-label="Nexus Multiplayer Arena">
+    <span class="project-badge">Live</span>
 
-        <!-- Nexus — FEATURED (added, was completely missing) -->
-        <article class="project-card project-featured" aria-label="Nexus project">
-          <div class="project-badge">Live</div>
-          <div class="project-img-wrap">
-            <img src="assets/nexus.png"
-                 alt="Nexus Multiplayer Arena interface"
-                 class="project-img"
-                 loading="lazy"
-                 onerror="this.style.display='none'">
-            <div class="project-img-fallback" aria-hidden="true">⚔️</div>
-          </div>
-          <div class="project-info">
-            <h3 class="project-title">Nexus Multiplayer Arena</h3>
-            <p class="project-stack">Java 17 · Spring Boot 3 · WebSocket · PostgreSQL</p>
-            <p class="project-desc">
-              Real-time multiplayer game platform with STOMP WebSocket sessions,
-              bcrypt authentication, email activation, and automated CI/CD via
-              GitHub Actions to Oracle Cloud.
-            </p>
-            <div class="btn-container">
-              <a href="https://nexusgame.space"
-                 class="btn btn-primary btn-sm"
-                 target="_blank" rel="noopener">
-                Live Demo
-              </a>
-              <a href="https://github.com/VijayKumarCode/nexus"
-                 class="btn btn-ghost btn-sm"
-                 target="_blank" rel="noopener">
-                GitHub
-              </a>
-            </div>
-          </div>
-        </article>
+    <div class="project-img-wrap">
+      <img src="assets/nexus.png"
+           alt="Nexus Multiplayer Arena game interface"
+           class="project-img"
+           loading="lazy">
+      <div class="project-img-fallback" aria-hidden="true">⚔️</div>
+    </div>
 
-        <!-- TicTacToe Java -->
-        <article class="project-card" aria-label="TicTacToe Java project">
-          <div class="project-img-wrap">
-            <img src="assets/TicTacToe.png"
-                 alt="Java TicTacToe project"
-                 class="project-img"
-                 loading="lazy">
-          </div>
-          <div class="project-info">
-            <h3 class="project-title">TicTacToe</h3>
-            <p class="project-stack">Java · Sockets · Multithreading</p>
-            <p class="project-desc">
-              Network-based multiplayer game using raw Java Sockets.
-              Handles concurrent sessions with dedicated threads.
-              Architectural predecessor to Nexus.
-            </p>
-            <div class="btn-container">
-              <a href="https://github.com/VijayKumarCode/TicTacToe_java"
-                 class="btn btn-ghost btn-sm"
-                 target="_blank" rel="noopener">
-                GitHub
-              </a>
-            </div>
-          </div>
-        </article>
-
-        <!-- DSA Java -->
-        <article class="project-card" aria-label="DSA Java project">
-          <div class="project-img-wrap">
-            <img src="assets/dsa.png"
-                 alt="DSA Java algorithms project"
-                 class="project-img"
-                 loading="lazy">
-          </div>
-          <div class="project-info">
-            <h3 class="project-title">DSA-In-Java</h3>
-            <p class="project-stack">Java 17 · Algorithms · Data Structures</p>
-            <p class="project-desc">
-              Documented implementations of Trees, Graphs, Linked Lists, and
-              sorting algorithms. Each solution includes verified time and space
-              complexity analysis.
-            </p>
-            <div class="btn-container">
-              <a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms"
-                 class="btn btn-ghost btn-sm"
-                 target="_blank" rel="noopener">
-                GitHub
-              </a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Portfolio -->
-        <article class="project-card" aria-label="Portfolio website project">
-          <div class="project-img-wrap">
-            <img src="assets/portfolio-website.png"
-                 alt="Portfolio website"
-                 class="project-img"
-                 loading="lazy">
-          </div>
-          <div class="project-info">
-            <h3 class="project-title">Portfolio Website</h3>
-            <p class="project-stack">HTML · CSS · JavaScript · Vercel</p>
-            <p class="project-desc">
-              This site. Vanilla HTML/CSS/JS — no frameworks. Custom domain,
-              contact form backed by Spring Boot, continuous deployment on
-              every push to main.
-            </p>
-            <div class="btn-container">
-              <!-- BUG FIX: replaced broken # links with real URLs -->
-              <a href="https://vijaykumarcode.space"
-                 class="btn btn-primary btn-sm"
-                 target="_blank" rel="noopener">
-                Live Demo
-              </a>
-              <a href="https://github.com/VijayKumarCode/Vijay-Kumar-Portfolio"
-                 class="btn btn-ghost btn-sm"
-                 target="_blank" rel="noopener">
-                GitHub
-              </a>
-            </div>
-          </div>
-        </article>
-
+    <div class="project-info">
+      <div class="project-stack">
+        Java 17 · Spring Boot 3 · WebSocket (STOMP/SockJS) · PostgreSQL
       </div>
-    </section>
+      <h3 class="project-title">Nexus Multiplayer Arena</h3>
+      <p class="project-desc">
+        Real-time multiplayer game platform with STOMP WebSocket sessions,
+        bcrypt authentication, email activation via Resend HTTP API,
+        and automated CI/CD via GitHub Actions to Oracle Cloud.
+      </p>
 
-    <!-- ══════════════════════════════════════════
-         BLOG / ENGINEERING LOG
-    ══════════════════════════════════════════ -->
-    <section id="blog" aria-labelledby="blog-heading">
-      <p class="section__text__p1">Writing</p>
-      <h2 class="section-title" id="blog-heading">Engineering Log</h2>
+      <!-- Specific technical claims — these are what recruiters remember -->
+      <ul class="project-claims" aria-label="Technical highlights">
+        <li>Concurrent game state managed in ConcurrentHashMap — no race conditions</li>
+        <li>Diagnosed Railway port-587 SMTP block; replaced with Resend HTTP API</li>
+        <li>Fixed JPQL enum inner-class crash causing move rejections every 10s</li>
+        <li>WebSocket session lifecycle with connect/disconnect presence tracking</li>
+      </ul>
 
-      <div id="blog-container" class="blog-grid">
-        <!-- Injected by home-blog.js -->
-        <div class="blog-loading" aria-live="polite">Loading entries…</div>
+      <div class="btn-container project-ctas">
+        <a href="https://nexusgame.space"
+           target="_blank" rel="noopener"
+           class="btn btn-primary btn-sm">
+          Live Demo ↗
+        </a>
+        <a href="https://github.com/VijayKumarCode/nexus"
+           target="_blank" rel="noopener"
+           class="btn btn-ghost btn-sm">
+          GitHub
+        </a>
       </div>
+    </div>
+  </article>
 
-      <div class="blog-footer-link">
-        <a href="/blog" class="btn btn-ghost">View all entries →</a>
+  <!-- ── Secondary projects grid ──────────────────── -->
+  <div class="projects-grid">
+
+    <article class="project-card">
+      <div class="project-img-wrap">
+        <img src="assets/TicTacToe.png" alt="TicTacToe" class="project-img" loading="lazy">
       </div>
-    </section>
+      <div class="project-info">
+        <div class="project-stack">Java · Sockets · Multithreading</div>
+        <h3 class="project-title">TicTacToe</h3>
+        <p class="project-desc">
+          Network-based multiplayer game using raw Java Sockets.
+          Handles concurrent sessions with dedicated threads.
+          Architectural predecessor to Nexus.
+        </p>
+        <div class="btn-container">
+          <a href="https://github.com/VijayKumarCode/TicTacToe_java"
+             target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-img-wrap">
+        <img src="assets/dsa.png" alt="DSA in Java" class="project-img" loading="lazy">
+      </div>
+      <div class="project-info">
+        <div class="project-stack">Java 17 · Algorithms · Data Structures</div>
+        <h3 class="project-title">DSA In Java</h3>
+        <p class="project-desc">
+          Documented implementations of Trees, Graphs, Linked Lists,
+          and sorting algorithms. Each solution includes verified
+          time and space complexity analysis.
+        </p>
+        <div class="btn-container">
+          <a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms"
+             target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+  <!-- Blog section HTML — replace existing -->
+<section id="blog" aria-labelledby="blog-heading">
+  <p class="section__text__p1">Writing</p>
+  <h2 class="section-title" id="blog-heading">Engineering Log</h2>
+
+  <!-- Pre-rendered skeletons — visible on first paint, hidden by JS after load -->
+  <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
+    <div class="blog-article-card blog-skeleton-card">
+      <div class="sk-tag"></div>
+      <div class="sk-title"></div>
+      <div class="sk-body"></div>
+      <div class="sk-link"></div>
+    </div>
+    <div class="blog-article-card blog-skeleton-card">
+      <div class="sk-tag"></div>
+      <div class="sk-title"></div>
+      <div class="sk-body"></div>
+      <div class="sk-link"></div>
+    </div>
+    <div class="blog-article-card blog-skeleton-card">
+      <div class="sk-tag"></div>
+      <div class="sk-title"></div>
+      <div class="sk-body"></div>
+      <div class="sk-link"></div>
+    </div>
+  </div>
+
+  <!-- Real cards injected here by blogManager.js -->
+  <div id="blog-container" class="blog-grid" style="display:none;"></div>
+
+  <div class="blog-footer-link">
+    <a href="/blog" class="btn btn-ghost btn-blog-all">
+      View all entries
+      <span class="btn-arrow">→</span>
+    </a>
+  </div>
+</section>
 
     <!-- ══════════════════════════════════════════
          CONTACT
