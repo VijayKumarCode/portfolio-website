@@ -1,8 +1,10 @@
-/* home-blog.js — loads BlogManager for the home page */
 import { BlogManager } from './blogManager.js';
-
 document.addEventListener('DOMContentLoaded', () => {
-  /* BUG FIX: removed buttonId param (no longer used on home page) */
   const blog = new BlogManager('blog-container', 'data/posts.json');
-  blog.init();
+  blog.init().then(() => {
+    const skeleton = document.getElementById('blog-container-skeleton');
+    const container = document.getElementById('blog-container');
+    if (skeleton) skeleton.style.display = 'none';
+    if (container) container.style.display = 'grid';
+  });
 });
