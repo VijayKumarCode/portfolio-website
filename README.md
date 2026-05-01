@@ -68,27 +68,33 @@ portfolio-website/
 │   ├── assets/                   # Images, icons
 │   └── vercel.json               # Clean URLs + security headers
 │
-└── backend/                      # Spring Boot API — deployed on Render
-    ├── src/main/java/com/vijaykumar/portfolio/
-    │   ├── config/
-    │   │   ├── AppConfig.java    # RestTemplate @Bean
-    │   │   └── CorsConfig.java   # CORS — allows custom domain
-    │   ├── controller/
-    │   │   └── ContactController.java
-    │   ├── dto/
-    │   │   ├── ApiResponse.java  # Standard JSON response record
-    │   │   └── ContactRequest.java # Validated request record
-    │   ├── entity/
-    │   │   └── ContactMessage.java # JPA entity
-    │   ├── repository/
-    │   │   └── ContactRepository.java
-    │   └── service/
-    │       └── ContactService.java # Saves to DB + sends email via Resend
-    ├── src/main/resources/
-    │   ├── application.properties       # Local dev defaults
-    │   └── application-prod.properties  # Production (env var driven)
-    ├── Dockerfile
-    └── pom.xml
+├── backend/                      # Spring Boot API — deployed on Render
+│   ├── src/main/java/com/vijaykumar/portfolio/
+│   │   ├── config/
+│   │   │   ├── AppConfig.java    # RestTemplate @Bean
+│   │   │   └── CorsConfig.java   # CORS — allows custom domain
+│   │   ├── controller/
+│   │   │   └── ContactController.java
+│   │   ├── dto/
+│   │   │   ├── ApiResponse.java  # Standard JSON response record
+│   │   │   └── ContactRequest.java # Validated request record
+│   │   ├── entity/
+│   │   │   └── ContactMessage.java # JPA entity
+│   │   ├── repository/
+│   │   │   └── ContactRepository.java
+│   │   └── service/
+│   │       └── ContactService.java # Saves to DB + sends email via Resend
+│   ├── src/main/resources/
+│   │   ├── application.properties       # Local dev defaults
+│   │   └── application-prod.properties  # Production (env var driven)
+│   ├── Dockerfile
+│   └── pom.xml
+│
+├── {}package.json
+|
+├── README.md
+|
+└── {} vercel.json
 ```
 
 ---
