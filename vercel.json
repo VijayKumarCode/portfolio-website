@@ -1,35 +1,26 @@
 {
-  "buildCommand": "echo 'No build'",
-  "outputDirectory": "frontend",
+  "buildCommand": "mkdir -p public && cp -a frontend/. public/",
+  "outputDirectory": "public",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
     {
       "source": "/:path*",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
       ]
     }
   ],
   "rewrites": [
     {
       "source": "/blog/:slug",
-      "destination": "/post"
+      "destination": "/post.html"
     },
     {
       "source": "/blog",
-      "destination": "/blog"
+      "destination": "/blog/index.html"
     }
   ]
 }

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "serve . -l 3000",
     "preview": "vercel --local-config vercel.json",
-    "build": "echo \"no build step for static site\"",
+    "build": "mkdir -p public && cp -a frontend/. public/",
     "start": "serve . -l 3000"
   },
   "devDependencies": {
