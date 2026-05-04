@@ -24,7 +24,7 @@
   ],
   "rewrites": [
     {
-      "source": "/blog/:slug*",
+      "source": "/blog/(.*)",
       "destination": "/post.html"
     },
     {
