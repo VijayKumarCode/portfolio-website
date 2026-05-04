@@ -24,12 +24,12 @@
   ],
   "rewrites": [
     {
-      "source": "/blog/(.*)",
-      "destination": "/post.html"
+      "source": "/blog/:slug",
+      "destination": "/post"
     },
     {
       "source": "/blog",
-      "destination": "/blog.html"
+      "destination": "/blog"
     }
   ]
 }
