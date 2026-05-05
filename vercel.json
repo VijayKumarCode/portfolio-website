@@ -16,11 +16,11 @@
   "rewrites": [
     {
       "source": "/blog/:slug",
-      "destination": "/post.html"
+      "destination": "/post"
     },
     {
       "source": "/blog",
-      "destination": "/blog/index.html"
+      "destination": "/blog"
     }
   ]
 }
