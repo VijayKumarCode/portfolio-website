@@ -1,18 +1,16 @@
 {
   "name": "portfolio-frontend",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
-    "dev": "serve . -l 3000",
-    "preview": "vercel --local-config vercel.json",
-    "build": "mkdir -p public && cp -a frontend/. public/",
-    "start": "serve . -l 3000"
+    "dev": "serve frontend -l 3000",
+    "build": "echo 'Static site — no build step required'",
+    "start": "serve frontend -l 3000"
   },
   "devDependencies": {
     "serve": "^14.2.6"
   },
   "engines": {
     "node": ">=18"
-  },
-  "packageManager": "npm@9.0.0"
+  }
 }

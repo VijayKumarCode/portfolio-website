@@ -1,15 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════
-   PORTFOLIO v1.0 — blog.css
-   Covers: blog.html (listing) + post.html (single article)
-   Must be loaded AFTER style.css (inherits all CSS variables)
-═══════════════════════════════════════════════════════════════ */
+ PORTFOLIO v1.1 — blog.css
+ Covers: blog.html (listing) + post.html (single article)
+ Must be loaded AFTER style.css (inherits all CSS variables)
+ ═══════════════════════════════════════════════════════════════ */
 
 /* ── Blog nav ─────────────────────────────────────────────── */
 #blog-nav {
-  max-width: var(--max-w, 1160px);
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 2rem;
-  height: var(--nav-h, 68px);
+  padding: 0 var(--container-pad);
+  height: var(--nav-h);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,21 +20,21 @@
 .nav-back {
   font-family: var(--font-mono);
   font-size: 0.82rem;
-  color: var(--text-2, #8b96a8);
+  color: var(--text-2);
   padding: 0.4rem 0.8rem;
-  border: 1px solid var(--border, rgba(255,255,255,0.08));
-  border-radius: 8px;
-  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease), background var(--fast) var(--ease);
 }
 .nav-back:hover {
-  color: var(--accent, #2f81f7);
-  border-color: rgba(47,129,247,0.4);
-  background: rgba(47,129,247,0.06);
+  color: var(--accent);
+  border-color: rgba(0, 217, 255, 0.4);
+  background: var(--accent-dim);
 }
 
 /* ── Blog hero ─────────────────────────────────────────────── */
 .blog-hero {
-  border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-bottom: 1px solid var(--border);
   padding: 4rem 2rem 3.5rem;
 }
 .blog-hero-inner {
@@ -45,22 +45,22 @@
 .blog-eyebrow {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--accent, #2f81f7);
+  color: var(--accent);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 0.75rem;
 }
 .blog-hero-title {
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.03em;
-  color: var(--text, #e8edf5);
+  color: var(--text);
   margin-bottom: 1rem;
   line-height: 1.15;
 }
 .blog-hero-sub {
-  font-size: 1rem;
-  color: var(--text-2, #8b96a8);
+  font-size: var(--text-body);
+  color: var(--text-2);
   line-height: 1.75;
   max-width: 520px;
   margin: 0 auto;
@@ -68,7 +68,7 @@
 
 /* ── Blog listing ─────────────────────────────────────────── */
 .blog-content-section {
-  max-width: var(--max-w, 1160px);
+  max-width: var(--container-max);
   margin: 0 auto;
   padding: 3rem 2rem 5rem;
   width: 100%;
@@ -86,20 +86,20 @@
 .blog-search-input {
   flex: 1;
   min-width: 200px;
-  background: var(--surface, #13181f);
-  border: 1px solid var(--border, rgba(255,255,255,0.08));
-  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   padding: 0.6rem 1rem;
-  color: var(--text, #e8edf5);
+  color: var(--text);
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
-.blog-search-input::placeholder { color: var(--text-3, #545f6e); }
+.blog-search-input::placeholder { color: var(--text-3); }
 .blog-search-input:focus {
-  border-color: var(--accent, #2f81f7);
-  box-shadow: 0 0 0 3px rgba(47,129,247,0.12);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.12);
 }
 
 .blog-filter-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -107,18 +107,18 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   padding: 0.3rem 0.75rem;
-  border-radius: 100px;
-  border: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-2, #8b96a8);
+  color: var(--text-2);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--fast) var(--ease);
 }
-.filter-tag:hover { color: var(--text); border-color: var(--border-2, rgba(255,255,255,0.14)); }
+.filter-tag:hover { color: var(--text); border-color: var(--border-2); }
 .filter-tag.active {
-  background: var(--accent-dim, rgba(47,129,247,0.12));
-  color: var(--accent, #2f81f7);
-  border-color: rgba(47,129,247,0.3);
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: rgba(0, 217, 255, 0.3);
 }
 
 /* Article cards */
@@ -127,37 +127,37 @@
 .blog-card {
   display: block;
   padding: 1.75rem 0;
-  border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-bottom: 1px solid var(--border);
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all var(--fast) var(--ease);
   cursor: pointer;
 }
-.blog-card:first-child { border-top: 1px solid var(--border, rgba(255,255,255,0.08)); }
+.blog-card:first-child { border-top: 1px solid var(--border); }
 .blog-card:hover { padding-left: 0.5rem; }
 
 .blog-card .category-tag {
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--accent, #2f81f7);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.5rem;
 }
 .blog-card-title {
   font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--text, #e8edf5);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
   margin-bottom: 0.5rem;
   letter-spacing: -0.015em;
   line-height: 1.4;
-  transition: color 0.15s ease;
+  transition: color var(--fast) var(--ease);
 }
-.blog-card:hover .blog-card-title { color: var(--accent, #2f81f7); }
+.blog-card:hover .blog-card-title { color: var(--accent); }
 .blog-card-excerpt {
-  font-size: 0.9rem;
-  color: var(--text-2, #8b96a8);
+  font-size: var(--text-sm);
+  color: var(--text-2);
   line-height: 1.7;
   margin-bottom: 0.75rem;
   display: -webkit-box;
@@ -172,16 +172,16 @@
   gap: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--text-3, #545f6e);
+  color: var(--text-3);
 }
 .blog-card-meta .sep { opacity: 0.4; }
 .blog-card-read {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--accent, #2f81f7);
+  color: var(--accent);
   margin-left: auto;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity var(--fast) var(--ease);
 }
 .blog-card:hover .blog-card-read { opacity: 1; }
 
@@ -189,16 +189,16 @@
 .skeleton-card {
   height: 100px;
   background: linear-gradient(90deg,
-    var(--surface, #13181f) 25%,
-    var(--surface-2, #1a2130) 50%,
-    var(--surface, #13181f) 75%);
+    var(--surface) 25%,
+    var(--surface-2) 50%,
+    var(--surface) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-bottom: 1px;
 }
 @keyframes shimmer {
-  0%   { background-position: 200% 0; }
+  0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
@@ -208,7 +208,7 @@
   padding: 4rem 0;
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: var(--text-3, #545f6e);
+  color: var(--text-3);
 }
 .load-more-wrap { text-align: center; margin-top: 2.5rem; }
 
@@ -232,14 +232,14 @@
 .breadcrumb li {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--text-3, #545f6e);
+  color: var(--text-3);
 }
 .breadcrumb a {
-  color: var(--accent, #2f81f7);
-  transition: opacity 0.15s;
+  color: var(--accent);
+  transition: opacity var(--fast) var(--ease);
 }
 .breadcrumb a:hover { opacity: 0.75; }
-.breadcrumb li[aria-current="page"] { color: var(--text-2, #8b96a8); }
+.breadcrumb li[aria-current="page"] { color: var(--text-2); }
 
 /* Post header */
 .post-header { margin-bottom: 2rem; }
@@ -247,18 +247,18 @@
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--accent, #2f81f7);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.75rem;
 }
 .post-title {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.03em;
   line-height: 1.15;
-  color: var(--text, #e8edf5);
+  color: var(--text);
   margin-bottom: 1.25rem;
 }
 .post-meta {
@@ -268,13 +268,13 @@
   gap: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--text-3, #545f6e);
+  color: var(--text-3);
 }
 .post-meta-author {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text-2, #8b96a8);
+  color: var(--text-2);
 }
 .post-avatar {
   width: 22px; height: 22px;
@@ -287,30 +287,30 @@
 /* Divider */
 .post-divider {
   height: 1px;
-  background: var(--border, rgba(255,255,255,0.08));
+  background: var(--border);
   margin: 2rem 0;
 }
 
-/* Post content — the actual article body */
+/* Post content */
 .post-content {
-  font-size: 1rem;
+  font-size: var(--text-body);
   line-height: 1.85;
-  color: var(--text-2, #8b96a8);
+  color: var(--text-2);
 }
 .post-content h2 {
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: var(--text, #e8edf5);
+  font-size: var(--text-h3);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
   margin: 2.5rem 0 0.75rem;
   letter-spacing: -0.02em;
 }
 .post-content h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text, #e8edf5);
+  font-size: var(--text-h4);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
   margin: 2rem 0 0.5rem;
 }
-.post-content p  { margin-bottom: 1.4rem; }
+.post-content p { margin-bottom: 1.4rem; }
 .post-content ul,
 .post-content ol {
   padding-left: 1.5rem;
@@ -318,7 +318,7 @@
 }
 .post-content li { margin-bottom: 0.5rem; }
 .post-content a {
-  color: var(--accent, #2f81f7);
+  color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -326,16 +326,16 @@
 .post-content code {
   font-family: var(--font-mono);
   font-size: 0.88em;
-  background: var(--surface-2, #1a2130);
+  background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   padding: 0.15em 0.45em;
-  color: var(--text, #e8edf5);
+  color: var(--text);
 }
 .post-content pre {
-  background: var(--surface, #13181f);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
   margin-bottom: 1.4rem;
@@ -344,20 +344,20 @@
   background: none;
   border: none;
   padding: 0;
-  font-size: 0.88rem;
+  font-size: var(--text-sm);
   line-height: 1.7;
 }
 .post-content blockquote {
-  border-left: 3px solid var(--accent, #2f81f7);
+  border-left: 3px solid var(--accent);
   padding: 0.75rem 1.25rem;
-  background: var(--accent-dim, rgba(47,129,247,0.06));
-  border-radius: 0 8px 8px 0;
+  background: var(--accent-dim);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   margin-bottom: 1.4rem;
   color: var(--text-2);
   font-style: italic;
 }
-.post-content strong { color: var(--text, #e8edf5); font-weight: 600; }
-.post-content em     { color: var(--text, #e8edf5); }
+.post-content strong { color: var(--text); font-weight: var(--font-weight-semibold); }
+.post-content em { color: var(--text); }
 .post-content hr {
   border: none;
   border-top: 1px solid var(--border);
@@ -373,25 +373,10 @@
   margin: 2.5rem 0;
 }
 
-/*
- * FIX — post nav overflow (advanced):
- *
- * post.js wraps each link in div.nav-prev / div.nav-next.
- * In flexbox, the default min-width:auto means items cannot
- * shrink below their content width — a long title forces the
- * div wider than 50%, overflowing the container.
- *
- * Solution:
- *   1. Give each wrapper exactly half the container minus half gap
- *   2. min-width:0 — overrides the auto, allows shrinking
- *   3. Link fills wrapper (width:100%) and truncates with ellipsis
- *
- * This is the correct CSS algorithm for constrained flex text.
- */
 .nav-prev,
 .nav-next {
   flex: 0 1 calc(50% - 0.5rem);
-  min-width: 0;            /* KEY: allows item to shrink below content width */
+  min-width: 0;
 }
 .nav-next { text-align: right; }
 
@@ -400,30 +385,29 @@
   width: 100%;
   font-family: var(--font-mono);
   font-size: 0.82rem;
-  color: var(--text-2, #8b96a8);
+  color: var(--text-2);
   padding: 0.65rem 1rem;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   box-sizing: border-box;
-  transition: all 0.15s ease;
-  /* Truncate with ellipsis — correct for nav links */
+  transition: all var(--fast) var(--ease);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
 }
 .post-nav-link:hover {
-  color: var(--accent, #2f81f7);
-  border-color: rgba(47,129,247,0.4);
-  background: var(--accent-dim, rgba(47,129,247,0.06));
+  color: var(--accent);
+  border-color: rgba(0, 217, 255, 0.4);
+  background: var(--accent-dim);
 }
 
 /* Author box */
 .author-box {
-  background: var(--surface, #13181f);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent, #2f81f7);
-  border-radius: 0 10px 10px 0;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   padding: 1.5rem;
   margin-top: 2rem;
 }
@@ -436,18 +420,18 @@
   width: 52px; height: 52px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--border-2, rgba(255,255,255,0.14));
+  border: 2px solid var(--border-2);
   flex-shrink: 0;
 }
 .author-name {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   font-size: 0.96rem;
-  color: var(--text, #e8edf5);
+  color: var(--text);
   margin-bottom: 0.35rem;
 }
 .author-bio {
-  font-size: 0.88rem;
-  color: var(--text-2, #8b96a8);
+  font-size: var(--text-sm);
+  color: var(--text-2);
   line-height: 1.7;
   margin-bottom: 0.75rem;
 }
@@ -459,18 +443,18 @@
 .author-links a {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--accent, #2f81f7);
-  transition: opacity 0.15s;
+  color: var(--accent);
+  transition: opacity var(--fast) var(--ease);
 }
 .author-links a:hover { opacity: 0.7; }
 
 /* ── Blog footer ──────────────────────────────────────────── */
 .blog-footer {
-  border-top: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-top: 1px solid var(--border);
   padding: 2rem;
 }
 .blog-footer-inner {
-  max-width: var(--max-w, 1160px);
+  max-width: var(--container-max);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -485,68 +469,48 @@
 .blog-footer a {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--text-3, #545f6e);
-  transition: color 0.15s;
+  color: var(--text-3);
+  transition: color var(--fast) var(--ease);
 }
 .blog-footer a:hover { color: var(--text); }
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media screen and (max-width: 640px) {
-  .blog-hero    { padding: 3rem 1.25rem 2.5rem; }
+  .blog-hero { padding: 3rem 1.25rem 2.5rem; }
   .blog-content-section { padding: 2rem 1.25rem 4rem; }
-  .post-wrap    { padding: 2rem 1.25rem 4rem; }
+  .post-wrap { padding: 2rem 1.25rem 4rem; }
 
-  .blog-filter-bar  { flex-direction: column; align-items: stretch; }
+  .blog-filter-bar { flex-direction: column; align-items: stretch; }
   .blog-search-input { min-width: unset; }
 
-  .post-navigation  { flex-direction: column; align-items: stretch; }
+  .post-navigation { flex-direction: column; align-items: stretch; }
   .nav-prev,
-  .nav-next         { flex: 0 0 100%; min-width: 0; text-align: left; }
-  .post-nav-link    { width: 100%; }
+  .nav-next { flex: 0 0 100%; min-width: 0; text-align: left; }
+  .post-nav-link { width: 100%; }
 
   .author-box-inner { flex-direction: column; }
 
   .blog-footer-inner { flex-direction: column; align-items: center; text-align: center; }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SECTION BLEED FIX
-   style.css defines global section { padding: 5rem 2rem }.
-   On blog/post pages (body.single-post-page, body.blog-list-page)
-   the portfolio section rules must not apply.
-   Scope ALL portfolio-specific section ids to NOT match here.
-═══════════════════════════════════════════════════════════ */
+/* ── Section bleed fix ─────────────────────────────────────── */
 body.single-post-page section,
-body.blog-list-page   section {
-  /* Reset the huge 5rem vertical padding from style.css */
+body.blog-list-page section {
   padding: 0;
-  /* Prevent the portfolio hero/about/skills background rules leaking */
   background: transparent;
 }
 
-/* The blog hero is the one section on blog-list-page that
-   needs its own padding — already defined above, just ensure
-   it wins the cascade */
 body.blog-list-page .blog-hero {
   padding: 2rem 2rem 2.5rem;
 }
 body.blog-list-page .blog-content-section {
   padding: 3rem 2rem 5rem;
 }
-
-/* post-wrap is not a section but ensure no accidental padding */
 body.single-post-page .post-wrap {
   padding: 2.5rem 2rem 5rem;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   SHARE BAR — Mobile-first
-   Mobile  : icon + label, full-width row, wraps
-   Tablet+ : compact pill row
-   Desktop : same, slightly larger
-═══════════════════════════════════════════════════════════ */
-
-/* Container */
+/* ── Share bar ─────────────────────────────────────────────── */
 .share-bar {
   display: flex;
   align-items: center;
@@ -554,45 +518,41 @@ body.single-post-page .post-wrap {
   gap: 0.5rem;
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-top: 1px solid var(--border);
 }
 
 .share-label {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--text-3, #545f6e);
+  color: var(--text-3);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-right: 0.25rem;
-  /* On very small screens the label alone gets its own row */
   flex-shrink: 0;
 }
 
-/* Each platform button */
 .share-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   padding: 0.4rem 0.8rem;
-  border-radius: 100px;
-  border: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
   background: transparent;
-  color: var(--text-2, #8b96a8);
+  color: var(--text-2);
   text-decoration: none;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 500;
-  transition: background 0.15s ease,
-              border-color 0.15s ease,
-              color 0.15s ease,
-              transform 0.15s ease;
-  /* Minimum tap target: 44px height for mobile accessibility */
+  font-weight: var(--font-weight-medium);
+  transition: background var(--fast) var(--ease),
+              border-color var(--fast) var(--ease),
+              color var(--fast) var(--ease),
+              transform var(--fast) var(--ease);
   min-height: 36px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* SVG inside button */
 .share-btn svg {
   width: 15px;
   height: 15px;
@@ -600,7 +560,6 @@ body.single-post-page .post-wrap {
   flex-shrink: 0;
 }
 
-/* Per-platform hover colours */
 .share-btn--x:hover {
   background: rgba(0,0,0,0.4);
   border-color: rgba(0,0,0,0.6);
@@ -619,13 +578,12 @@ body.single-post-page .post-wrap {
 .share-btn--email:hover {
   background: rgba(107,114,128,0.15);
   border-color: rgba(107,114,128,0.5);
-  color: var(--text, #e8edf5);
+  color: var(--text);
 }
 
 .share-btn:hover { transform: translateY(-1px); }
 .share-btn:active { transform: translateY(0); }
 
-/* ── Mobile (< 480px): hide text labels, show icons only ── */
 @media screen and (max-width: 480px) {
   .share-btn-label { display: none; }
   .share-btn {
@@ -635,16 +593,13 @@ body.single-post-page .post-wrap {
     justify-content: center;
   }
   .share-btn svg { width: 17px; height: 17px; }
-  /* Larger gap between icon-only buttons */
   .share-bar { gap: 0.6rem; }
 }
 
-/* ── Tablet 768px+: show labels ──────────────────────────── */
 @media screen and (min-width: 481px) {
   .share-btn-label { display: inline; }
 }
 
-/* ── Desktop 1024px+: slightly more breathing room ──────── */
 @media screen and (min-width: 1024px) {
   .share-btn { font-size: 0.78rem; padding: 0.45rem 0.9rem; }
   .share-btn svg { width: 16px; height: 16px; }

@@ -3,14 +3,15 @@
 const LIMIT = 10;
 let allPosts = [];
 let filtered = [];
-let shown    = 0;
+let shown = 0;
+let searchAbort = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const blogList  = document.getElementById('blog-list');
-  const loadBtn   = document.getElementById('load-more-btn');
-  const emptyEl   = document.getElementById('empty-state');
-  const searchEl  = document.getElementById('blog-search');
-  const tagsEl    = document.getElementById('filter-tags');
+  const blogList = document.getElementById('blog-list');
+  const loadBtn = document.getElementById('load-more-btn');
+  const emptyEl = document.getElementById('empty-state');
+  const searchEl = document.getElementById('blog-search');
+  const tagsEl = document.getElementById('filter-tags');
 
   try {
     const res = await fetch('/data/posts.json');
@@ -18,7 +19,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     allPosts = await res.json();
     allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    /* FIX: hide skeleton once data is ready */
     const skeletonEl = document.getElementById('blog-skeleton');
     if (skeletonEl) skeletonEl.style.display = 'none';
 
@@ -33,18 +33,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     filtered = [...allPosts];
     renderBatch(blogList, loadBtn);
 
-    // Search
+    // Debounced search
+    let searchTimer;
     searchEl.addEventListener('input', () => {
-      const q = searchEl.value.toLowerCase().trim();
-      filterAndRender(q, getActiveCategory(), blogList, loadBtn, emptyEl);
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        const q = searchEl.value.toLowerCase().trim();
+        filterAndRender(q, getActiveCategory(), blogList, loadBtn, emptyEl);
+      }, 200);
     });
 
-    // Load more
     loadBtn.addEventListener('click', () => {
       renderBatch(blogList, loadBtn);
     });
 
-    // Category filter
     tagsEl.addEventListener('click', e => {
       const btn = e.target.closest('.filter-tag');
       if (!btn) return;
@@ -57,14 +59,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('[blog.js]', err);
     const skeletonEl = document.getElementById('blog-skeleton');
     if (skeletonEl) skeletonEl.style.display = 'none';
-    blogList.innerHTML = `<p style="color:var(--text-3);text-align:center;padding:3rem;">Could not load entries. Please refresh.</p>`;
+    blogList.innerHTML = `
+      <p class="blog-empty">Could not load entries. Please refresh.</p>
+    `;
   }
 });
 
-/* ── Helpers ──────────────────────────────────────────────── */
 function filterAndRender(query, category, list, btn, empty) {
   filtered = allPosts.filter(p => {
-    const matchCat   = !category || category === 'all' || (p.category || '').toLowerCase() === category.toLowerCase();
+    const matchCat = !category || category === 'all' || (p.category || '').toLowerCase() === category.toLowerCase();
     const matchQuery = !query
       || p.title.toLowerCase().includes(query)
       || stripHtml(p.content).toLowerCase().includes(query)
@@ -77,7 +80,7 @@ function filterAndRender(query, category, list, btn, empty) {
 
   if (filtered.length === 0) {
     empty.style.display = 'block';
-    btn.style.display   = 'none';
+    btn.style.display = 'none';
   } else {
     empty.style.display = 'none';
     renderBatch(list, btn);
@@ -88,19 +91,19 @@ function renderBatch(list, btn) {
   const batch = filtered.slice(shown, shown + LIMIT);
 
   batch.forEach(post => {
-    const plain   = stripHtml(post.content || '');
+    const plain = stripHtml(post.content || '');
     const excerpt = plain.split(/\s+/).slice(0, 25).join(' ') + '…';
 
     const card = document.createElement('a');
-    card.className  = 'blog-card';
-    card.href       = `/blog/${encodeURIComponent(post.slug)}`;
+    card.className = 'blog-card';
+    card.href = `/blog/${encodeURIComponent(post.slug)}`;
     card.setAttribute('role', 'article');
-    card.innerHTML  = `
+    card.innerHTML = `
       <span class="category-tag">${esc(post.category || 'Engineering')}</span>
       <h2 class="blog-card-title">${esc(post.title || 'Untitled')}</h2>
       <p class="blog-card-excerpt">${esc(excerpt)}</p>
       <div class="blog-card-meta">
-        <time>${esc(post.date || '')}</time>
+        <time datetime="${esc(post.date || '')}">${esc(post.date || '')}</time>
         <span class="sep">·</span>
         <span>${esc(post.readTime || '')}</span>
         <span class="blog-card-read">Read →</span>
@@ -114,12 +117,13 @@ function renderBatch(list, btn) {
 }
 
 function buildCategoryTags(container, posts) {
+  if (!container) return;
   const cats = [...new Set(posts.map(p => p.category).filter(Boolean))];
   cats.forEach(cat => {
     const btn = document.createElement('button');
-    btn.className    = 'filter-tag';
+    btn.className = 'filter-tag';
     btn.dataset.category = cat;
-    btn.textContent  = cat;
+    btn.textContent = cat;
     container.appendChild(btn);
   });
 }
@@ -130,6 +134,7 @@ function getActiveCategory() {
 }
 
 function stripHtml(html) {
+  if (!html) return '';
   try {
     return new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
   } catch {

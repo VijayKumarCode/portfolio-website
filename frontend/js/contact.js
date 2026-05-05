@@ -1,8 +1,5 @@
 /**
- * contact.js — Contact form handler.
- *
- * Uses the config and api utility modules.
- * Validates input, calls the backend, shows feedback.
+ * contact.js — Contact form handler with ARIA accessibility.
  */
 
 'use strict';
@@ -12,24 +9,32 @@ import { post, warmBackend } from '../src/utils/api.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Warm the Render backend on page load so by the time
-  // the user fills and submits the form, it's already awake
   warmBackend();
 
-  const form      = document.getElementById('contact-form');
+  const form = document.getElementById('contact-form');
   const submitBtn = document.getElementById('submit-btn');
   const statusDiv = document.getElementById('form-status');
 
   if (!form) return;
 
-  // Clear field error on input
+  // Ensure status div is an ARIA live region
+  if (statusDiv) {
+    statusDiv.setAttribute('role', 'status');
+    statusDiv.setAttribute('aria-live', 'polite');
+    statusDiv.setAttribute('aria-atomic', 'true');
+  }
+
   ['name', 'email', 'message'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', () => {
       el.classList.remove('invalid');
+      el.removeAttribute('aria-invalid');
       const err = document.getElementById(`${id}-error`);
-      if (err) err.textContent = '';
+      if (err) {
+        err.textContent = '';
+        err.setAttribute('aria-hidden', 'true');
+      }
     });
   });
 
@@ -38,11 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     clearErrors();
     hideStatus();
 
-    const name    = document.getElementById('name')?.value.trim()    ?? '';
-    const email   = document.getElementById('email')?.value.trim()   ?? '';
+    const name = document.getElementById('name')?.value.trim() ?? '';
+    const email = document.getElementById('email')?.value.trim() ?? '';
     const message = document.getElementById('message')?.value.trim() ?? '';
 
-    // Client-side validation
     let valid = true;
     if (!name || name.length < 2) {
       showFieldError('name-error', 'name', 'Please enter your name (min 2 characters).');
@@ -58,8 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (!valid) return;
 
-    // Loading state
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.setAttribute('aria-busy', 'true');
+      submitBtn.textContent = 'Sending…';
+    }
 
     const result = await post(API.contact, { name, email, message });
 
@@ -73,34 +80,51 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send Message'; }
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.removeAttribute('aria-busy');
+      submitBtn.textContent = 'Send Message';
+    }
   });
 
-  // ── Helpers ──────────────────────────────────────────────
   function showFieldError(errorId, inputId, message) {
     const err = document.getElementById(errorId);
-    if (err) err.textContent = message;
+    if (err) {
+      err.textContent = message;
+      err.setAttribute('aria-hidden', 'false');
+    }
     const input = document.getElementById(inputId);
-    if (input) input.classList.add('invalid');
+    if (input) {
+      input.classList.add('invalid');
+      input.setAttribute('aria-invalid', 'true');
+    }
   }
 
   function clearErrors() {
     ['name-error', 'email-error', 'message-error'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.textContent = '';
+      if (el) {
+        el.textContent = '';
+        el.setAttribute('aria-hidden', 'true');
+      }
     });
-    document.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+    document.querySelectorAll('.invalid').forEach(el => {
+      el.classList.remove('invalid');
+      el.removeAttribute('aria-invalid');
+    });
   }
 
   function showStatus(message, type) {
     if (!statusDiv) return;
     statusDiv.textContent = message;
-    statusDiv.className   = type;
+    statusDiv.className = type;
+    statusDiv.setAttribute('aria-hidden', 'false');
   }
 
   function hideStatus() {
     if (!statusDiv) return;
     statusDiv.textContent = '';
-    statusDiv.className   = '';
+    statusDiv.className = '';
+    statusDiv.setAttribute('aria-hidden', 'true');
   }
 });

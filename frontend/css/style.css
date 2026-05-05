@@ -1,8 +1,3 @@
-/* ================================================================
-   STYLE.CSS - DESIGN SYSTEM & CORE STYLES
-   Production-Ready | Accessible | Fully-Indented
-   ================================================================ */
-
 :root {
   /* ────── COLOR PALETTE ────── */
   --bg: #0a0d13;
@@ -29,6 +24,12 @@
   --warning-dim: rgba(255, 165, 0, 0.15);
   --warning-border: rgba(255, 165, 0, 0.3);
 
+  /* ────── SURFACE COLORS (for blog.css compatibility) ────── */
+  --surface: #13181f;
+  --surface-2: #1a2130;
+  --accent-dim: rgba(0, 217, 255, 0.12);
+  --border-2: rgba(255, 255, 255, 0.14);
+
   /* ────── TYPOGRAPHY SCALE ────── */
   --text-hero: clamp(2.4rem, 5.5vw, 4.2rem);
   --text-h1: clamp(1.8rem, 4vw, 2.8rem);
@@ -38,6 +39,10 @@
   --text-body: clamp(0.95rem, 1.5vw, 1.1rem);
   --text-sm: clamp(0.85rem, 1.2vw, 0.95rem);
   --text-xs: clamp(0.75rem, 1vw, 0.85rem);
+
+  /* ────── FONT FAMILIES (for blog.css compatibility) ────── */
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Fira Code', 'Cascadia Code', monospace;
 
   /* ────── FONT WEIGHTS ────── */
   --font-weight-light: 300;
@@ -99,6 +104,9 @@
   --nav-h: 60px;
   --container-max: 1200px;
   --container-pad: 2rem;
+
+  /* ────── ALIASES (for backward compatibility) ────── */
+  --max-w: var(--container-max);
 }
 
 /* ────────────────────────────────────────────────────────────── 
@@ -463,4 +471,78 @@ nav {
 .menu-links a:hover {
   background: var(--bg-hover);
   color: var(--accent);
+}
+/* ──────────────────────────────────────────────────────────────
+ SCREEN READER ONLY UTILITY
+ ────────────────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+ FOCUS-VISIBLE ENHANCEMENTS
+ ────────────────────────────────────────────────────────────── */
+.project-card:focus-visible,
+.blog-card:focus-visible,
+.about-card:focus-visible,
+.skills-group:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+ PRINT STYLES
+ ────────────────────────────────────────────────────────────── */
+@media print {
+  header,
+  .hamburger-menu,
+  #socials-container,
+  .btn-container,
+  .hero-actions,
+  .contact-form-wrap,
+  footer,
+  .share-bar {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  section {
+    padding: 1rem 0 !important;
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    opacity: 0.7;
+  }
+
+  .project-card,
+  .about-card,
+  .skills-group {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
 }

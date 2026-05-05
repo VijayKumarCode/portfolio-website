@@ -2,59 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <!-- BUG FIX: Removed duplicate <title> and duplicate <meta name="description"> -->
+  <!-- Primary Meta -->
   <title>Vijay Kumar | Java Backend Engineer</title>
-  <meta name="description" content="Vijay Kumar — Java Backend Engineer. Built Nexus, a live real-time multiplayer platform with Spring Boot 3, WebSocket, and PostgreSQL. Open to remote backend roles.">
+  <meta name="description" content="Java Backend Engineer building real-time distributed systems with Spring Boot 3, WebSocket, and PostgreSQL. Open to remote backend roles.">
+  <meta name="keywords" content="Java Backend Engineer, Spring Boot, WebSocket, PostgreSQL, Distributed Systems, Remote">
   <meta name="author" content="Vijay Kumar">
-
-  <!-- BUG FIX: canonical now points to custom domain, not vercel URL -->
+  <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://vijaykumarcode.space/">
 
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#0a0d13">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Preconnect / DNS Prefetch -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://portfolio-backend-v17c.onrender.com">
+  <link rel="dns-prefetch" href="https://portfolio-backend-v17c.onrender.com">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mediaqueries.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.json">
+
   <!-- Open Graph -->
-  <meta property="og:type"        content="website">
-  <meta property="og:title"       content="Vijay Kumar | Java Backend Engineer">
-  <meta property="og:description" content="Built Nexus — live multiplayer platform with Spring Boot 3, WebSocket, PostgreSQL. Open to remote backend roles.">
-  <meta property="og:url"         content="https://vijaykumarcode.space/">
-  <meta property="og:image"       content="https://vijaykumarcode.space/assets/profilePic.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vijaykumarcode.space/">
+  <meta property="og:title" content="Vijay Kumar | Java Backend Engineer">
+  <meta property="og:description" content="Java Backend Engineer building real-time distributed systems with Spring Boot 3, WebSocket, and PostgreSQL.">
+  <meta property="og:image" content="https://vijaykumarcode.space/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Vijay Kumar">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="Vijay Kumar | Java Backend Engineer">
-  <meta name="twitter:description" content="Built Nexus — live multiplayer platform with Spring Boot 3, WebSocket, PostgreSQL.">
-  <!-- BUG FIX: twitter:image now uses custom domain -->
-  <meta name="twitter:image"       content="https://vijaykumarcode.space/assets/profilePic.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@VijayKumarCode">
+  <meta name="twitter:creator" content="@VijayKumarCode">
+  <meta name="twitter:title" content="Vijay Kumar | Java Backend Engineer">
+  <meta name="twitter:description" content="Java Backend Engineer building real-time distributed systems with Spring Boot 3, WebSocket, and PostgreSQL.">
+  <meta name="twitter:image" content="https://vijaykumarcode.space/assets/og-image.jpg">
 
-  <!-- Structured Data: helps Google show rich results -->
+  <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Vijay Kumar",
+    "jobTitle": "Java Backend Engineer",
     "url": "https://vijaykumarcode.space",
-    "jobTitle": "Software Engineer",
     "sameAs": [
       "https://github.com/VijayKumarCode",
       "https://linkedin.com/in/vijaykumarcode",
       "https://x.com/VijayKumarCode"
-    ]
+    ],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Independent"
+    },
+    "knowsAbout": ["Java", "Spring Boot", "WebSocket", "PostgreSQL", "Distributed Systems"]
   }
   </script>
-
-  <link rel="icon" type="image/png" href="assets/profilePic.png">
-
-  <!-- Fonts: IBM Plex Mono (code feel) + DM Sans (body) — distinctive pairing -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/mediaqueries.css">
 </head>
-
 <body>
+  <a href="#main-content" class="sr-only">Skip to main content</a>
 
   <!-- ══════════════════════════════════════════
        NAVIGATION
@@ -96,7 +119,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
 
    <!-- ── HERO ──────────────────────────────────────── -->
 <section id="profile">
@@ -140,15 +163,17 @@
     <div id="socials-container" aria-label="Social profiles">
       <a href="https://github.com/VijayKumarCode"
          target="_blank" rel="noopener" aria-label="GitHub">
-        <img src="assets/github.png" alt="GitHub" class="social-icon">
-      </a>
+         <img src="assets/github-icon.png" alt="" loading="lazy" 
+         decoding="async" width="28" height="28">
       <a href="https://linkedin.com/in/vijaykumarcode"
          target="_blank" rel="noopener" aria-label="LinkedIn">
-        <img src="assets/linkedin.png" alt="LinkedIn" class="social-icon">
+        <img src="assets/linkedin.png" alt="" loading="lazy" 
+         decoding="async" width="28" height="28">
       </a>
       <a href="https://x.com/VijayKumarCode"
          target="_blank" rel="noopener" aria-label="X (Twitter)">
-        <img src="assets/x.png" alt="X" class="social-icon">
+        <img src="assets/x.png" alt="" loading="lazy" 
+         decoding="async" width="28" height="28">
       </a>
       <a href="assets/VijayKumar_Resume_v5.pdf"
          download
@@ -163,9 +188,10 @@
   <div class="hero-photo-wrap">
     <div class="hero-photo-frame">
       <img src="assets/profilePic.png"
-           alt="Vijay Kumar — Java Backend Engineer"
-           class="profile-pic"
-           width="340" height="340">
+           alt="Vijay Kumar — Java Backend Engineer" 
+           loading="eager" 
+           decoding="async" 
+           fetchpriority="high">
     </div>
   </div>
 
@@ -259,9 +285,9 @@
 
     <div class="project-img-wrap">
       <img src="assets/nexus.png"
-           alt="Nexus Multiplayer Arena game interface"
-           class="project-img"
-           loading="lazy">
+           alt="Nexus Multiplayer Arena project screenshot" 
+           loading="lazy" 
+           decoding="async">
       <div class="project-img-fallback" aria-hidden="true">⚔️</div>
     </div>
 
@@ -304,7 +330,8 @@
 
     <article class="project-card">
       <div class="project-img-wrap">
-        <img src="assets/TicTacToe.png" alt="TicTacToe" class="project-img" loading="lazy">
+        <img src="assets/TicTacToe.png" alt="TicTacToe" 
+       loading="lazy" decoding="async">
       </div>
       <div class="project-info">
         <div class="project-stack">Java · Sockets · Multithreading</div>
@@ -323,7 +350,8 @@
 
     <article class="project-card">
       <div class="project-img-wrap">
-        <img src="assets/dsa.png" alt="DSA in Java" class="project-img" loading="lazy">
+        <img src="assets/dsa.png" alt="DSA in Java"
+         loading="lazy" decoding="async">
       </div>
       <div class="project-info">
         <div class="project-stack">Java 17 · Algorithms · Data Structures</div>
@@ -467,9 +495,9 @@
   </footer>
 
   <!-- Scripts: deferred for performance -->
-  <script src="/js/script.js" defer></script>
-  <script type="module" src="/js/home-blog.js"></script>
-  <script type="module" src="/js/contact.js"></script>
+  <script type="module" src="js/script.js"></script>
+  <script type="module" src="js/contact.js"></script>
+  <script type="module" src="js/home-blog.js"></script>
 
 </body>
 </html>
