@@ -1,41 +1,52 @@
 /* ═══════════════════════════════════════════════════════════════
- PORTFOLIO v2.3 — RESPONSIVE mediaqueries.css
- Production-grade | Accessibility-first | Mobile-optimized
- ═══════════════════════════════════════════════════════════════ */
+   VIJAY KUMAR — PORTFOLIO v2.3
+   Responsive mediaqueries.css
+   Matched to actual HTML structure
+   Accessibility-first | Mobile-optimized
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ──────────────────────────────────────────────────────────────
- BASE MOBILE-FIRST DEFAULTS (no media query)
- These are the defaults that mobile gets before any breakpoint.
- ────────────────────────────────────────────────────────────── */
-
-/* iOS Safari: prevent font scaling on orientation change */
+/* ── Base mobile defaults ─────────────────────────────────── */
 html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* ──────────────────────────────────────────────────────────────
- 400px — Smallest Android phones (Galaxy A13, Redmi 9A, etc.)
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   400px — Smallest Android phones
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (max-width: 400px) {
   section {
     padding: 2.5rem 1rem;
   }
 
-  #skills {
+  #skills,
+  #projects,
+  #blog,
+  #contact {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
   #profile {
+    flex-direction: column-reverse;
+    text-align: center;
     padding-top: 2rem;
     padding-bottom: 2rem;
-    background-size: min(210px, 78vw);
     gap: 1.5rem;
   }
 
-  .profile-pic {
+  .hero-photo-frame {
     width: 120px;
     height: 120px;
+  }
+
+  .hero-photo-frame img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-content {
+    align-items: center;
+    text-align: center;
   }
 
   .hero-name {
@@ -43,7 +54,7 @@ html {
     letter-spacing: -0.03em;
   }
 
-  .hero-role {
+  .hero-role-text {
     font-size: 0.85rem;
   }
 
@@ -58,18 +69,29 @@ html {
     min-height: 44px;
   }
 
+  .hero-proof {
+    text-align: center;
+  }
+
   .section-title {
     font-size: 1.45rem;
     margin-bottom: 1.75rem;
   }
 
   #socials-container {
+    justify-content: center;
     gap: 0.5rem;
   }
 
-  .social-icon {
+  #socials-container img {
     width: 24px;
     height: 24px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
   }
 
   .about-cards {
@@ -89,12 +111,63 @@ html {
     font-size: 0.72rem;
   }
 
+  .about-text {
+    text-align: center;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .skills-group {
+    padding: 1rem 0.75rem;
+  }
+
   .skills-group-title {
-    font-size: 0.72rem;
+    font-size: 0.8rem;
+  }
+
+  .skill-item {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
   }
 
   .skill-name {
     font-size: 0.82rem;
+  }
+
+  .project-featured {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .project-featured .project-img-wrap {
+    height: 180px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .project-card .project-img-wrap {
+    height: 160px;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .blog-article-card {
+    padding: 1rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 
   .contact-form-wrap {
@@ -103,30 +176,40 @@ html {
 
   .contact-tagline {
     font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 16px; /* Prevent iOS zoom */
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 420px — Samsung Galaxy S23 (411px), Pixel 7 (412px)
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   420px — Standard mid-range phones
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 401px) and (max-width: 420px) {
   section {
     padding: 2.75rem 1.1rem;
   }
 
-  #skills {
+  #skills,
+  #projects,
+  #blog,
+  #contact {
     padding-left: 1.1rem;
     padding-right: 1.1rem;
   }
 
   #profile {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 1.75rem;
     padding-top: 2.25rem;
     padding-bottom: 2.25rem;
-    background-size: min(240px, 80vw);
-    gap: 1.75rem;
   }
 
-  .profile-pic {
+  .hero-photo-frame {
     width: 140px;
     height: 140px;
   }
@@ -136,11 +219,12 @@ html {
     letter-spacing: -0.03em;
   }
 
-  .hero-role {
+  .hero-role-text {
     font-size: 0.88rem;
   }
 
   .hero-actions {
+    justify-content: center;
     gap: 0.5rem;
   }
 
@@ -148,15 +232,6 @@ html {
     padding: 0.6rem 1.25rem;
     font-size: 0.8rem;
     min-height: 44px;
-  }
-
-  #socials-container {
-    gap: 0.6rem;
-  }
-
-  .social-icon {
-    width: 26px;
-    height: 26px;
   }
 
   .section-title {
@@ -172,24 +247,6 @@ html {
     padding: 0.85rem 0.75rem;
   }
 
-  .about-card h3 {
-    font-size: 0.82rem;
-  }
-
-  .about-card p {
-    font-size: 0.72rem;
-  }
-
-  .skill-bar {
-    width: 100%;
-    flex: none;
-    height: 4px;
-  }
-
-  .skill-bar > .skill-fill {
-    height: 100%;
-  }
-
   .project-featured .project-img-wrap {
     height: 170px;
   }
@@ -198,20 +255,16 @@ html {
     height: 140px;
   }
 
-  .project-info {
-    padding: 1rem;
-  }
-
   .contact-form-wrap {
     padding: 1.1rem 0.9rem;
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 480px — Mid-size phones (iPhone 12/13/14, Pixel 6)
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   480px — Mid-size phones (iPhone 12/13/14, Pixel 6)
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 421px) and (max-width: 480px) {
-  .profile-pic {
+  .hero-photo-frame {
     width: 150px;
     height: 150px;
   }
@@ -238,15 +291,18 @@ html {
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 640px — Mobile landscape / large phones
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   640px — Mobile landscape / large phones
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 481px) and (max-width: 640px) {
   section {
     padding: 3rem 1.25rem;
   }
 
-  #skills {
+  #skills,
+  #projects,
+  #blog,
+  #contact {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
@@ -256,25 +312,22 @@ html {
   }
 
   #profile {
+    flex-direction: column-reverse;
+    text-align: center;
     gap: 2rem;
     padding: 2.5rem 1.25rem 3rem;
-    background-size: min(320px, 85vw);
   }
 
-  .profile-pic {
+  .hero-photo-frame {
     width: 160px;
     height: 160px;
-  }
-
-  .hero-photo-frame::before {
-    display: none;
   }
 
   .hero-name {
     font-size: clamp(1.8rem, 8vw, 2.4rem);
   }
 
-  .hero-role {
+  .hero-role-text {
     font-size: 0.9rem;
   }
 
@@ -283,10 +336,6 @@ html {
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.6rem;
-  }
-
-  #about {
-    padding-top: 3rem;
   }
 
   .about-cards {
@@ -305,26 +354,20 @@ html {
 
   .skills-group {
     padding: 1.25rem;
-    border-radius: var(--radius-lg);
   }
 
   .skill-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    grid-template-columns: 1fr;
     gap: 0.35rem;
   }
 
   .skill-name {
-    min-width: unset;
     font-size: 0.85rem;
   }
 
   .skill-bar {
     width: 100%;
-    flex: none;
     height: 4px;
-    border-radius: 2px;
   }
 
   .projects-grid {
@@ -333,16 +376,11 @@ html {
   }
 
   .project-featured {
-    grid-column: span 1;
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .project-featured .project-img-wrap {
-    flex: none;
-    width: 100%;
     height: 200px;
-    min-height: unset;
-    aspect-ratio: auto;
   }
 
   .project-card:not(.project-featured) .project-img-wrap {
@@ -352,10 +390,6 @@ html {
   .blog-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
-  }
-
-  .blog-loading {
-    grid-column: span 1;
   }
 
   .contact-grid {
@@ -397,42 +431,64 @@ html {
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 768px — iPad portrait / small tablets
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   768px — iPad portrait / small tablets
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 641px) and (max-width: 768px) {
   section {
     padding: 3.5rem 1.75rem;
   }
 
-  .profile-pic {
+  #skills,
+  #projects,
+  #blog,
+  #contact {
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
+
+  .hero-photo-frame {
     width: clamp(160px, 35vw, 220px);
     height: clamp(160px, 35vw, 220px);
   }
 
   #profile {
-    background-size: min(360px, 88vw);
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .hero-content {
+    align-items: center;
   }
 
   .hero-name {
     font-size: clamp(2rem, 7vw, 2.8rem);
   }
 
+  .hero-proof {
+    text-align: center;
+  }
+
   .about-pic {
     max-width: 260px;
   }
 
-  #skills {
-    padding-left: 1.75rem;
-    padding-right: 1.75rem;
+  .skill-item {
+    grid-template-columns: 130px 1fr;
   }
 
-  .skill-name {
-    min-width: 120px;
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .project-card:not(.project-featured) .project-img-wrap {
     height: 160px;
+  }
+
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 
   .contact-form-wrap {
@@ -450,16 +506,16 @@ html {
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 900px — iPad landscape / two-col → single col
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   900px — Tablet landscape / two-col to single col transition
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 769px) and (max-width: 900px) {
   section {
     padding: 4rem 2rem;
   }
 
   #profile {
-    grid-template-columns: 1fr;
+    flex-direction: column-reverse;
     text-align: center;
     padding: 3rem 1.5rem 4rem;
     gap: 2.5rem;
@@ -511,12 +567,8 @@ html {
     padding: 1.5rem;
   }
 
-  .skill-name {
-    min-width: 130px;
-  }
-
-  .skill-bar {
-    width: 100%;
+  .skill-item {
+    grid-template-columns: 140px 1fr;
   }
 
   .projects-grid {
@@ -524,18 +576,11 @@ html {
   }
 
   .project-featured {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .project-featured .project-img-wrap {
-    flex: none;
     height: 220px;
-    aspect-ratio: auto;
-  }
-
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
   }
 
   .blog-grid {
@@ -543,8 +588,9 @@ html {
     gap: 1rem;
   }
 
-  .blog-loading {
-    grid-column: span 2;
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 
   .footer-inner {
@@ -558,37 +604,31 @@ html {
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 1024px — Small laptop / large tablet landscape
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   1024px — Small laptop / large tablet
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 901px) and (max-width: 1024px) {
   section {
     padding: 4rem 2rem;
   }
 
   .project-featured {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .project-featured .project-img-wrap {
-    flex: none;
     height: 240px;
-    aspect-ratio: auto;
   }
 
   .blog-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
   }
-
-  .blog-loading {
-    grid-column: span 2;
-  }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 1200px — Collapse desktop nav, show hamburger
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   1200px — Collapse desktop nav, show hamburger
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (max-width: 1200px) {
   #desktop-nav {
     display: none;
@@ -599,9 +639,9 @@ html {
   }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 1200px–1919px — Desktop (nav visible)
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   1200px+ — Desktop (full nav visible)
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 1201px) {
   #desktop-nav {
     display: flex;
@@ -614,19 +654,14 @@ html {
   .skills-grid {
     gap: 2rem;
   }
-
-  #skills {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
 }
 
-/* ──────────────────────────────────────────────────────────────
- 1920px — Large desktop / Full HD / ultrawide
- ────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   1920px — Large desktop / Full HD / Ultrawide
+   ═══════════════════════════════════════════════════════════════ */
 @media screen and (min-width: 1920px) {
   :root {
-    --nav-h: 76px;
+    --container-max: 1400px;
   }
 
   section {
@@ -640,15 +675,17 @@ html {
 
   .skills-grid {
     gap: 4rem;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .skill-name {
-    min-width: 180px;
+    min-width: 160px;
     font-size: 0.95rem;
   }
 
   .projects-grid {
     gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .blog-grid {
@@ -658,10 +695,10 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- ACCESSIBILITY & PREFERENCE MEDIA QUERIES
- ═══════════════════════════════════════════════════════════════ */
+   ACCESSIBILITY & PREFERENCE MEDIA QUERIES
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ── Reduced motion ──────────────────────────────────────────── */
+/* ── Reduced motion ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -672,28 +709,28 @@ html {
     scroll-behavior: auto !important;
   }
 
-  .skill-fill {
-    transition: none !important;
-    width: var(--target-width, 0%) !important;
-  }
-
-  .reveal,
+  .fade-in,
   .project-card,
   .about-card,
   .skills-group {
     opacity: 1 !important;
     transform: none !important;
   }
+
+  .tag-dot {
+    animation: none !important;
+    opacity: 1;
+  }
 }
 
-/* ── High contrast ─────────────────────────────────────────── */
+/* ── High contrast ──────────────────────────────────────────── */
 @media (prefers-contrast: more) {
   :root {
-    --text-2: #b0b8c8;
-    --text-3: #7a8899;
-    --border: rgba(255, 255, 255, 0.2);
-    --accent: #00ffff;
-    --accent-dark: #0088dd;
+    --color-text-secondary: #b0b8c8;
+    --color-text-tertiary: #7a8899;
+    --color-border: rgba(255, 255, 255, 0.25);
+    --color-accent-primary: #00ffff;
+    --color-accent-secondary: #0088dd;
   }
 
   .skill-bar {
@@ -703,32 +740,34 @@ html {
   a:focus-visible,
   button:focus-visible,
   .btn:focus-visible {
-    outline: 3px solid var(--accent);
+    outline: 3px solid var(--color-accent-primary);
     outline-offset: 3px;
+  }
+
+  .project-card,
+  .about-card,
+  .skills-group,
+  .blog-article-card {
+    border: 2px solid var(--color-border);
   }
 }
 
-/* ── Reduced data ──────────────────────────────────────────── */
+/* ── Reduced data ───────────────────────────────────────────── */
 @media (prefers-reduced-data: reduce) {
   img,
   video {
     filter: grayscale(100%);
   }
 
-  .hero-photo-frame::before,
   #profile::before {
     display: none !important;
   }
 }
 
-/* ── Touch-only devices (no hover) ─────────────────────────── */
+/* ── Touch-only devices (no hover capability) ──────────────── */
 @media (hover: none) and (pointer: coarse) {
-  .blog-card:hover {
-    padding-left: 0;
-  }
-
-  .blog-card:hover .blog-card-read {
-    opacity: 1;
+  .blog-article-card:hover {
+    transform: none;
   }
 
   .project-card:hover,
@@ -739,22 +778,27 @@ html {
   .btn:hover {
     transform: none;
   }
+
+  .menu-links a {
+    padding: 0.75rem;
+  }
 }
 
-/* ── Landscape phones ──────────────────────────────────────── */
+/* ── Landscape phones ───────────────────────────────────────── */
 @media screen and (orientation: landscape) and (max-height: 600px) and (max-width: 900px) {
   #profile {
-    grid-template-columns: 1fr 1fr;
+    flex-direction: row;
     text-align: left;
     padding: 2rem 1.5rem;
     gap: 2rem;
+    min-height: auto;
   }
 
   .hero-photo-wrap {
     order: 0;
   }
 
-  .profile-pic {
+  .hero-photo-frame {
     width: 140px;
     height: 140px;
   }
@@ -772,6 +816,11 @@ html {
     width: auto;
   }
 
+  .hero-content {
+    align-items: flex-start;
+    text-align: left;
+  }
+
   section {
     padding: 2.5rem 1.5rem;
   }
@@ -779,9 +828,9 @@ html {
 
 /* ── iPhone safe area (notch / dynamic island) ─────────────── */
 @supports (padding: max(0px)) {
-  header {
-    padding-left: max(var(--container-pad), env(safe-area-inset-left));
-    padding-right: max(var(--container-pad), env(safe-area-inset-right));
+  #site-header {
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
   }
 
   section {
@@ -795,19 +844,16 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- PRINT STYLES
- ═══════════════════════════════════════════════════════════════ */
-
+   PRINT STYLES
+   ═══════════════════════════════════════════════════════════════ */
 @media print {
-  header,
+  #site-header,
   .hamburger-menu,
   #socials-container,
   .hero-actions,
   .contact-form-wrap,
   footer,
-  .share-bar,
-  .blog-filter-bar,
-  .load-more-wrap {
+  .blog-footer-link {
     display: none !important;
   }
 
@@ -825,16 +871,17 @@ html {
   }
 
   #profile {
-    grid-template-columns: 1fr 2fr;
+    flex-direction: row;
     gap: 2rem;
     text-align: left;
+    min-height: auto;
   }
 
   .hero-photo-wrap {
     order: 0;
   }
 
-  .profile-pic {
+  .hero-photo-frame {
     width: 120px;
     height: 120px;
   }
@@ -844,7 +891,7 @@ html {
     color: #000 !important;
   }
 
-  .hero-role,
+  .hero-role-text,
   .hero-stack {
     color: #333 !important;
   }
@@ -868,7 +915,8 @@ html {
 
   .project-card,
   .about-card,
-  .skills-group {
+  .skills-group,
+  .blog-article-card {
     border: 1px solid #ccc !important;
     box-shadow: none !important;
     background: #fff !important;
@@ -876,10 +924,6 @@ html {
 
   .skill-bar {
     background: #ddd !important;
-  }
-
-  .skill-fill {
-    background: #333 !important;
   }
 
   img {
