@@ -6,18 +6,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <!-- Primary Meta -->
-  <title>Vijay Kumar | Java Backend Engineer</title>
-  <meta name="description" content="Java Backend Engineer building real-time distributed systems with Spring Boot 3, WebSocket, and PostgreSQL. Open to remote backend roles.">
-  <meta name="keywords" content="Java Backend Engineer, Spring Boot, WebSocket, PostgreSQL, Distributed Systems, Remote">
+  <title>Vijay Kumar | Java Backend Engineer — Real-Time Distributed Systems</title>
+  <meta name="description" content="Java Backend Engineer building production-grade distributed systems with Spring Boot 3, WebSocket, and PostgreSQL. Creator of Nexus — a live multiplayer platform. Open to remote backend roles.">
+  <meta name="keywords" content="Java Backend Engineer, Spring Boot, WebSocket, PostgreSQL, Distributed Systems, Remote, Vijay Kumar">
   <meta name="author" content="Vijay Kumar">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://vijaykumarcode.space/">
 
-  <!-- Theme Color -->
+  <!-- Theme -->
   <meta name="theme-color" content="#0a0d13">
   <meta name="color-scheme" content="dark">
 
-  <!-- Preconnect / DNS Prefetch -->
+  <!-- Performance: Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://portfolio-backend-v17c.onrender.com">
@@ -26,15 +26,13 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/mediaqueries.css">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-
-  <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
 
   <!-- Open Graph -->
@@ -45,7 +43,7 @@
   <meta property="og:image" content="https://vijaykumarcode.space/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:site_name" content="Vijay Kumar">
+  <meta property="og:site_name" content="Vijay Kumar — Backend Engineer">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -63,29 +61,38 @@
     "name": "Vijay Kumar",
     "jobTitle": "Java Backend Engineer",
     "url": "https://vijaykumarcode.space",
+    "image": "https://vijaykumarcode.space/assets/profilePic.png",
     "sameAs": [
       "https://github.com/VijayKumarCode",
       "https://linkedin.com/in/vijaykumarcode",
       "https://x.com/VijayKumarCode"
     ],
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Independent"
-    },
-    "knowsAbout": ["Java", "Spring Boot", "WebSocket", "PostgreSQL", "Distributed Systems"]
+    "knowsAbout": [
+      "Java",
+      "Spring Boot",
+      "WebSocket",
+      "PostgreSQL",
+      "Distributed Systems",
+      "REST APIs",
+      "Docker",
+      "GitHub Actions"
+    ],
+    "description": "Java Backend Engineer building production-grade distributed systems. Creator of Nexus — a live real-time multiplayer platform with STOMP WebSocket sessions and automated CI/CD."
   }
   </script>
 </head>
 <body>
-  <a href="#main-content" class="sr-only">Skip to main content</a>
+  <!-- Skip Navigation -->
+  <a href="#main-content" class="sr-only" id="skip-link">Skip to main content</a>
 
   <!-- ══════════════════════════════════════════
        NAVIGATION
   ══════════════════════════════════════════ -->
   <header id="site-header" role="banner">
+    <!-- Desktop Navigation -->
     <nav id="desktop-nav" aria-label="Desktop navigation">
-      <a href="/" class="logo-container" aria-label="Vijay Kumar — home">
-        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img">
+      <a href="/" class="logo-container" aria-label="Vijay Kumar — Home">
+        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img" width="48" height="48">
       </a>
       <ul class="nav-links" role="list">
         <li><a href="#about">About</a></li>
@@ -96,9 +103,10 @@
       </ul>
     </nav>
 
+    <!-- Mobile Navigation -->
     <nav id="hamburger-nav" aria-label="Mobile navigation">
-      <a href="/" class="logo-container" aria-label="Vijay Kumar — home">
-        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img">
+      <a href="/" class="logo-container" aria-label="Vijay Kumar — Home">
+        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img" width="40" height="40">
       </a>
       <div class="hamburger-menu">
         <button class="hamburger-icon"
@@ -106,14 +114,16 @@
                 aria-label="Toggle navigation menu"
                 aria-expanded="false"
                 aria-controls="mobile-menu">
-          <span></span><span></span><span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
         <ul class="menu-links" id="mobile-menu" role="list">
-          <li><a href="#about"    onclick="closeMenu()">About</a></li>
-          <li><a href="#skills"   onclick="closeMenu()">Skills</a></li>
+          <li><a href="#about" onclick="closeMenu()">About</a></li>
+          <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
           <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
-          <li><a href="#blog"     onclick="closeMenu()">Log</a></li>
-          <li><a href="#contact"  onclick="closeMenu()">Contact</a></li>
+          <li><a href="#blog" onclick="closeMenu()">Log</a></li>
+          <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
         </ul>
       </div>
     </nav>
@@ -121,80 +131,84 @@
 
   <main id="main-content">
 
-   <!-- ── HERO ──────────────────────────────────────── -->
-<section id="profile">
+    <!-- ══════════════════════════════════════════
+         HERO / PROFILE
+    ══════════════════════════════════════════ -->
+    <section id="profile">
+      <div class="hero-content">
+        <span class="hero-tag">
+          <span class="tag-dot" aria-hidden="true"></span>
+          Open to remote backend roles
+        </span>
 
-  <!-- Left: content block -->
-  <div class="hero-content">
+        <h1 class="hero-name">Vijay Kumar</h1>
 
-    <span class="hero-tag">
-      <span class="tag-dot" aria-hidden="true"></span>
-      Open to remote backend roles
-    </span>
+        <p class="hero-role">
+          <span class="hero-role-text">Java Backend Engineer</span>
+        </p>
 
-    <h1 class="hero-name">Vijay Kumar</h1>
+        <p class="hero-stack">
+          Spring Boot 3 · WebSocket · PostgreSQL · Java 17
+        </p>
 
-    <p class="hero-role">
-      <span class="hero-role-text">Java Backend Engineer</span>
-    </p>
+        <p class="hero-proof">
+          Built <a href="https://nexusgame.space" target="_blank" rel="noopener noreferrer" class="hero-proof-link">Nexus</a>
+          — a live real-time multiplayer platform with STOMP WebSocket sessions,
+          concurrent game state, and automated CI/CD to Oracle Cloud.
+        </p>
 
-    <p class="hero-stack">
-      Spring Boot 3 · WebSocket · PostgreSQL · Java 17
-    </p>
+        <div class="hero-actions">
+          <a href="https://nexusgame.space"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="btn btn-primary">
+            View Live Project ↗
+          </a>
+          <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+        </div>
 
-    <!-- THE DIFFERENTIATOR — one sentence with a live link -->
-    <p class="hero-proof">
-      Built <a href="https://nexusgame.space" target="_blank" rel="noopener" class="hero-proof-link">Nexus</a>
-      — a live real-time multiplayer platform with STOMP WebSocket sessions,
-      concurrent game state, and automated CI/CD to Oracle Cloud.
-    </p>
+        <!-- Social Links -->
+        <div id="socials-container" aria-label="Social profiles">
+          <a href="https://github.com/VijayKumarCode"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="GitHub Profile">
+            <img src="assets/github-icon.png" alt="" loading="lazy" decoding="async" width="28" height="28">
+          </a>
+          <a href="https://linkedin.com/in/vijaykumarcode"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="LinkedIn Profile">
+            <img src="assets/linkedin.png" alt="" loading="lazy" decoding="async" width="28" height="28">
+          </a>
+          <a href="https://x.com/VijayKumarCode"
+             target="_blank"
+             rel="noopener noreferrer"
+             aria-label="X (Twitter) Profile">
+            <img src="assets/x.png" alt="" loading="lazy" decoding="async" width="28" height="28">
+          </a>
+          <a href="assets/VijayKumar_Resume_v5.pdf"
+             download
+             aria-label="Download resume (PDF)">
+            <span class="social-cv-link">CV ↓</span>
+          </a>
+        </div>
+      </div>
 
-    <div class="hero-actions">
-      <a href="https://nexusgame.space"
-         target="_blank"
-         rel="noopener"
-         class="btn btn-primary">
-        View Live Project ↗
-      </a>
-      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
-    </div>
+      <!-- Profile Photo -->
+      <div class="hero-photo-wrap">
+        <div class="hero-photo-frame">
+          <img src="assets/profilePic.png"
+               alt="Vijay Kumar — Java Backend Engineer"
+               loading="eager"
+               decoding="async"
+               fetchpriority="high"
+               width="320"
+               height="320">
+        </div>
+      </div>
+    </section>
 
-    <!-- Socials visible in hero, no scroll needed -->
-    <div id="socials-container" aria-label="Social profiles">
-      <a href="https://github.com/VijayKumarCode"
-       target="_blank" rel="noopener" aria-label="GitHub">
-        <img src="assets/github-icon.png" alt="" loading="lazy" 
-         decoding="async" width="28" height="28">
-      </a>
-      <a href="https://linkedin.com/in/vijaykumarcode"
-       target="_blank" rel="noopener" aria-label="LinkedIn">
-        <img src="assets/linkedin.png" alt="" loading="lazy" 
-         decoding="async" width="28" height="28">
-      </a>
-      <a href="https://x.com/VijayKumarCode"
-       target="_blank" rel="noopener" aria-label="X (Twitter)">
-        <img src="assets/x.png" alt="" loading="lazy" 
-         decoding="async" width="28" height="28">
-      </a>
-      <a href="assets/VijayKumar_Resume_v5.pdf"
-         download
-         aria-label="Download resume (PDF)">
-        <span class="social-cv-link">CV ↓</span>
-      </a>
-    </div>
-
-  <!-- Right: profile photo -->
-  <div class="hero-photo-wrap">
-    <div class="hero-photo-frame">
-      <img src="assets/profilePic.png"
-           alt="Vijay Kumar — Java Backend Engineer" 
-           loading="eager" 
-           decoding="async" 
-           fetchpriority="high">
-    </div>
-  </div>
-
-</section>
     <!-- ══════════════════════════════════════════
          ABOUT
     ══════════════════════════════════════════ -->
@@ -208,24 +222,24 @@
                alt="Vijay Kumar working"
                class="about-pic"
                loading="lazy"
-               width="400" height="400">
+               width="400"
+               height="400">
         </div>
 
         <div class="about-content">
           <div class="about-cards">
             <div class="about-card">
-              <img src="assets/experience.png" alt="" class="about-card-icon" aria-hidden="true">
+              <img src="assets/experience.png" alt="" class="about-card-icon" aria-hidden="true" width="32" height="32">
               <h3>Experience</h3>
               <p>Independent Backend Engineer</p>
             </div>
             <div class="about-card">
-              <img src="assets/education.png" alt="" class="about-card-icon" aria-hidden="true">
+              <img src="assets/education.png" alt="" class="about-card-icon" aria-hidden="true" width="32" height="32">
               <h3>Education</h3>
               <p>MCA · BCA</p>
             </div>
           </div>
 
-          <!-- BUG FIX: About text updated to reflect actual experience level -->
           <p class="about-text">
             Backend engineer with production experience building real-time distributed
             systems using <strong>Java 17</strong> and <strong>Spring Boot 3</strong>.
@@ -240,229 +254,246 @@
     </section>
 
     <!-- ══════════════════════════════════════════
-         SKILLS  (renamed from "experience" which was misleading)
+         SKILLS
     ══════════════════════════════════════════ -->
-   <section id="skills" aria-labelledby="skills-heading">
-  <p class="section__text__p1">Technical Expertise</p>
-  <h2 class="section-title" id="skills-heading">Stack</h2>
+    <section id="skills" aria-labelledby="skills-heading">
+      <p class="section__text__p1">Technical Expertise</p>
+      <h2 class="section-title" id="skills-heading">Stack</h2>
 
-  <div class="skills-grid">
-    <div class="skills-group">
-      <h3 class="skills-group-title">Core & Backend</h3>
-      <ul class="skills-list" role="list">
-        <li class="skill-item">
-          <span class="skill-name">Java 17</span>
-          <meter class="skill-bar" min="0" max="100" value="90" aria-label="Java 17 proficiency: 90%">90%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">Spring Boot 3</span>
-          <meter class="skill-bar" min="0" max="100" value="85" aria-label="Spring Boot 3 proficiency: 85%">85%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">Spring Data JPA</span>
-          <meter class="skill-bar" min="0" max="100" value="80" aria-label="Spring Data JPA proficiency: 80%">80%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">WebSocket / STOMP</span>
-          <meter class="skill-bar" min="0" max="100" value="85" aria-label="WebSocket and STOMP proficiency: 85%">85%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">PostgreSQL</span>
-          <meter class="skill-bar" min="0" max="100" value="78" aria-label="PostgreSQL proficiency: 78%">78%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">DSA</span>
-          <meter class="skill-bar" min="0" max="100" value="88" aria-label="Data Structures and Algorithms proficiency: 88%">88%</meter>
-        </li>
-      </ul>
-    </div>
+      <div class="skills-grid">
+        <div class="skills-group">
+          <h3 class="skills-group-title">Core & Backend</h3>
+          <ul class="skills-list" role="list">
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-java">Java 17</span>
+              <meter class="skill-bar" min="0" max="100" value="90" aria-labelledby="skill-label-java">90%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-spring">Spring Boot 3</span>
+              <meter class="skill-bar" min="0" max="100" value="85" aria-labelledby="skill-label-spring">85%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-jpa">Spring Data JPA</span>
+              <meter class="skill-bar" min="0" max="100" value="80" aria-labelledby="skill-label-jpa">80%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-ws">WebSocket / STOMP</span>
+              <meter class="skill-bar" min="0" max="100" value="85" aria-labelledby="skill-label-ws">85%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-pg">PostgreSQL</span>
+              <meter class="skill-bar" min="0" max="100" value="78" aria-labelledby="skill-label-pg">78%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-dsa">DSA</span>
+              <meter class="skill-bar" min="0" max="100" value="88" aria-labelledby="skill-label-dsa">88%</meter>
+            </li>
+          </ul>
+        </div>
 
-    <div class="skills-group">
-      <h3 class="skills-group-title">Tools & Infrastructure</h3>
-      <ul class="skills-list" role="list">
-        <li class="skill-item">
-          <span class="skill-name">Git & GitHub</span>
-          <meter class="skill-bar" min="0" max="100" value="92" aria-label="Git and GitHub proficiency: 92%">92%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">GitHub Actions</span>
-          <meter class="skill-bar" min="0" max="100" value="78" aria-label="GitHub Actions proficiency: 78%">78%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">Docker</span>
-          <meter class="skill-bar" min="0" max="100" value="68" aria-label="Docker proficiency: 68%">68%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">Linux (Ubuntu)</span>
-          <meter class="skill-bar" min="0" max="100" value="78" aria-label="Linux Ubuntu proficiency: 78%">78%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">Maven / JUnit</span>
-          <meter class="skill-bar" min="0" max="100" value="75" aria-label="Maven and JUnit proficiency: 75%">75%</meter>
-        </li>
-        <li class="skill-item">
-          <span class="skill-name">REST APIs</span>
-          <meter class="skill-bar" min="0" max="100" value="90" aria-label="REST APIs proficiency: 90%">90%</meter>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-   <!-- Projects section — replace the entire grid -->
-<section id="projects" aria-labelledby="projects-heading">
-  <p class="section__text__p1">What I've Built</p>
-  <h2 class="section-title" id="projects-heading">Projects</h2>
-
-  <!-- ── FEATURED: Nexus ──────────────────────────── -->
-  <article class="project-card project-featured" aria-label="Nexus Multiplayer Arena">
-    <span class="project-badge">Live</span>
-
-    <div class="project-img-wrap">
-      <img src="assets/nexus.png"
-           alt="Nexus Multiplayer Arena project screenshot" 
-           loading="lazy" 
-           decoding="async">
-      <div class="project-img-fallback" aria-hidden="true">⚔️</div>
-    </div>
-
-    <div class="project-info">
-      <div class="project-stack">
-        Java 17 · Spring Boot 3 · WebSocket (STOMP/SockJS) · PostgreSQL
-      </div>
-      <h3 class="project-title">Nexus Multiplayer Arena</h3>
-      <p class="project-desc">
-        Real-time multiplayer game platform with STOMP WebSocket sessions,
-        bcrypt authentication, email activation via Resend HTTP API,
-        and automated CI/CD via GitHub Actions to Oracle Cloud.
-      </p>
-
-      <!-- Specific technical claims — these are what recruiters remember -->
-      <ul class="project-claims" aria-label="Technical highlights">
-        <li>Concurrent game state managed in ConcurrentHashMap — no race conditions</li>
-        <li>Diagnosed Railway port-587 SMTP block; replaced with Resend HTTP API</li>
-        <li>Fixed JPQL enum inner-class crash causing move rejections every 10s</li>
-        <li>WebSocket session lifecycle with connect/disconnect presence tracking</li>
-      </ul>
-
-      <div class="btn-container project-ctas">
-        <a href="https://nexusgame.space"
-           target="_blank" rel="noopener"
-           class="btn btn-primary btn-sm">
-          Live Demo ↗
-        </a>
-        <a href="https://github.com/VijayKumarCode/nexus"
-           target="_blank" rel="noopener"
-           class="btn btn-ghost btn-sm">
-          GitHub
-        </a>
-      </div>
-    </div>
-  </article>
-
-  <!-- ── Secondary projects grid ──────────────────── -->
-  <div class="projects-grid">
-
-    <article class="project-card">
-      <div class="project-img-wrap">
-        <img src="assets/TicTacToe.png" alt="TicTacToe" 
-       loading="lazy" decoding="async">
-      </div>
-      <div class="project-info">
-        <div class="project-stack">Java · Sockets · Multithreading</div>
-        <h3 class="project-title">TicTacToe</h3>
-        <p class="project-desc">
-          Network-based multiplayer game using raw Java Sockets.
-          Handles concurrent sessions with dedicated threads.
-          Architectural predecessor to Nexus.
-        </p>
-        <div class="btn-container">
-          <a href="https://github.com/VijayKumarCode/TicTacToe_java"
-             target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub</a>
+        <div class="skills-group">
+          <h3 class="skills-group-title">Tools & Infrastructure</h3>
+          <ul class="skills-list" role="list">
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-git">Git & GitHub</span>
+              <meter class="skill-bar" min="0" max="100" value="92" aria-labelledby="skill-label-git">92%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-gha">GitHub Actions</span>
+              <meter class="skill-bar" min="0" max="100" value="78" aria-labelledby="skill-label-gha">78%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-docker">Docker</span>
+              <meter class="skill-bar" min="0" max="100" value="68" aria-labelledby="skill-label-docker">68%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-linux">Linux (Ubuntu)</span>
+              <meter class="skill-bar" min="0" max="100" value="78" aria-labelledby="skill-label-linux">78%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-maven">Maven / JUnit</span>
+              <meter class="skill-bar" min="0" max="100" value="75" aria-labelledby="skill-label-maven">75%</meter>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name" id="skill-label-rest">REST APIs</span>
+              <meter class="skill-bar" min="0" max="100" value="90" aria-labelledby="skill-label-rest">90%</meter>
+            </li>
+          </ul>
         </div>
       </div>
-    </article>
+    </section>
 
-    <article class="project-card">
-      <div class="project-img-wrap">
-        <img src="assets/dsa.png" alt="DSA in Java"
-         loading="lazy" decoding="async">
+    <!-- ══════════════════════════════════════════
+         PROJECTS
+    ══════════════════════════════════════════ -->
+    <section id="projects" aria-labelledby="projects-heading">
+      <p class="section__text__p1">What I've Built</p>
+      <h2 class="section-title" id="projects-heading">Projects</h2>
+
+      <!-- Featured Project: Nexus -->
+      <article class="project-card project-featured" aria-label="Nexus Multiplayer Arena">
+        <span class="project-badge" aria-label="Live deployment">Live</span>
+
+        <div class="project-img-wrap">
+          <img src="assets/nexus.png"
+               alt="Nexus Multiplayer Arena project screenshot showing real-time game interface"
+               loading="lazy"
+               decoding="async"
+               width="600"
+               height="340">
+          <div class="project-img-fallback" aria-hidden="true">⚔️</div>
+        </div>
+
+        <div class="project-info">
+          <div class="project-stack">
+            Java 17 · Spring Boot 3 · WebSocket (STOMP/SockJS) · PostgreSQL
+          </div>
+          <h3 class="project-title">Nexus Multiplayer Arena</h3>
+          <p class="project-desc">
+            Real-time multiplayer game platform with STOMP WebSocket sessions,
+            bcrypt authentication, email activation via Resend HTTP API,
+            and automated CI/CD via GitHub Actions to Oracle Cloud.
+          </p>
+
+          <ul class="project-claims" aria-label="Technical highlights">
+            <li>Concurrent game state managed in ConcurrentHashMap — no race conditions under load</li>
+            <li>Diagnosed Railway port-587 SMTP block; replaced with Resend HTTP API for reliable email delivery</li>
+            <li>Fixed JPQL enum inner-class crash causing move rejections every 10 seconds</li>
+            <li>WebSocket session lifecycle with connect/disconnect presence tracking</li>
+          </ul>
+
+          <div class="btn-container project-ctas">
+            <a href="https://nexusgame.space"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-primary btn-sm">
+              Live Demo ↗
+            </a>
+            <a href="https://github.com/VijayKumarCode/nexus"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-ghost btn-sm">
+              GitHub
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Secondary Projects Grid -->
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="project-img-wrap">
+            <img src="assets/TicTacToe.png"
+                 alt="TicTacToe network multiplayer game"
+                 loading="lazy"
+                 decoding="async"
+                 width="400"
+                 height="240">
+          </div>
+          <div class="project-info">
+            <div class="project-stack">Java · Sockets · Multithreading</div>
+            <h3 class="project-title">TicTacToe (Network Multiplayer)</h3>
+            <p class="project-desc">
+              Network-based multiplayer game using raw Java Sockets.
+              Handles concurrent sessions with dedicated threads.
+              Architectural predecessor to Nexus — this project proved the concurrency model.
+            </p>
+            <div class="btn-container">
+              <a href="https://github.com/VijayKumarCode/TicTacToe_java"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="btn btn-ghost btn-sm">
+                GitHub ↗
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-img-wrap">
+            <img src="assets/dsa.png"
+                 alt="Data Structures and Algorithms implementations in Java"
+                 loading="lazy"
+                 decoding="async"
+                 width="400"
+                 height="240">
+          </div>
+          <div class="project-info">
+            <div class="project-stack">Java 17 · Algorithms · Data Structures</div>
+            <h3 class="project-title">DSA In Java</h3>
+            <p class="project-desc">
+              Documented implementations of Trees, Graphs, Linked Lists,
+              and sorting algorithms. Each solution includes verified
+              time and space complexity analysis with test cases.
+            </p>
+            <div class="btn-container">
+              <a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="btn btn-ghost btn-sm">
+                GitHub ↗
+              </a>
+            </div>
+          </div>
+        </article>
       </div>
-      <div class="project-info">
-        <div class="project-stack">Java 17 · Algorithms · Data Structures</div>
-        <h3 class="project-title">DSA In Java</h3>
-        <p class="project-desc">
-          Documented implementations of Trees, Graphs, Linked Lists,
-          and sorting algorithms. Each solution includes verified
-          time and space complexity analysis.
-        </p>
-        <div class="btn-container">
-          <a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms"
-             target="_blank" rel="noopener" class="btn btn-ghost btn-sm">GitHub</a>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         BLOG PREVIEW
+    ══════════════════════════════════════════ -->
+    <section id="blog" aria-labelledby="blog-heading">
+      <p class="section__text__p1">Writing</p>
+      <h2 class="section-title" id="blog-heading">Engineering Log</h2>
+
+      <!-- Loading Skeletons -->
+      <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
+        <div class="blog-article-card blog-skeleton-card">
+          <div class="sk-tag"></div>
+          <div class="sk-title"></div>
+          <div class="sk-body"></div>
+          <div class="sk-link"></div>
+        </div>
+        <div class="blog-article-card blog-skeleton-card">
+          <div class="sk-tag"></div>
+          <div class="sk-title"></div>
+          <div class="sk-body"></div>
+          <div class="sk-link"></div>
+        </div>
+        <div class="blog-article-card blog-skeleton-card">
+          <div class="sk-tag"></div>
+          <div class="sk-title"></div>
+          <div class="sk-body"></div>
+          <div class="sk-link"></div>
         </div>
       </div>
-    </article>
 
-  </div>
-</section>
+      <!-- Real Blog Cards -->
+      <div id="blog-container" class="blog-grid" style="display:none;"></div>
 
-  <!-- Blog section HTML — replace existing -->
-<section id="blog" aria-labelledby="blog-heading">
-  <p class="section__text__p1">Writing</p>
-  <h2 class="section-title" id="blog-heading">Engineering Log</h2>
+      <!-- Fallback States -->
+      <div id="blog-fallback" style="display:none;" aria-live="polite">
+        <div id="blog-empty" class="blog-empty-state" role="status">
+          <p class="blog-empty-icon" aria-hidden="true">📝</p>
+          <h3>No Posts Yet</h3>
+          <p>Engineering logs are in progress. Check back soon for deep-dives on backend systems, Java patterns, and production debugging stories.</p>
+        </div>
 
-  <!-- Pre-rendered skeletons — visible on first paint, hidden by JS after load -->
-  <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
-    <div class="blog-article-card blog-skeleton-card">
-      <div class="sk-tag"></div>
-      <div class="sk-title"></div>
-      <div class="sk-body"></div>
-      <div class="sk-link"></div>
-    </div>
-    <div class="blog-article-card blog-skeleton-card">
-      <div class="sk-tag"></div>
-      <div class="sk-title"></div>
-      <div class="sk-body"></div>
-      <div class="sk-link"></div>
-    </div>
-    <div class="blog-article-card blog-skeleton-card">
-      <div class="sk-tag"></div>
-      <div class="sk-title"></div>
-      <div class="sk-body"></div>
-      <div class="sk-link"></div>
-    </div>
-  </div>
+        <div id="blog-error" class="blog-error-state" role="alert">
+          <p class="blog-error-icon" aria-hidden="true">⚡</p>
+          <h3>Failed to Load Posts</h3>
+          <p>The engineering log is temporarily unavailable. This is likely a network hiccup — refresh the page or visit the <a href="/blog">full archive</a>.</p>
+          <button id="blog-retry-btn" class="btn btn-ghost btn-sm" type="button">Retry</button>
+        </div>
+      </div>
 
-  <!-- Real cards injected here by blogManager.js -->
-  <div id="blog-container" class="blog-grid" style="display:none;"></div>
-
-  <!-- Fallback states — hidden by default, shown by JS on error/empty -->
-<div id="blog-fallback" style="display:none;" aria-live="polite">
-  <!-- Empty State -->
-  <div id="blog-empty" class="blog-empty-state" role="status">
-    <p class="blog-empty-icon" aria-hidden="true">📝</p>
-    <h3>No Posts Yet</h3>
-    <p>Engineering logs are in progress. Check back soon for deep-dives on backend systems, Java patterns, and production debugging stories.</p>
-  </div>
-
-  <!-- Error State -->
-  <div id="blog-error" class="blog-error-state" role="alert">
-    <p class="blog-error-icon" aria-hidden="true">⚡</p>
-    <h3>Failed to Load Posts</h3>
-    <p>The engineering log is temporarily unavailable. This is likely a network hiccup — refresh the page or visit the <a href="/blog">full archive</a>.</p>
-    <button id="blog-retry-btn" class="btn btn-ghost btn-sm" type="button">
-      Retry
-    </button>
-  </div>
-</div>
-
-  <div class="blog-footer-link">
-    <a href="/blog" class="btn btn-ghost btn-blog-all">
-      View all entries
-      <span class="btn-arrow">→</span>
-    </a>
-  </div>
-</section>
+      <div class="blog-footer-link">
+        <a href="/blog" class="btn btn-ghost btn-blog-all">
+          View all entries
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
 
     <!-- ══════════════════════════════════════════
          CONTACT
@@ -479,13 +510,14 @@
           </p>
           <div class="contact-links">
             <a href="mailto:vkumar.kumar31@gmail.com" class="contact-link">
-              <img src="assets/email.png" alt="" aria-hidden="true" class="contact-icon">
+              <img src="assets/email.png" alt="" aria-hidden="true" class="contact-icon" width="20" height="20">
               vkumar.kumar31@gmail.com
             </a>
             <a href="https://linkedin.com/in/vijaykumarcode"
-               target="_blank" rel="noopener"
+               target="_blank"
+               rel="noopener noreferrer"
                class="contact-link">
-              <img src="assets/linkedin.png" alt="" aria-hidden="true" class="contact-icon">
+              <img src="assets/linkedin.png" alt="" aria-hidden="true" class="contact-icon" width="20" height="20">
               linkedin.com/in/vijaykumarcode
             </a>
           </div>
@@ -499,7 +531,8 @@
                      placeholder="Your name"
                      autocomplete="name"
                      required
-                     minlength="2">
+                     minlength="2"
+                     maxlength="100">
               <span class="field-error" id="name-error" role="alert"></span>
             </div>
 
@@ -518,12 +551,14 @@
                         placeholder="What would you like to discuss?"
                         rows="5"
                         required
-                        minlength="10"></textarea>
+                        minlength="10"
+                        maxlength="5000"></textarea>
               <span class="field-error" id="message-error" role="alert"></span>
             </div>
 
             <button type="submit" class="btn btn-primary btn-full" id="submit-btn">
-              Send Message
+              <span class="btn-text">Send Message</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
             </button>
 
             <div id="form-status" role="alert" aria-live="polite"></div>
@@ -534,6 +569,9 @@
 
   </main>
 
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
   <footer role="contentinfo">
     <div class="footer-inner">
       <nav aria-label="Footer navigation">
@@ -545,14 +583,13 @@
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
-      <p class="footer-copy">© 2026 Vijay Kumar. All rights reserved.</p>
+      <p class="footer-copy">© 2026 Vijay Kumar. Built with Spring Boot on the backend, precision on the frontend.</p>
     </div>
   </footer>
 
-  <!-- Scripts: deferred for performance -->
+  <!-- Scripts -->
   <script type="module" src="js/script.js"></script>
   <script type="module" src="js/contact.js"></script>
   <script type="module" src="js/home-blog.js"></script>
-
 </body>
 </html>
