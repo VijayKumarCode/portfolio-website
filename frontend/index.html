@@ -162,27 +162,26 @@
     <!-- Socials visible in hero, no scroll needed -->
     <div id="socials-container" aria-label="Social profiles">
       <a href="https://github.com/VijayKumarCode"
-         target="_blank" rel="noopener" aria-label="GitHub">
-         <img src="assets/github-icon.png" alt="" loading="lazy" 
+       target="_blank" rel="noopener" aria-label="GitHub">
+        <img src="assets/github-icon.png" alt="" loading="lazy" 
          decoding="async" width="28" height="28">
+      </a>
       <a href="https://linkedin.com/in/vijaykumarcode"
-         target="_blank" rel="noopener" aria-label="LinkedIn">
+       target="_blank" rel="noopener" aria-label="LinkedIn">
         <img src="assets/linkedin.png" alt="" loading="lazy" 
          decoding="async" width="28" height="28">
       </a>
       <a href="https://x.com/VijayKumarCode"
-         target="_blank" rel="noopener" aria-label="X (Twitter)">
+       target="_blank" rel="noopener" aria-label="X (Twitter)">
         <img src="assets/x.png" alt="" loading="lazy" 
          decoding="async" width="28" height="28">
       </a>
       <a href="assets/VijayKumar_Resume_v5.pdf"
          download
-         aria-label="Download resume">
+         aria-label="Download resume (PDF)">
         <span class="social-cv-link">CV ↓</span>
       </a>
     </div>
-
-  </div>
 
   <!-- Right: profile photo -->
   <div class="hero-photo-wrap">
@@ -243,36 +242,72 @@
     <!-- ══════════════════════════════════════════
          SKILLS  (renamed from "experience" which was misleading)
     ══════════════════════════════════════════ -->
-    <section id="skills" aria-labelledby="skills-heading">
-      <p class="section__text__p1">Technical Expertise</p>
-      <h2 class="section-title" id="skills-heading">Stack</h2>
+   <section id="skills" aria-labelledby="skills-heading">
+  <p class="section__text__p1">Technical Expertise</p>
+  <h2 class="section-title" id="skills-heading">Stack</h2>
 
-      <div class="skills-grid">
-        <div class="skills-group">
-          <h3 class="skills-group-title">Core & Backend</h3>
-          <div class="skills-list">
-            <div class="skill-item"><span class="skill-name">Java 17</span><span class="skill-bar" style="--w:75%"></span></div>
-            <div class="skill-item"><span class="skill-name">Spring Boot 3</span><span class="skill-bar" style="--w:68%"></span></div>
-            <div class="skill-item"><span class="skill-name">Spring Data JPA</span><span class="skill-bar" style="--w:65%"></span></div>
-            <div class="skill-item"><span class="skill-name">WebSocket / STOMP</span><span class="skill-bar" style="--w:70%"></span></div>
-            <div class="skill-item"><span class="skill-name">PostgreSQL</span><span class="skill-bar" style="--w:62%"></span></div>
-            <div class="skill-item"><span class="skill-name">DSA</span><span class="skill-bar" style="--w:72%"></span></div>
-          </div>
-        </div>
+  <div class="skills-grid">
+    <div class="skills-group">
+      <h3 class="skills-group-title">Core & Backend</h3>
+      <ul class="skills-list" role="list">
+        <li class="skill-item">
+          <span class="skill-name">Java 17</span>
+          <meter class="skill-bar" min="0" max="100" value="90" aria-label="Java 17 proficiency: 90%">90%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">Spring Boot 3</span>
+          <meter class="skill-bar" min="0" max="100" value="85" aria-label="Spring Boot 3 proficiency: 85%">85%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">Spring Data JPA</span>
+          <meter class="skill-bar" min="0" max="100" value="80" aria-label="Spring Data JPA proficiency: 80%">80%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">WebSocket / STOMP</span>
+          <meter class="skill-bar" min="0" max="100" value="85" aria-label="WebSocket and STOMP proficiency: 85%">85%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">PostgreSQL</span>
+          <meter class="skill-bar" min="0" max="100" value="78" aria-label="PostgreSQL proficiency: 78%">78%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">DSA</span>
+          <meter class="skill-bar" min="0" max="100" value="88" aria-label="Data Structures and Algorithms proficiency: 88%">88%</meter>
+        </li>
+      </ul>
+    </div>
 
-        <div class="skills-group">
-          <h3 class="skills-group-title">Tools & Infrastructure</h3>
-          <div class="skills-list">
-            <div class="skill-item"><span class="skill-name">Git & GitHub</span><span class="skill-bar" style="--w:80%"></span></div>
-            <div class="skill-item"><span class="skill-name">GitHub Actions</span><span class="skill-bar" style="--w:62%"></span></div>
-            <div class="skill-item"><span class="skill-name">Docker</span><span class="skill-bar" style="--w:55%"></span></div>
-            <div class="skill-item"><span class="skill-name">Linux (Ubuntu)</span><span class="skill-bar" style="--w:65%"></span></div>
-            <div class="skill-item"><span class="skill-name">Maven / JUnit</span><span class="skill-bar" style="--w:60%"></span></div>
-            <div class="skill-item"><span class="skill-name">REST APIs</span><span class="skill-bar" style="--w:75%"></span></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div class="skills-group">
+      <h3 class="skills-group-title">Tools & Infrastructure</h3>
+      <ul class="skills-list" role="list">
+        <li class="skill-item">
+          <span class="skill-name">Git & GitHub</span>
+          <meter class="skill-bar" min="0" max="100" value="92" aria-label="Git and GitHub proficiency: 92%">92%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">GitHub Actions</span>
+          <meter class="skill-bar" min="0" max="100" value="78" aria-label="GitHub Actions proficiency: 78%">78%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">Docker</span>
+          <meter class="skill-bar" min="0" max="100" value="68" aria-label="Docker proficiency: 68%">68%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">Linux (Ubuntu)</span>
+          <meter class="skill-bar" min="0" max="100" value="78" aria-label="Linux Ubuntu proficiency: 78%">78%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">Maven / JUnit</span>
+          <meter class="skill-bar" min="0" max="100" value="75" aria-label="Maven and JUnit proficiency: 75%">75%</meter>
+        </li>
+        <li class="skill-item">
+          <span class="skill-name">REST APIs</span>
+          <meter class="skill-bar" min="0" max="100" value="90" aria-label="REST APIs proficiency: 90%">90%</meter>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
 
    <!-- Projects section — replace the entire grid -->
 <section id="projects" aria-labelledby="projects-heading">
