@@ -88,13 +88,13 @@ portfolio-website/
 │   │   ├── application.properties       # Local dev defaults
 │   │   └── application-prod.properties  # Production (env var driven)
 │   ├── Dockerfile
-│   └── pom.xml
-│
+│   │   
+│   ├── pom.xml
+│   │ 
+│   └── vercel.json
 ├── {}package.json
 |
-├── README.md
-|
-└── {} vercel.json
+└──  README.md
 ```
 
 ---
