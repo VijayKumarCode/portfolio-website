@@ -1,142 +1,141 @@
 /**
- * VIJAY KUMAR - PORTFOLIO
- * Home Page Blog Section Loader
- * Module: Blog Preview with Loading/Error States
+ * Home Page Blog Preview Loader
+ * Fetches from API with fallback to static JSON
  */
 
+import { apiFetch } from '../src/utils/api.js';
+import { BLOG_ENDPOINT, BLOG_FALLBACK } from '../src/config/config.js';
+import { stripHtml, formatDate } from '../src/utils/helpers.js';
+
 const HomeBlog = {
-  container: null,
+  skeletonContainer: null,
+  blogContainer: null,
+  fallbackContainer: null,
   maxPosts: 3,
-  
+
   init() {
-    this.container = document.getElementById('home-blog-grid');
-    if (!this.container) return;
-    
-    this.showLoadingState();
+    this.skeletonContainer = document.getElementById('blog-container-skeleton');
+    this.blogContainer = document.getElementById('blog-container');
+    this.fallbackContainer = document.getElementById('blog-fallback');
+
+    if (!this.blogContainer) return;
+
     this.fetchPosts();
   },
-  
-  showLoadingState() {
-    this.container.innerHTML = '';
-    
-    for (let i = 0; i < this.maxPosts; i++) {
-      const skeleton = document.createElement('div');
-      skeleton.className = 'blog-card-skeleton';
-      skeleton.setAttribute('aria-hidden', 'true');
-      skeleton.innerHTML = `
-        <div class="skeleton-image"></div>
-        <div class="skeleton-content">
-          <div class="skeleton-line short"></div>
-          <div class="skeleton-line"></div>
-          <div class="skeleton-line"></div>
-          <div class="skeleton-line short"></div>
-        </div>
-      `;
-      this.container.appendChild(skeleton);
-    }
-  },
-  
-  showErrorState() {
-    this.container.innerHTML = `
-      <div class="blog-error" role="alert">
-        <p>Unable to load blog posts at the moment.</p>
-        <a href="/blog" class="btn btn-secondary">
-          View All Posts →
-        </a>
-      </div>
-    `;
-  },
-  
+
   async fetchPosts() {
     try {
-      const response = await fetch('/blog/posts.json');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      // Try primary endpoint
+      let data = await apiFetch(BLOG_ENDPOINT, {}, 1);
+
+      // Ensure we have posts array
+      const posts = Array.isArray(data) ? data : data.posts || [];
+
+      if (!Array.isArray(posts) || posts.length === 0) {
+        return this.showEmpty();
       }
-      
-      const data = await response.json();
-      
-      if (!data.posts || !Array.isArray(data.posts)) {
-        throw new Error('Invalid data format');
-      }
-      
-      const recentPosts = data.posts
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
+
+      const recentPosts = posts
+        .sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt))
         .slice(0, this.maxPosts);
-      
-      if (recentPosts.length === 0) {
-        this.container.innerHTML = `
-          <div class="blog-error">
-            <p>No blog posts yet. Check back soon!</p>
-          </div>
-        `;
-        return;
-      }
-      
+
       this.renderPosts(recentPosts);
-      
     } catch (error) {
-      console.error('Failed to load blog posts:', error);
-      this.showErrorState();
+      console.warn('Primary blog fetch failed, trying fallback:', error.message);
+
+      // Try fallback (static JSON)
+      try {
+        const response = await fetch(BLOG_FALLBACK);
+        if (!response.ok) throw new Error('Fallback fetch failed');
+        const fallbackData = await response.json();
+        const posts = fallbackData.posts || [];
+
+        if (posts.length === 0) return this.showEmpty();
+
+        const recentPosts = posts
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, this.maxPosts);
+
+        this.renderPosts(recentPosts);
+      } catch (fallbackError) {
+        console.error('Both blog fetches failed:', fallbackError);
+        this.showError();
+      }
     }
   },
-  
+
   renderPosts(posts) {
-    this.container.innerHTML = '';
-    
+    // Hide skeletons
+    if (this.skeletonContainer) {
+      this.skeletonContainer.style.display = 'none';
+    }
+
+    // Clear and show container
+    this.blogContainer.innerHTML = '';
+    this.blogContainer.style.display = '';
+
     posts.forEach(post => {
-      const card = document.createElement('article');
-      card.className = 'blog-card fade-in';
-      card.innerHTML = `
-        ${post.image ? `
-          <img 
-            class="blog-card-image" 
-            src="${post.image}" 
-            alt="${post.title}"
-            loading="lazy"
-            width="400"
-            height="200"
-          >
-        ` : ''}
-        <div class="blog-card-content">
-          <div class="blog-card-meta">
-            <span>${this.formatDate(post.date)}</span>
-            ${post.tags ? post.tags.slice(0, 2).map(tag => 
-              `<span>#${tag}</span>`
-            ).join('') : ''}
-          </div>
-          <h3>${post.title}</h3>
-          <p>${post.excerpt || post.content?.substring(0, 150) + '...'}</p>
-          <a href="/blog/${post.slug}" class="blog-card-link">
-            Read more
-            <span aria-hidden="true">→</span>
-          </a>
+      const article = document.createElement('article');
+      article.className = 'blog-article-card fade-in';
+      article.innerHTML = `
+        <div class="blog-card-meta">
+          <span class="blog-card-date">${formatDate(post.date || post.createdAt)}</span>
+          ${post.tags ? post.tags.slice(0, 2).map(tag =>
+            `<span class="blog-card-tag">#${tag}</span>`
+          ).join('') : ''}
         </div>
+        <h3 class="blog-card-title">
+          <a href="/blog/${post.slug || post.id}">${post.title}</a>
+        </h3>
+        <p class="blog-card-excerpt">${post.excerpt || stripHtml(post.content || '').substring(0, 150) + '...'}</p>
+        <a href="/blog/${post.slug || post.id}" class="blog-card-link">
+          Read more <span aria-hidden="true">→</span>
+        </a>
       `;
-      
-      this.container.appendChild(card);
+      this.blogContainer.appendChild(article);
     });
-    
-    // Trigger fade-in animations
-    setTimeout(() => {
-      document.querySelectorAll('.blog-card.fade-in').forEach(card => {
-        card.classList.add('visible');
+
+    // Trigger animations
+    requestAnimationFrame(() => {
+      this.blogContainer.querySelectorAll('.fade-in').forEach((el, i) => {
+        el.style.animationDelay = `${i * 0.1}s`;
+        el.classList.add('visible');
       });
-    }, 100);
-  },
-  
-  formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
     });
+  },
+
+  showEmpty() {
+    this.hideAll();
+    const emptyEl = document.getElementById('blog-empty');
+    if (emptyEl) {
+      emptyEl.closest('#blog-fallback').style.display = '';
+      emptyEl.style.display = '';
+    }
+  },
+
+  showError() {
+    this.hideAll();
+    const errorEl = document.getElementById('blog-error');
+    if (errorEl) {
+      errorEl.closest('#blog-fallback').style.display = '';
+      errorEl.style.display = '';
+
+      // Retry button
+      const retryBtn = document.getElementById('blog-retry-btn');
+      retryBtn?.addEventListener('click', () => {
+        if (this.skeletonContainer) this.skeletonContainer.style.display = '';
+        if (this.fallbackContainer) this.fallbackContainer.style.display = 'none';
+        if (this.blogContainer) this.blogContainer.style.display = 'none';
+        this.fetchPosts();
+      }, { once: true });
+    }
+  },
+
+  hideAll() {
+    if (this.skeletonContainer) this.skeletonContainer.style.display = 'none';
+    if (this.blogContainer) this.blogContainer.style.display = 'none';
+    if (this.fallbackContainer) this.fallbackContainer.style.display = 'none';
   }
 };
 
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => HomeBlog.init());
-
-export { HomeBlog };
