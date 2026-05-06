@@ -1,54 +1,26 @@
 /**
- * config.js — Central configuration for the portfolio frontend.
- *
- * All API endpoints and environment-sensitive values live here.
- * Import this module wherever you need to make API calls or
- * reference the backend URL. Never hardcode URLs in other files.
- *
- * Usage:
- *   import { API } from '../src/config/config.js';
- *   const res = await fetch(API.contact, { method: 'POST', ... });
+ * Portfolio Configuration
+ * Environment-aware API endpoint + timeout settings
  */
 
-'use strict';
+const isLocal = window.location.hostname === 'localhost' || 
+                window.location.hostname === '127.0.0.1';
 
-// ── Environment detection ─────────────────────────────────────
-const IS_LOCAL = (
-  window.location.hostname === 'localhost' ||
-  window.location.hostname === '127.0.0.1'
-);
+export const API_BASE_URL = isLocal
+  ? 'http://localhost:8080/api'
+  : 'https://portfolio-backend-v17c.onrender.com/api';
 
-// ── Backend base URL ──────────────────────────────────────────
-// Local dev: requests go to the same origin (proxy via Live Server
-//            or a local Spring Boot instance on :8080)
-// Production: your Render-deployed backend
-export const BACKEND_URL = IS_LOCAL
-  ? 'http://localhost:8080'
-  : 'https://portfolio-backend-v17c.onrender.com';
+export const API_TIMEOUT = 15000; // 15s — Render cold starts can be slow
 
-// ── API endpoint map ──────────────────────────────────────────
-export const API = {
-  /** Submit the contact form */
-  contact:  `${BACKEND_URL}/api/v1/contact`,
+export const CONTACT_ENDPOINT = `${API_BASE_URL}/contact`;
 
-  /** Health check — used by cron-job.org to keep Render warm */
-  health:   `${BACKEND_URL}/api/v1/health`,
-};
+export const BLOG_ENDPOINT = isLocal
+  ? '/data/posts.json'  // Static JSON for local dev
+  : `${API_BASE_URL}/posts`; // Backend API in production
 
-// ── Static data paths ─────────────────────────────────────────
-export const DATA = {
-  /** Blog posts JSON file (served as a static asset by Vercel) */
-  posts: '/data/posts.json',
-};
+export const BLOG_FALLBACK = '/data/posts.json'; // Fallback to static JSON
 
-// ── Site metadata ─────────────────────────────────────────────
-export const SITE = {
-  name:       'Vijay Kumar',
-  role:       'Java Backend Engineer',
-  email:      'vkumar.kumar31@gmail.com',
-  github:     'https://github.com/VijayKumarCode',
-  linkedin:   'https://linkedin.com/in/vijaykumarcode',
-  x:          'https://x.com/VijayKumarCode',
-  portfolio:  'https://vijaykumarcode.space',
-  nexus:      'https://nexusgame.space',
+export const REQUEST_HEADERS = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
 };
