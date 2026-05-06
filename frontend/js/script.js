@@ -1,4 +1,186 @@
-'use strict';
+/**
+ * VIJAY KUMAR - PORTFOLIO
+ * Production-Grade JavaScript
+ * Module: Main Site Controller
+ */
+
+// ---------- NAVIGATION CONTROLLER ----------
+const Navigation = {
+  nav: null,
+  hamburger: null,
+  navLinks: null,
+  allNavLinks: null,
+  
+  init() {
+    this.nav = document.querySelector('.nav');
+    this.hamburger = document.querySelector('.hamburger');
+    this.navLinks = document.querySelector('.nav-links');
+    this.allNavLinks = document.querySelectorAll('.nav-links a');
+    
+    if (!this.nav || !this.hamburger || !this.navLinks) {
+      console.warn('Navigation elements not found');
+      return;
+    }
+    
+    this.bindEvents();
+    this.initScrollBehavior();
+  },
+  
+  bindEvents() {
+    // Hamburger toggle
+    this.hamburger.addEventListener('click', () => this.toggleMenu());
+    
+    // Close menu on link click (mobile)
+    this.allNavLinks.forEach(link => {
+      link.addEventListener('click', () => this.closeMenu());
+    });
+    
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+      if (this.navLinks.classList.contains('active') && 
+          !this.navLinks.contains(e.target) && 
+          !this.hamburger.contains(e.target)) {
+        this.closeMenu();
+      }
+    });
+    
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.navLinks.classList.contains('active')) {
+        this.closeMenu();
+      }
+    });
+  },
+  
+  toggleMenu() {
+    this.hamburger.classList.toggle('active');
+    this.navLinks.classList.toggle('active');
+    document.body.style.overflow = this.navLinks.classList.contains('active') 
+      ? 'hidden' 
+      : '';
+  },
+  
+  closeMenu() {
+    this.hamburger.classList.remove('active');
+    this.navLinks.classList.remove('active');
+    document.body.style.overflow = '';
+  },
+  
+  initScrollBehavior() {
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      // Add scrolled class for background
+      if (currentScroll > 50) {
+        this.nav.classList.add('scrolled');
+      } else {
+        this.nav.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    }, { passive: true });
+  }
+};
+
+// ---------- ACTIVE NAV LINK ----------
+const ActiveNavLink = {
+  init() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+    
+    if (!sections.length) return;
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${entry.target.id}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => observer.observe(section));
+  }
+};
+
+// ---------- SCROLL ANIMATIONS ----------
+const ScrollAnimations = {
+  init() {
+    const elements = document.querySelectorAll('.fade-in');
+    
+    if (!elements.length) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          // Stagger delay
+          entry.target.style.transitionDelay = `${index * 0.1}s`;
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    elements.forEach(el => observer.observe(el));
+  }
+};
+
+// ---------- SMOOTH SCROLL ----------
+const SmoothScroll = {
+  init() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const targetId = anchor.getAttribute('href');
+        
+        if (targetId === '#') return;
+        
+        const target = document.querySelector(targetId);
+        
+        if (target) {
+          e.preventDefault();
+          const navHeight = document.querySelector('.nav')?.offsetHeight || 72;
+          const targetPosition = target.offsetTop - navHeight - 24;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+};
+
+// ---------- INITIALIZATION ----------
+document.addEventListener('DOMContentLoaded', () => {
+  Navigation.init();
+  ActiveNavLink.init();
+  ScrollAnimations.init();
+  SmoothScroll.init();
+  
+  console.log('%c🚀 Portfolio Initialized %c| %cVijay Kumar',
+    'color: #6c63ff; font-weight: bold;',
+    '',
+    'color: #4ecdc4;');
+});
+
+// Export for potential module usage
+export { Navigation, ActiveNavLink, ScrollAnimations, SmoothScroll };'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- 1. GLOBAL UI ELEMENTS ---
