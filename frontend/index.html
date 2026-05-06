@@ -436,6 +436,26 @@
   <!-- Real cards injected here by blogManager.js -->
   <div id="blog-container" class="blog-grid" style="display:none;"></div>
 
+  <!-- Fallback states — hidden by default, shown by JS on error/empty -->
+<div id="blog-fallback" style="display:none;" aria-live="polite">
+  <!-- Empty State -->
+  <div id="blog-empty" class="blog-empty-state" role="status">
+    <p class="blog-empty-icon" aria-hidden="true">📝</p>
+    <h3>No Posts Yet</h3>
+    <p>Engineering logs are in progress. Check back soon for deep-dives on backend systems, Java patterns, and production debugging stories.</p>
+  </div>
+
+  <!-- Error State -->
+  <div id="blog-error" class="blog-error-state" role="alert">
+    <p class="blog-error-icon" aria-hidden="true">⚡</p>
+    <h3>Failed to Load Posts</h3>
+    <p>The engineering log is temporarily unavailable. This is likely a network hiccup — refresh the page or visit the <a href="/blog">full archive</a>.</p>
+    <button id="blog-retry-btn" class="btn btn-ghost btn-sm" type="button">
+      Retry
+    </button>
+  </div>
+</div>
+
   <div class="blog-footer-link">
     <a href="/blog" class="btn btn-ghost btn-blog-all">
       View all entries
