@@ -20,6 +20,8 @@
 
 ## 🧱 Architecture
 
+---
+
 ┌─────────────────────────────────────────────┐
 │  Frontend (Vercel)                          │
 │  Vanilla HTML · CSS · JavaScript (ES2022)   │
@@ -40,11 +42,14 @@
 │  Neon (cloud) │  │  Email on every form     │
 │  contact_msgs │  │  submission              │
 └───────────────┘  └──────────────────────────┘
+---
 
 
 ---
 
 ## 📁 Repository Structure
+
+---
 
 portfolio-website/
 ├── frontend/                    # Static site — deployed on Vercel
@@ -98,6 +103,7 @@ portfolio-website/
 ├── .gitignore                   # Root ignore rules
 ├── package.json                 # Root scripts
 └── README.md
+---
 
 
 ---
