@@ -384,6 +384,21 @@ a:hover {
   color: var(--color-text-primary);
 }
 
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: calc(var(--z-overlay) - 1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-base);
+}
+
+.menu-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 /* ══════════════════════════════════════════
    HERO (ID: #profile)
    ══════════════════════════════════════════ */
