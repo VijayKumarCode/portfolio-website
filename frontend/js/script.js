@@ -1,226 +1,74 @@
 /**
- * VIJAY KUMAR - PORTFOLIO
+ * VIJAY KUMAR — PORTFOLIO
  * Production-Grade JavaScript
- * Module: Main Site Controller
+ * 
+ * Features:
+ * - Accessible mobile nav with focus trap & backdrop
+ * - Scroll spy active nav link
+ * - IntersectionObserver scroll reveal
+ * - Skills bar animation
+ * - Header shrink on scroll
+ * - Smooth scroll for all anchor links
+ * - Back-to-top button
  */
 
-// ---------- NAVIGATION CONTROLLER ----------
-const Navigation = {
-  nav: null,
-  hamburger: null,
-  navLinks: null,
-  allNavLinks: null,
-  
-  init() {
-    this.nav = document.querySelector('.nav');
-    this.hamburger = document.querySelector('.hamburger');
-    this.navLinks = document.querySelector('.nav-links');
-    this.allNavLinks = document.querySelectorAll('.nav-links a');
-    
-    if (!this.nav || !this.hamburger || !this.navLinks) {
-      console.warn('Navigation elements not found');
-      return;
-    }
-    
-    this.bindEvents();
-    this.initScrollBehavior();
-  },
-  
-  bindEvents() {
-    // Hamburger toggle
-    this.hamburger.addEventListener('click', () => this.toggleMenu());
-    
-    // Close menu on link click (mobile)
-    this.allNavLinks.forEach(link => {
-      link.addEventListener('click', () => this.closeMenu());
-    });
-    
-    // Close menu on outside click
-    document.addEventListener('click', (e) => {
-      if (this.navLinks.classList.contains('active') && 
-          !this.navLinks.contains(e.target) && 
-          !this.hamburger.contains(e.target)) {
-        this.closeMenu();
-      }
-    });
-    
-    // Close menu on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.navLinks.classList.contains('active')) {
-        this.closeMenu();
-      }
-    });
-  },
-  
-  toggleMenu() {
-    this.hamburger.classList.toggle('active');
-    this.navLinks.classList.toggle('active');
-    document.body.style.overflow = this.navLinks.classList.contains('active') 
-      ? 'hidden' 
-      : '';
-  },
-  
-  closeMenu() {
-    this.hamburger.classList.remove('active');
-    this.navLinks.classList.remove('active');
-    document.body.style.overflow = '';
-  },
-  
-  initScrollBehavior() {
-    let lastScroll = 0;
-    
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
-      
-      // Add scrolled class for background
-      if (currentScroll > 50) {
-        this.nav.classList.add('scrolled');
-      } else {
-        this.nav.classList.remove('scrolled');
-      }
-      
-      lastScroll = currentScroll;
-    }, { passive: true });
-  }
-};
-
-// ---------- ACTIVE NAV LINK ----------
-const ActiveNavLink = {
-  init() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
-    
-    if (!sections.length) return;
-    
-    const observerOptions = {
-      root: null,
-      rootMargin: '-50% 0px -50% 0px',
-      threshold: 0
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${entry.target.id}`) {
-              link.classList.add('active');
-            }
-          });
-        }
-      });
-    }, observerOptions);
-    
-    sections.forEach(section => observer.observe(section));
-  }
-};
-
-// ---------- SCROLL ANIMATIONS ----------
-const ScrollAnimations = {
-  init() {
-    const elements = document.querySelectorAll('.fade-in');
-    
-    if (!elements.length) return;
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          // Stagger delay
-          entry.target.style.transitionDelay = `${index * 0.1}s`;
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.15,
-      rootMargin: '0px 0px -50px 0px'
-    });
-    
-    elements.forEach(el => observer.observe(el));
-  }
-};
-
-// ---------- SMOOTH SCROLL ----------
-const SmoothScroll = {
-  init() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        const targetId = anchor.getAttribute('href');
-        
-        if (targetId === '#') return;
-        
-        const target = document.querySelector(targetId);
-        
-        if (target) {
-          e.preventDefault();
-          const navHeight = document.querySelector('.nav')?.offsetHeight || 72;
-          const targetPosition = target.offsetTop - navHeight - 24;
-          
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
-  }
-};
-
-// ---------- INITIALIZATION ----------
-document.addEventListener('DOMContentLoaded', () => {
-  Navigation.init();
-  ActiveNavLink.init();
-  ScrollAnimations.init();
-  SmoothScroll.init();
-  
-  console.log('%c🚀 Portfolio Initialized %c| %cVijay Kumar',
-    'color: #6c63ff; font-weight: bold;',
-    '',
-    'color: #4ecdc4;');
-});
-
-// Export for potential module usage
-export { Navigation, ActiveNavLink, ScrollAnimations, SmoothScroll };'use strict';
+'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- 1. GLOBAL UI ELEMENTS ---
+  // --- DOM ELEMENTS ---
   const header = document.getElementById('site-header');
   const hamburgerBtn = document.getElementById('hamburger-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
   const mobileLinks = document.querySelectorAll('.menu-links a');
+  const mobileBackdrop = document.getElementById('menu-backdrop');
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('#desktop-nav .nav-links a, .menu-links a');
+  const backToTopBtn = document.getElementById('back-to-top');
+  const revealElements = document.querySelectorAll('.reveal, .project-card, .about-card, .skills-group, .fade-in');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // --- 2. MOBILE NAVIGATION LOGIC ---
+  // --- MOBILE NAVIGATION (with backdrop & focus trap) ---
   let lastFocusedElement = null;
 
+  function openMenu() {
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    hamburgerBtn.classList.add('active');
+    mobileMenu.classList.add('open'); // using .open class for mobile menu visibility
+    if (mobileBackdrop) mobileBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lastFocusedElement = document.activeElement;
+    const firstLink = mobileMenu.querySelector('a');
+    if (firstLink) firstLink.focus();
+  }
+
+  function closeMenu() {
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    hamburgerBtn.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    if (mobileBackdrop) mobileBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+
   if (hamburgerBtn && mobileMenu) {
-    const toggleMenu = (isOpen) => {
-      const expanding = isOpen ?? (hamburgerBtn.getAttribute('aria-expanded') !== 'true');
-      hamburgerBtn.setAttribute('aria-expanded', expanding);
-      mobileMenu.classList.toggle('active', expanding);
-      hamburgerBtn.classList.toggle('active', expanding);
-
-      if (expanding) {
-        lastFocusedElement = document.activeElement;
-        // Focus first menu item
-        const firstLink = mobileMenu.querySelector('a');
-        if (firstLink) firstLink.focus();
-      } else if (lastFocusedElement) {
-        lastFocusedElement.focus();
-      }
-    };
-
-    hamburgerBtn.addEventListener('click', () => toggleMenu());
-
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => toggleMenu(false));
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = hamburgerBtn.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
     });
 
-    // Close on Escape key
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close on backdrop click
+    if (mobileBackdrop) {
+      mobileBackdrop.addEventListener('click', closeMenu);
+    }
+
+    // Close on Escape
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-        toggleMenu(false);
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        closeMenu();
       }
     });
 
@@ -241,10 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 3. SCROLL REVEAL & SKILLS ANIMATION ---
-  const revealElements = document.querySelectorAll('.reveal, .project-card, .about-card, .skills-group');
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+  // --- SCROLL REVEAL & SKILLS ANIMATION ---
   if (!prefersReducedMotion && 'IntersectionObserver' in window) {
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -257,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     revealElements.forEach(el => revealObserver.observe(el));
 
+    // Skills section special animation
     const skillsSection = document.getElementById('skills');
     if (skillsSection) {
       const skillsObserver = new IntersectionObserver((entries) => {
@@ -270,13 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
       skillsObserver.observe(skillsSection);
     }
   } else {
-    // Fallback: Show all elements immediately
+    // Reduced motion fallback: show all immediately
     [...revealElements, document.getElementById('skills')].forEach(el => {
       if (el) el.classList.add('visible', 'animate');
     });
   }
 
-  // --- 4. HEADER SHRINK ON SCROLL ---
+  // --- HEADER SHRINK ON SCROLL ---
   if (header) {
     window.addEventListener('scroll', () => {
       header.style.borderBottomColor =
@@ -286,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
   }
 
-  // --- 5. ACTIVE NAV LINK (SCROLL SPY) ---
+  // --- ACTIVE NAV LINK (SCROLL SPY) ---
   const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 80;
 
   const navObserver = new IntersectionObserver((entries) => {
@@ -306,4 +152,38 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   sections.forEach(s => navObserver.observe(s));
+
+  // --- SMOOTH SCROLL FOR ALL ANCHOR LINKS ---
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      const targetId = anchor.getAttribute('href');
+      if (targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        const headerH = header ? header.offsetHeight : 72;
+        const targetPos = target.offsetTop - headerH - 12;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // --- BACK-TO-TOP BUTTON ---
+  if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+      backToTopBtn.classList.toggle('visible', window.scrollY > 500);
+    }, { passive: true });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // --- INIT LOG ---
+  console.log(
+    '%c🚀 Portfolio Ready %c| %cVijay Kumar',
+    'color: #8b5cf6; font-weight: bold;',
+    '',
+    'color: #0d9488;'
+  );
 });
