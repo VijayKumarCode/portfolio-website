@@ -202,12 +202,7 @@ Backend → Render
 
     Fonts loaded with font-display: swap for zero layout shift
 
-📈 Lighthouse Scores (Target)
-Category	Score
-Performance	95+
-Accessibility	100
-Best Practices	100
-SEO	100
+
 🧑‍💻 About the Author
 
 Vijay Kumar — Java Backend Engineer
@@ -223,6 +218,3 @@ Vijay Kumar — Java Backend Engineer
     Email: vkumar.kumar31@gmail.com
 
 Open to remote backend roles — let’s build something scalable.
-text
-
-
