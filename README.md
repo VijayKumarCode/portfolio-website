@@ -10,18 +10,15 @@
 
 **Personal portfolio with a live Spring Boot backend, real‑time multiplayer project showcase, and engineering blog.**
 
----
 
 ## 🚀 Live Demo
 
 **[vijaykumarcode.space](https://vijaykumarcode.space)** — fully responsive, dark‑themed, production‑deployed.
 
----
 
 ## 🧱 Architecture
 
----
-
+```
 ┌─────────────────────────────────────────────┐
 │  Frontend (Vercel)                          │
 │  Vanilla HTML · CSS · JavaScript (ES2022)   │
@@ -42,14 +39,11 @@
 │  Neon (cloud) │  │  Email on every form     │
 │  contact_msgs │  │  submission              │
 └───────────────┘  └──────────────────────────┘
----
-
-
----
+```
 
 ## 📁 Repository Structure
 
----
+```
 
 portfolio-website/
 ├── frontend/                    # Static site — deployed on Vercel
@@ -103,7 +97,7 @@ portfolio-website/
 ├── .gitignore                   # Root ignore rules
 ├── package.json                 # Root scripts
 └── README.md
----
+```
 
 
 ---
