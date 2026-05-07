@@ -387,7 +387,7 @@ a:hover {
 .menu-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.65);
   z-index: calc(var(--z-overlay) - 1);
   opacity: 0;
   pointer-events: none;
@@ -628,6 +628,29 @@ a:hover {
 .btn-full {
   width: 100%;
   justify-content: center;
+}
+
+.btn.loading .btn-text {
+  visibility: hidden;
+}
+
+.btn-spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-left: 8px;
+}
+
+.btn.loading .btn-spinner {
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ══════════════════════════════════════════
@@ -1015,8 +1038,10 @@ a:hover {
 
 /* Blog skeleton cards */
 .blog-skeleton-card {
-  min-height: 180px;
-  animation: shimmer 1.8s infinite;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .sk-tag {
@@ -1343,4 +1368,33 @@ footer {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+#back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-accent-primary);
+  color: #fff;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all var(--transition-base);
+  z-index: var(--z-sticky);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
