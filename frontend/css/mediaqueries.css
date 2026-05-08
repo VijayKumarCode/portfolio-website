@@ -1,581 +1,128 @@
-/* ═══════════════════════════════════════════════════════════════
-   VIJAY KUMAR — PORTFOLIO v2.3
-   Responsive mediaqueries.css
-   Matched to actual HTML structure
-   Accessibility-first | Mobile-optimized
-   ═══════════════════════════════════════════════════════════════ */
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   Mobile-first with progressive enhancement
+   ============================================ */
 
-/* ── Base mobile defaults ─────────────────────────────────── */
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   400px — Smallest Android phones
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (max-width: 400px) {
-  section {
-    padding: 2.5rem 1rem;
-  }
-
-  #skills,
-  #projects,
-  #blog,
-  #contact {
-    padding-left: 1rem;
-    padding-right: 1rem;
+/* ─── 1440px+ (Large Desktop) ─── */
+@media screen and (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
   }
 
   #profile {
-    flex-direction: column-reverse;
-    text-align: center;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    gap: 1.5rem;
+    gap: var(--space-24);
   }
 
   .hero-photo-frame {
-    width: 70vw;          /* scales with screen, never too small */
-    max-width: 150px;
-    height: auto;
-    aspect-ratio: 1 / 1;
-  }
-
-  .hero-photo-frame img {
-    width: 100%;
-    height: 100%;
-  }
-
-  .hero-content {
-    align-items: center;
-    text-align: center;
-  }
-
-  .hero-name {
-    font-size: 1.55rem;
-    letter-spacing: -0.03em;
-  }
-
-  .hero-role-text {
-    font-size: 0.85rem;
-  }
-
-  .hero-actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 0.5rem;
-  }
-
-  .hero-actions .btn {
-    width: 100%;
-    min-height: 44px;
-  }
-
-  .hero-proof {
-    text-align: center;
-  }
-
-  .section-title {
-    font-size: 1.45rem;
-    margin-bottom: 1.75rem;
-  }
-
-  #socials-container {
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  #socials-container img {
-    width: 24px;
-    height: 24px;
+    width: 360px;
+    height: 360px;
   }
 
   .about-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    text-align: center;
+    gap: var(--space-16);
   }
 
-  .about-cards {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+  .about-pic-wrap {
+    max-height: 580px;
+  }
+}
+
+/* ─── 1024px - 1439px (Desktop) ─── */
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: 0 var(--space-6);
   }
 
-  .about-card {
-    padding: 0.85rem 0.75rem;
+  #profile {
+    gap: var(--space-12);
+    padding: calc(72px + var(--space-12)) var(--space-6) var(--space-12);
   }
 
-  .about-card h3 {
-    font-size: 0.82rem;
+  .hero-photo-frame {
+    width: 280px;
+    height: 280px;
   }
 
-  .about-card p {
-    font-size: 0.72rem;
+  .about-grid {
+    gap: var(--space-8);
   }
 
-  .about-text {
-    text-align: center;
-  }
-
-  .skills-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .skills-group {
-    padding: 1rem 0.75rem;
-  }
-
-  .skills-group-title {
-    font-size: 0.8rem;
-  }
-
-  .skill-item {
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
-  }
-
-  .skill-name {
-    font-size: 0.82rem;
-  }
-
-  .project-featured {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-    gap: 1rem;
-  }
-
-  .project-featured .project-img-wrap {
-    height: 180px;
+  .about-pic-wrap {
+    max-height: 480px;
   }
 
   .projects-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .project-card .project-img-wrap {
-    height: 160px;
-  }
-
-  .blog-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .blog-article-card {
-    padding: 1rem;
-  }
-
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .contact-form-wrap {
-    padding: 1rem 0.75rem;
-  }
-
-  .contact-tagline {
-    font-size: 0.9rem;
-    text-align: center;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    font-size: 16px; /* Prevent iOS zoom */
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   420px — Standard mid-range phones
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 401px) and (max-width: 420px) {
-  section {
-    padding: 2.75rem 1.1rem;
-  }
-
-  #skills,
-  #projects,
-  #blog,
-  #contact {
-    padding-left: 1.1rem;
-    padding-right: 1.1rem;
-  }
-
-  #profile {
-    flex-direction: column-reverse;
-    text-align: center;
-    gap: 1.75rem;
-    padding-top: 2.25rem;
-    padding-bottom: 2.25rem;
-  }
-
-  .hero-photo-frame {
-    width: 60vw;
-    max-width: 170px;
-    height: auto;
-    aspect-ratio: 1 / 1;
-  }
-
-  .hero-name {
-    font-size: 1.7rem;
-    letter-spacing: -0.03em;
-  }
-
-  .hero-role-text {
-    font-size: 0.88rem;
-  }
-
-  .hero-actions {
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .btn {
-    padding: 0.6rem 1.25rem;
-    font-size: 0.8rem;
-    min-height: 44px;
-  }
-
-  .section-title {
-    font-size: 1.55rem;
-    margin-bottom: 2rem;
-  }
-
-  .about-cards {
-    gap: 0.55rem;
-  }
-
-  .about-card {
-    padding: 0.85rem 0.75rem;
-  }
-
-  .project-featured .project-img-wrap {
-    height: 170px;
-  }
-
-  .project-card:not(.project-featured) .project-img-wrap {
-    height: 140px;
-  }
-
-  .contact-form-wrap {
-    padding: 1.1rem 0.9rem;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   480px — Mid-size phones (iPhone 12/13/14, Pixel 6)
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 421px) and (max-width: 480px) {
-  .hero-photo-frame {
-    width: 150px;
-    height: 150px;
-  }
-
-  .hero-name {
-    font-size: clamp(1.7rem, 7vw, 2rem);
-  }
-
-  .section-title {
-    font-size: 1.65rem;
-  }
-
-  .about-cards {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
-  }
-
-  .about-card {
-    padding: 1rem;
-  }
-
-  .btn {
-    min-height: 44px;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   640px — Mobile landscape / large phones
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 481px) and (max-width: 640px) {
-  section {
-    padding: 3rem 1.25rem;
-  }
-
-  #skills,
-  #projects,
-  #blog,
-  #contact {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
-
-  #hamburger-nav {
-    padding: 0 1.25rem;
-  }
-
-  #profile {
-    flex-direction: column-reverse;
-    text-align: center;
-    gap: 2rem;
-    padding: 2.5rem 1.25rem 3rem;
-  }
-
-  .hero-photo-frame {
-    width: 160px;
-    height: 160px;
-  }
-
-  .hero-name {
-    font-size: clamp(1.8rem, 8vw, 2.4rem);
-  }
-
-  .hero-role-text {
-    font-size: 0.9rem;
-  }
-
-  .hero-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.6rem;
-  }
-
-  .about-cards {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .about-pic {
-    max-width: 220px;
-  }
-
-  .skills-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .skills-group {
-    padding: 1.25rem;
-  }
-
-  .skill-item {
-    grid-template-columns: 1fr;
-    gap: 0.35rem;
-  }
-
-  .skill-name {
-    font-size: 0.85rem;
-  }
-
-  .skill-bar {
-    width: 100%;
-    height: 4px;
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .project-featured {
-    grid-template-columns: 1fr;
-  }
-
-  .project-featured .project-img-wrap {
-    height: 200px;
-  }
-
-  .project-card:not(.project-featured) .project-img-wrap {
-    height: 160px;
-  }
-
-  .blog-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .contact-form-wrap {
-    padding: 1.25rem 1rem;
-  }
-
-  .contact-tagline {
-    font-size: 0.95rem;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    font-size: 16px;
-  }
-
-  footer {
-    padding: 1.5rem 1.25rem;
-  }
-
-  .footer-inner {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.75rem;
-  }
-
-  .footer-links {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .footer-copy {
-    font-size: 0.72rem;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   768px — iPad portrait / small tablets
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 641px) and (max-width: 768px) {
-  section {
-    padding: 3.5rem 1.75rem;
-  }
-
-  #skills,
-  #projects,
-  #blog,
-  #contact {
-    padding-left: 1.75rem;
-    padding-right: 1.75rem;
-  }
-
-  .hero-photo-frame {
-    width: clamp(160px, 35vw, 220px);
-    height: clamp(160px, 35vw, 220px);
-  }
-
-  #profile {
-    flex-direction: column-reverse;
-    text-align: center;
-  }
-
-  .hero-content {
-    align-items: center;
-  }
-
-  .hero-name {
-    font-size: clamp(2rem, 7vw, 2.8rem);
-  }
-
-  .hero-proof {
-    text-align: center;
-  }
-
-  .about-pic {
-    max-width: 260px;
-  }
-
-  .skill-item {
-    grid-template-columns: 130px 1fr;
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-
-  .project-card:not(.project-featured) .project-img-wrap {
-    height: 160px;
   }
 
   .blog-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  .contact-form-wrap {
-    padding: 1.5rem;
   }
 
   .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-
-  .footer-links {
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: var(--space-8);
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   900px — Tablet landscape / two-col to single col transition
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 769px) and (max-width: 900px) {
+/* ─── 768px - 1023px (Tablet) ─── */
+@media screen and (max-width: 768px) {
+  h1 { font-size: var(--text-3xl); }
+  h2 { font-size: var(--text-2xl); }
+
   section {
-    padding: 4rem 2rem;
+    padding: var(--space-16) 0;
+  }
+
+  .section-title {
+    margin-bottom: var(--space-8);
   }
 
   #profile {
     flex-direction: column-reverse;
     text-align: center;
-    padding: 3rem 1.5rem 4rem;
-    gap: 2.5rem;
+    padding: calc(72px + var(--space-8)) var(--space-4) var(--space-12);
+    gap: var(--space-8);
+  }
+
+  .hero-content {
+    max-width: 100%;
   }
 
   .hero-photo-wrap {
     order: -1;
   }
 
-  .hero-content {
-    align-items: center;
-    max-width: 100%;
-  }
-
-  .hero-proof {
-    text-align: center;
-    max-width: 100%;
+  .hero-photo-frame {
+    width: clamp(200px, 45vw, 260px);
+    height: clamp(200px, 45vw, 260px);
+    margin: 0 auto;
   }
 
   .hero-actions {
     justify-content: center;
   }
 
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    text-align: center;
-  }
-
-  .about-pic-wrap {
-    display: flex;
+  #socials-container {
     justify-content: center;
   }
 
-  .about-pic {
-    max-width: 300px;
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
   }
 
-  .about-text {
-    text-align: left;
+  .about-pic-wrap {
+    max-width: 320px;
+    max-height: 420px;
+    margin: 0 auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  .about-cards {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .skills-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-
-  .skills-group {
-    padding: 1.5rem;
-  }
-
-  .skill-item {
-    grid-template-columns: 140px 1fr;
-  }
-
-  .projects-grid {
     grid-template-columns: 1fr;
   }
 
@@ -584,125 +131,190 @@ html {
   }
 
   .project-featured .project-img-wrap {
-    height: 220px;
+    aspect-ratio: 16 / 10;
   }
 
   .blog-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    grid-template-columns: 1fr;
   }
 
   .contact-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: var(--space-8);
+  }
+
+  .contact-form-wrap {
+    padding: var(--space-6);
+  }
+}
+
+/* ─── 640px - 767px (Large Mobile) ─── */
+@media screen and (max-width: 640px) {
+  #desktop-nav {
+    display: none;
+  }
+
+  #hamburger-nav {
+    display: flex;
+  }
+
+  .hero-photo-frame {
+    width: 200px;
+    height: 200px;
+  }
+
+  .about-pic-wrap {
+    max-width: 280px;
+    max-height: 380px;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .about-card {
+    padding: var(--space-4);
+  }
+
+  .project-ctas {
+    flex-direction: column;
+  }
+
+  .project-ctas .btn {
+    width: 100%;
   }
 
   .footer-inner {
-    flex-direction: column;
-    align-items: center;
     text-align: center;
   }
 
   .footer-links {
+    flex-wrap: wrap;
     justify-content: center;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   1024px — Small laptop / large tablet
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 901px) and (max-width: 1024px) {
-  section {
-    padding: 4rem 2rem;
+/* ─── 480px - 639px (Mobile) ─── */
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0 var(--space-4);
   }
 
-  .project-featured {
+  section {
+    padding: var(--space-12) 0;
+  }
+
+  #profile {
+    padding: calc(72px + var(--space-6)) var(--space-4) var(--space-10);
+    gap: var(--space-6);
+  }
+
+  .hero-photo-frame {
+    width: 180px;
+    height: 180px;
+  }
+
+  .hero-name {
+    font-size: var(--text-3xl);
+  }
+
+  .hero-role {
+    font-size: var(--text-lg);
+  }
+
+  .hero-stack {
+    font-size: var(--text-xs);
+  }
+
+  .hero-proof {
+    font-size: var(--text-sm);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .about-pic-wrap {
+    max-width: 240px;
+    max-height: 320px;
+  }
+
+  .about-cards {
     grid-template-columns: 1fr;
   }
 
-  .project-featured .project-img-wrap {
-    height: 240px;
+  .skills-group {
+    padding: var(--space-6);
   }
 
-  .blog-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   1200px — Collapse desktop nav, show hamburger
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (max-width: 1200px) {
-  #desktop-nav {
-    display: none;
+  .project-info {
+    padding: var(--space-6);
   }
 
-  #hamburger-nav {
-    display: flex;
+  .contact-form-wrap {
+    padding: var(--space-5);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-4);
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   1200px+ — Desktop (full nav visible)
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 1201px) {
-  #desktop-nav {
-    display: flex;
+/* ─── 400px - 479px (Small Mobile) ─── */
+@media screen and (max-width: 400px) {
+  .hero-photo-frame {
+    width: 160px;
+    height: 160px;
   }
 
-  #hamburger-nav {
-    display: none;
-  }
-
-  .skills-grid {
-    gap: 2rem;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   1920px — Large desktop / Full HD / Ultrawide
-   ═══════════════════════════════════════════════════════════════ */
-@media screen and (min-width: 1920px) {
-  :root {
-    --container-max: 1400px;
-  }
-
-  section {
-    padding: 6rem 4rem;
+  .hero-name {
+    font-size: var(--text-2xl);
   }
 
   .section-title {
-    font-size: 3rem;
-    margin-bottom: 3.5rem;
+    font-size: var(--text-2xl);
   }
 
-  .skills-grid {
-    gap: 4rem;
-    grid-template-columns: repeat(2, 1fr);
+  .about-pic-wrap {
+    max-width: 200px;
+    max-height: 280px;
   }
 
-  .skill-name {
-    min-width: 160px;
-    font-size: 0.95rem;
+  .blog-article-card {
+    padding: var(--space-4);
   }
 
-  .projects-grid {
-    gap: 2rem;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .blog-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+  .contact-link {
+    font-size: var(--text-xs);
+    word-break: break-all;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   ACCESSIBILITY & PREFERENCE MEDIA QUERIES
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── 320px (Tiny Mobile) ─── */
+@media screen and (max-width: 320px) {
+  .hero-photo-frame {
+    width: 140px;
+    height: 140px;
+  }
 
-/* ── Reduced motion ─────────────────────────────────────────── */
+  .about-pic-wrap {
+    max-width: 180px;
+    max-height: 240px;
+  }
+
+  .btn {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-xs);
+  }
+}
+
+/* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -713,236 +325,42 @@ html {
     scroll-behavior: auto !important;
   }
 
-  .fade-in,
-  .project-card,
-  .about-card,
-  .skills-group {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .tag-dot {
-    animation: none !important;
+  .fade-in {
     opacity: 1;
-  }
-}
-
-/* ── High contrast ──────────────────────────────────────────── */
-@media (prefers-contrast: more) {
-  :root {
-    --color-text-secondary: #b0b8c8;
-    --color-text-tertiary: #7a8899;
-    --color-border: rgba(255, 255, 255, 0.25);
-    --color-accent-primary: #00ffff;
-    --color-accent-secondary: #0088dd;
-  }
-
-  .skill-bar {
-    background: rgba(255, 255, 255, 0.25);
-  }
-
-  a:focus-visible,
-  button:focus-visible,
-  .btn:focus-visible {
-    outline: 3px solid var(--color-accent-primary);
-    outline-offset: 3px;
-  }
-
-  .project-card,
-  .about-card,
-  .skills-group,
-  .blog-article-card {
-    border: 2px solid var(--color-border);
-  }
-}
-
-/* ── Reduced data ───────────────────────────────────────────── */
-@media (prefers-reduced-data: reduce) {
-  img,
-  video {
-    filter: grayscale(100%);
-  }
-
-  #profile::before {
-    display: none !important;
-  }
-}
-
-/* ── Touch-only devices (no hover capability) ──────────────── */
-@media (hover: none) and (pointer: coarse) {
-  .blog-article-card:hover {
     transform: none;
   }
-
-  .project-card:hover,
-  .about-card:hover {
-    transform: none;
-  }
-
-  .btn:hover {
-    transform: none;
-  }
-
-  .menu-links a {
-    padding: 0.75rem;
-  }
 }
 
-/* ── Landscape phones ───────────────────────────────────────── */
-@media screen and (orientation: landscape) and (max-height: 600px) and (max-width: 900px) {
-  #profile {
-    flex-direction: row;
-    text-align: left;
-    padding: 2rem 1.5rem;
-    gap: 2rem;
-    min-height: auto;
-  }
-
-  .hero-photo-wrap {
-    order: 0;
-  }
-
-  .hero-photo-frame {
-    width: 140px;
-    height: 140px;
-  }
-
-  .hero-name {
-    font-size: 1.8rem;
-  }
-
-  .hero-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .hero-actions .btn {
-    width: auto;
-  }
-
-  .hero-content {
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  section {
-    padding: 2.5rem 1.5rem;
-  }
-}
-
-/* ── iPhone safe area (notch / dynamic island) ─────────────── */
-@supports (padding: max(0px)) {
-  #site-header {
-    padding-left: max(1.5rem, env(safe-area-inset-left));
-    padding-right: max(1.5rem, env(safe-area-inset-right));
-  }
-
-  section {
-    padding-left: max(1rem, env(safe-area-inset-left));
-    padding-right: max(1rem, env(safe-area-inset-right));
-  }
-
-  footer {
-    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   PRINT STYLES
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Print Styles ─── */
 @media print {
   #site-header,
-  .hamburger-menu,
-  #socials-container,
+  #back-to-top,
   .hero-actions,
+  .project-ctas,
+  .blog-footer-link,
   .contact-form-wrap,
-  footer,
-  .blog-footer-link {
+  .menu-backdrop,
+  .hamburger-menu {
     display: none !important;
   }
 
   body {
-    background: #fff !important;
-    color: #000 !important;
-    font-size: 11pt;
-    line-height: 1.4;
-  }
-
-  section {
-    padding: 0.75rem 0 !important;
-    page-break-inside: avoid;
-    background: transparent !important;
+    background: white;
+    color: black;
   }
 
   #profile {
-    flex-direction: row;
-    gap: 2rem;
-    text-align: left;
     min-height: auto;
-  }
-
-  .hero-photo-wrap {
-    order: 0;
-  }
-
-  .hero-photo-frame {
-    width: 120px;
-    height: 120px;
-  }
-
-  .hero-name {
-    font-size: 24pt;
-    color: #000 !important;
-  }
-
-  .hero-role-text,
-  .hero-stack {
-    color: #333 !important;
+    padding: 2rem;
   }
 
   a {
-    color: #000 !important;
-    text-decoration: none !important;
+    color: black;
+    text-decoration: underline;
   }
 
-  a[href]::after {
-    content: " (" attr(href) ")";
-    font-size: 9pt;
-    color: #666;
-    word-break: break-all;
-  }
-
-  a[href^="/"]::after,
-  a[href^="#"]::after {
-    content: "";
-  }
-
-  .project-card,
-  .about-card,
-  .skills-group,
-  .blog-article-card {
-    border: 1px solid #ccc !important;
-    box-shadow: none !important;
-    background: #fff !important;
-  }
-
-  .skill-bar {
-    background: #ddd !important;
-  }
-
-  img {
-    max-width: 100% !important;
+  section {
+    padding: 2rem 0;
     page-break-inside: avoid;
-  }
-
-  h1, h2, h3 {
-    color: #000 !important;
-    page-break-after: avoid;
-  }
-
-  .section-title {
-    font-size: 16pt;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 0.25rem;
   }
 }
