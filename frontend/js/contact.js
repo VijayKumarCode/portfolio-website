@@ -1,16 +1,14 @@
 /**
- * Contact Form Handler
- * Validates, submits to Spring Boot backend, handles all UX states
+ * Contact Form Module
+ * Handles validation, submission, and user feedback
  */
 
-import { apiFetch, ApiError } from '../src/utils/api.js';
-import { CONTACT_ENDPOINT } from '../src/config/config.js';
+import { API_ENDPOINTS } from '../src/config/config.js';
+import { sanitizeInput } from '../src/utils/helpers.js';
 
 const ContactForm = {
   form: null,
   submitBtn: null,
-  btnText: null,
-  btnSpinner: null,
   statusEl: null,
   fields: {},
 
@@ -19,12 +17,11 @@ const ContactForm = {
     if (!this.form) return;
 
     this.submitBtn = document.getElementById('submit-btn');
-    this.btnText = this.submitBtn?.querySelector('.btn-text');
-    this.btnSpinner = this.submitBtn?.querySelector('.btn-spinner');
     this.statusEl = document.getElementById('form-status');
     this.fields = {
       name: document.getElementById('name'),
       email: document.getElementById('email'),
+      subject: document.getElementById('subject'),
       message: document.getElementById('message')
     };
 
@@ -32,170 +29,137 @@ const ContactForm = {
   },
 
   bindEvents() {
-    // Real-time validation on blur
-    Object.values(this.fields).forEach(field => {
+    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+    // Real-time validation
+    Object.entries(this.fields).forEach(([key, field]) => {
       if (!field) return;
-      field.addEventListener('blur', () => this.validateField(field));
+      field.addEventListener('blur', () => this.validateField(key, field));
       field.addEventListener('input', () => this.clearFieldError(field));
     });
-
-    // Form submission
-    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
   },
 
-  validateField(field) {
-    const errorEl = document.getElementById(`${field.id}-error`);
-    if (!errorEl) return true;
-
+  validateField(name, field) {
     const value = field.value.trim();
+    let error = '';
 
-    // Required check
-    if (field.required && !value) {
-      this.showFieldError(field, errorEl, 'This field is required');
-      return false;
+    if (!value) {
+      error = 'This field is required';
+    } else if (name === 'email' && !this.isValidEmail(value)) {
+      error = 'Please enter a valid email address';
+    } else if (name === 'message' && value.length < 10) {
+      error = 'Message must be at least 10 characters';
     }
 
-    // Minlength check
-    if (field.minLength && value.length < field.minLength) {
-      this.showFieldError(field, errorEl, `Minimum ${field.minLength} characters required`);
-      return false;
-    }
-
-    // Maxlength check
-    if (field.maxLength && value.length > field.maxLength) {
-      this.showFieldError(field, errorEl, `Maximum ${field.maxLength} characters allowed`);
-      return false;
-    }
-
-    // Email validation
-    if (field.type === 'email' && value) {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailRegex.test(value)) {
-        this.showFieldError(field, errorEl, 'Please enter a valid email address');
-        return false;
-      }
-    }
-
-    return true;
+    this.showFieldError(field, error);
+    return !error;
   },
 
-  showFieldError(field, errorEl, message) {
-    field.classList.add('field-error-state');
-    field.setAttribute('aria-invalid', 'true');
-    errorEl.textContent = message;
-    errorEl.classList.add('visible');
+  isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  },
+
+  showFieldError(field, message) {
+    const errorEl = field.parentElement?.querySelector('.field-error');
+    if (errorEl) errorEl.textContent = message;
+    field.setAttribute('aria-invalid', message ? 'true' : 'false');
+    if (message) {
+      field.style.borderColor = '#ef4444';
+    } else {
+      field.style.borderColor = '';
+    }
   },
 
   clearFieldError(field) {
-    const errorEl = document.getElementById(`${field.id}-error`);
-    field.classList.remove('field-error-state');
-    field.removeAttribute('aria-invalid');
-    if (errorEl) {
-      errorEl.textContent = '';
-      errorEl.classList.remove('visible');
-    }
-  },
-
-  validateForm() {
-    let isValid = true;
-    Object.values(this.fields).forEach(field => {
-      if (field && !this.validateField(field)) {
-        isValid = false;
-      }
-    });
-    return isValid;
+    this.showFieldError(field, '');
   },
 
   async handleSubmit(e) {
     e.preventDefault();
 
-    // Clear previous status
-    this.clearStatus();
+    // Validate all fields
+    let isValid = true;
+    Object.entries(this.fields).forEach(([key, field]) => {
+      if (!this.validateField(key, field)) isValid = false;
+    });
 
-    // Validate
-    if (!this.validateForm()) {
-      const firstError = this.form.querySelector('.field-error-state');
-      firstError?.focus();
-      this.showStatus('Please fix the errors above before submitting.', 'error');
-      return;
-    }
+    if (!isValid) return;
 
-    // Set loading state
+    // Gather data
+    const data = {
+      name: sanitizeInput(this.fields.name.value.trim()),
+      email: sanitizeInput(this.fields.email.value.trim()),
+      subject: sanitizeInput(this.fields.subject.value.trim()),
+      message: sanitizeInput(this.fields.message.value.trim())
+    };
+
+    // Show loading state
     this.setLoading(true);
+    this.showStatus('', '');
 
     try {
-      const payload = {
-        name: this.fields.name.value.trim(),
-        email: this.fields.email.value.trim(),
-        message: this.fields.message.value.trim()
-      };
-
-      await apiFetch(CONTACT_ENDPOINT, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      }, 2); // Retry once on failure (Render cold start)
-
-      // Success
-      this.showStatus('Message sent successfully! I\'ll get back to you within 24 hours.', 'success');
+      const result = await this.submitWithTimeout(data, 15000);
+      this.showStatus('Message sent successfully! I\'ll get back to you soon.', 'success');
       this.form.reset();
-      Object.values(this.fields).forEach(f => f?.classList.remove('field-error-state'));
-
-    } catch (error) {
-      console.error('Contact form error:', error);
-
-      if (error instanceof ApiError) {
-        if (error.status === 408 || error.status === 0) {
-          this.showStatus('Request timed out. The server might be waking up — please try again in a few seconds.', 'error');
-        } else if (error.status >= 500) {
-          this.showStatus('Server error. I\'m aware of it — please email me directly at vkumar.kumar31@gmail.com.', 'error');
-        } else {
-          this.showStatus(error.message || 'Something went wrong. Please try again.', 'error');
-        }
-      } else {
-        this.showStatus('Network error. Please check your connection and try again.', 'error');
-      }
+    } catch (err) {
+      console.error('[Contact] Submission failed:', err);
+      const message = err.name === 'AbortError'
+        ? 'Request timed out. The server may be waking up — please try again in 30 seconds.'
+        : 'Failed to send message. Please try again or email me directly.';
+      this.showStatus(message, 'error');
     } finally {
       this.setLoading(false);
     }
   },
 
+  async submitWithTimeout(data, timeoutMs) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+      const response = await fetch(API_ENDPOINTS.contact, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (err) {
+      clearTimeout(timeoutId);
+      throw err;
+    }
+  },
+
   setLoading(isLoading) {
     if (!this.submitBtn) return;
-
-    if (isLoading) {
-      this.submitBtn.disabled = true;
-      this.submitBtn.setAttribute('aria-disabled', 'true');
-      this.btnText?.setAttribute('aria-hidden', 'true');
-      this.btnSpinner?.classList.add('visible');
-    } else {
-      this.submitBtn.disabled = false;
-      this.submitBtn.removeAttribute('aria-disabled');
-      this.btnText?.removeAttribute('aria-hidden');
-      this.btnSpinner?.classList.remove('visible');
-    }
+    this.submitBtn.disabled = isLoading;
+    this.submitBtn.classList.toggle('loading', isLoading);
+    const spinner = this.submitBtn.querySelector('.btn-spinner');
+    if (spinner) spinner.style.display = isLoading ? 'block' : 'none';
   },
 
   showStatus(message, type) {
     if (!this.statusEl) return;
     this.statusEl.textContent = message;
-    this.statusEl.className = `form-status form-status-${type}`;
-    this.statusEl.style.display = 'block';
-
-    // Auto-hide success messages
-    if (type === 'success') {
-      setTimeout(() => {
-        this.statusEl.style.display = 'none';
-      }, 8000);
-    }
-  },
-
-  clearStatus() {
-    if (this.statusEl) {
-      this.statusEl.textContent = '';
-      this.statusEl.className = '';
-      this.statusEl.style.display = 'none';
-    }
+    this.statusEl.className = type; // 'success' or 'error'
+    this.statusEl.style.display = message ? 'block' : 'none';
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => ContactForm.init());
+// Initialize
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => ContactForm.init());
+} else {
+  ContactForm.init();
+}
