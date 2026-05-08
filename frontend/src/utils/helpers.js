@@ -1,5 +1,6 @@
 /**
- * Utility Helpers
+ * Shared utility helpers.
+ * Used by home-blog.js and post.js.
  */
 
 export function stripHtml(html) {
@@ -12,7 +13,6 @@ export function formatDate(dateString) {
   if (!dateString) return '';
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return dateString;
-
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
@@ -24,12 +24,4 @@ export function escHtml(str) {
   const div = document.createElement('div');
   div.appendChild(document.createTextNode(str));
   return div.innerHTML;
-}
-
-export function debounce(fn, delay = 300) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
-  };
 }
