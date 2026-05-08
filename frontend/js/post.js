@@ -1,9 +1,7 @@
 /**
- * Single Post Renderer — final production version
- * Works with Vercel rewrites: ?slug=... or /blog/<slug>
- * Logs slugs to console and shows exact error reason in the UI.
+ * Single Blog Post Renderer
+ * Slug normalised (trim + lowercase) to avoid mismatches.
  */
-
 import { stripHtml, formatDate, escHtml } from '../src/utils/helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,54 +15,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const readTimeEl = document.getElementById('post-read-time');
   const pageTitle = document.querySelector('title');
 
-  // ---------- 1. Extract slug ----------
+  /* ----- slug extraction ----- */
   const params = new URLSearchParams(window.location.search);
-  let slug = params.get('slug');
+  let rawSlug = params.get('slug');
+  if (!rawSlug) {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    if (parts[0] === 'blog' && parts[1]) rawSlug = parts[1];
+  }
+  const slug = (rawSlug || '').trim().toLowerCase();
+  console.log('🔍 Normalised slug:', slug);
 
   if (!slug) {
-    const pathParts = window.location.pathname.split('/').filter(Boolean);
-    if (pathParts[0] === 'blog' && pathParts[1]) {
-      slug = pathParts[1];
-    }
-  }
-
-  // Clean slug
-  const cleanSlug = slug ? slug.trim() : '';
-  console.log('🔍 Extracted slug:', cleanSlug);
-
-  if (!cleanSlug) {
-    showError('No article slug found in URL.');
+    showError('No article slug specified.');
     return;
   }
 
-  // ---------- 2. Fetch posts.json ----------
+  /* ----- fetch posts.json ----- */
   fetch('/data/posts.json')
     .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status} — unable to load posts.json`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
     })
     .then(data => {
       const posts = data.posts || [];
-      console.log('📋 Available slugs:', posts.map(p => (p.slug || p.id || '').trim()));
-
-      // Find matching post (trim both for safety)
       const post = posts.find(p => {
-        const postSlug = (p.slug || p.id || '').trim();
-        return postSlug === cleanSlug;
+        const postSlug = (p.slug || p.id || '').trim().toLowerCase();
+        return postSlug === slug;
       });
-
-      if (!post) {
-        throw new Error(`No post found with slug "${cleanSlug}". Check the slugs above.`);
-      }
-
+      if (!post) throw new Error(`No post matching "${slug}"`);
       renderPost(post, posts);
     })
     .catch(err => {
-      console.error('❌ Post render error:', err);
-      showError(`Unable to load article: ${err.message}`);
+      console.error('Post error:', err);
+      showError(err.message);
     });
 
-  // ---------- 3. Render ----------
+  /* ----- render ----- */
   function renderPost(post, allPosts) {
     document.title = `${post.title} | Engineering Log — Vijay Kumar`;
     if (pageTitle) pageTitle.textContent = document.title;
@@ -73,16 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setMeta('meta[name="description"]', 'content', desc);
     setMeta('meta[property="og:title"]', 'content', document.title);
     setMeta('meta[property="og:description"]', 'content', desc);
-    setMeta('meta[property="og:url"]', 'content', `https://vijaykumarcode.space/blog/${cleanSlug}`);
-    setMeta('meta[name="twitter:title"]', 'content', document.title);
-    setMeta('meta[name="twitter:description"]', 'content', desc);
+    setMeta('meta[property="og:url"]', 'content', `https://vijaykumarcode.space/blog/${slug}`);
 
     breadcrumbTitle.textContent = post.title;
     titleEl.textContent = post.title;
 
     if (categoryEl) {
-      const mainTag = post.tags?.[0] || post.category || '';
-      categoryEl.textContent = mainTag ? `#${mainTag}` : '';
+      categoryEl.textContent = post.tags?.[0] ? `#${post.tags[0]}` : '';
     }
     if (dateEl) {
       dateEl.textContent = formatDate(post.date);
@@ -92,11 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const words = (post.content || '').split(/\s+/).length;
       readTimeEl.textContent = `${Math.max(1, Math.ceil(words / 200))} min read`;
     }
-
     contentEl.innerHTML = post.content || '<p>No content available.</p>';
 
     if (shareBar) {
-      const shareUrl = `https://vijaykumarcode.space/blog/${cleanSlug}`;
+      const shareUrl = `https://vijaykumarcode.space/blog/${slug}`;
       const shareTitle = encodeURIComponent(post.title);
       shareBar.innerHTML = `
         <span class="share-label">Share</span>
@@ -108,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (postNav && allPosts.length > 1) {
       const sorted = allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-      const idx = sorted.findIndex(p => (p.slug || p.id || '').trim() === cleanSlug);
+      const idx = sorted.findIndex(p => (p.slug || p.id || '').trim().toLowerCase() === slug);
       const prev = sorted[idx - 1];
       const next = sorted[idx + 1];
       postNav.innerHTML = `
@@ -124,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.title = 'Post Not Found | Engineering Log';
     if (pageTitle) pageTitle.textContent = document.title;
     if (titleEl) titleEl.textContent = 'Post Not Found';
-    if (contentEl) contentEl.innerHTML = `<div class="post-error">⚠️ ${msg}<br><a href="/blog">← All entries</a></div>`;
+    if (contentEl) contentEl.innerHTML = `<p>⚠️ ${msg}</p><a href="/blog">← All entries</a>`;
     if (breadcrumbTitle) breadcrumbTitle.textContent = 'Not found';
     if (shareBar) shareBar.innerHTML = '';
     if (postNav) postNav.innerHTML = '';
