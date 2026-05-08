@@ -35,8 +35,10 @@ html {
   }
 
   .hero-photo-frame {
-    width: 120px;
-    height: 120px;
+    width: 70vw;          /* scales with screen, never too small */
+    max-width: 150px;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
   .hero-photo-frame img {
@@ -210,8 +212,10 @@ html {
   }
 
   .hero-photo-frame {
-    width: 140px;
-    height: 140px;
+    width: 60vw;
+    max-width: 170px;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
   .hero-name {
