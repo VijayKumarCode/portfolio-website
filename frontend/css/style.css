@@ -517,18 +517,17 @@ a:hover {
 }
 
 .hero-photo-frame {
-  width: 280px;
-  height: 280px;
-  border-radius: var(--radius-xl);
+  aspect-ratio: 1 / 1;           
+  width: min(280px, 70vw);       
+  height: auto;                   
   overflow: hidden;
-  border: 2px solid var(--color-border);
-  box-shadow: var(--shadow-lg);
 }
 
 .hero-photo-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 /* Socials in hero */
@@ -676,9 +675,13 @@ a:hover {
 }
 
 .about-pic {
+  max-height: 400px;
+  object-fit: cover;
+  aspect-ratio: 4 / 3;            
   width: 100%;
   height: auto;
   display: block;
+  border-radius: inherit;         
 }
 
 .about-content {
