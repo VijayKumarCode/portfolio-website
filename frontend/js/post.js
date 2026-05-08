@@ -1,119 +1,215 @@
 /**
- * Single Blog Post Renderer
- * Slug normalised (trim + lowercase) to avoid mismatches.
+ * Individual Blog Post Renderer
+ * Handles slug extraction, post lookup, and rendering
  */
-import { stripHtml, formatDate, escHtml } from '../src/utils/helpers.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const titleEl = document.getElementById('post-title');
-  const categoryEl = document.getElementById('post-category');
-  const dateEl = document.getElementById('post-date');
-  const contentEl = document.getElementById('post-content');
-  const breadcrumbTitle = document.getElementById('breadcrumb-title');
-  const shareBar = document.getElementById('share-bar');
-  const postNav = document.getElementById('post-navigation');
-  const readTimeEl = document.getElementById('post-read-time');
-  const pageTitle = document.querySelector('title');
+import { SITE } from '../src/config/config.js';
+import { formatDate, readingTime, escHtml } from '../src/utils/helpers.js';
 
-  /* ----- slug extraction ----- */
+// ─── DOM Element References ───
+const els = {
+  loading: document.getElementById('post-loading'),
+  content: document.getElementById('post-content'),
+  error: document.getElementById('post-error'),
+  nav: document.getElementById('post-nav'),
+  title: document.getElementById('post-title'),
+  meta: document.getElementById('post-meta'),
+  body: document.getElementById('post-body'),
+  tags: document.getElementById('post-tags'),
+  toc: document.getElementById('post-toc'),
+  ogTitle: document.querySelector('meta[property="og:title"]'),
+  ogDesc: document.querySelector('meta[property="og:description"]'),
+  ogUrl: document.querySelector('meta[property="og:url"]'),
+  twitterTitle: document.querySelector('meta[name="twitter:title"]'),
+  twitterDesc: document.querySelector('meta[name="twitter:description"]'),
+  canonical: document.querySelector('link[rel="canonical"]')
+};
+
+// ─── Slug Extraction ───
+function getSlugFromUrl() {
+  // Try pathname first (for clean URLs like /blog/hello-world)
+  const path = window.location.pathname;
+  const pathMatch = path.match(/\/blog\/([^/]+)/);
+  if (pathMatch) return decodeURIComponent(pathMatch[1]);
+
+  // Fallback to query param (for URLs like /post.html?slug=hello-world)
   const params = new URLSearchParams(window.location.search);
-  let rawSlug = params.get('slug');
-  if (!rawSlug) {
-    const parts = window.location.pathname.split('/').filter(Boolean);
-    if (parts[0] === 'blog' && parts[1]) rawSlug = parts[1];
-  }
-  const slug = (rawSlug || '').trim().toLowerCase();
-  console.log('🔍 Normalised slug:', slug);
+  const slugParam = params.get('slug');
+  if (slugParam) return decodeURIComponent(slugParam);
+
+  // Fallback to hash (for hash-based routing)
+  const hash = window.location.hash.replace('#', '');
+  if (hash) return decodeURIComponent(hash);
+
+  return null;
+}
+
+// ─── Post Loader ───
+async function loadPost() {
+  const slug = getSlugFromUrl();
 
   if (!slug) {
-    showError('No article slug specified.');
+    showError('No post specified. <a href="/blog.html">Browse all posts</a>');
     return;
   }
 
-  /* ----- fetch posts.json ----- */
-  fetch('/data/posts.json')
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      const posts = data.posts || [];
-      const post = posts.find(p => {
-        const postSlug = (p.slug || p.id || '').trim().toLowerCase();
-        return postSlug === slug;
-      });
-      if (!post) throw new Error(`No post matching "${slug}"`);
-      renderPost(post, posts);
-    })
-    .catch(err => {
-      console.error('Post error:', err);
-      showError(err.message);
-    });
+  try {
+    const res = await fetch('/data/posts.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-  /* ----- render ----- */
-  function renderPost(post, allPosts) {
-    document.title = `${post.title} | Engineering Log — Vijay Kumar`;
-    if (pageTitle) pageTitle.textContent = document.title;
+    const data = await res.json();
+    // Defensive: handle both array and object with .posts
+    const posts = Array.isArray(data) ? data : data.posts || [];
+    const post = posts.find(p => p.slug === slug);
 
-    const desc = post.excerpt || stripHtml(post.content || '').substring(0, 160);
-    setMeta('meta[name="description"]', 'content', desc);
-    setMeta('meta[property="og:title"]', 'content', document.title);
-    setMeta('meta[property="og:description"]', 'content', desc);
-    setMeta('meta[property="og:url"]', 'content', `https://vijaykumarcode.space/blog/${slug}`);
-
-    breadcrumbTitle.textContent = post.title;
-    titleEl.textContent = post.title;
-
-    if (categoryEl) {
-      categoryEl.textContent = post.tags?.[0] ? `#${post.tags[0]}` : '';
-    }
-    if (dateEl) {
-      dateEl.textContent = formatDate(post.date);
-      dateEl.setAttribute('datetime', post.date);
-    }
-    if (readTimeEl) {
-      const words = (post.content || '').split(/\s+/).length;
-      readTimeEl.textContent = `${Math.max(1, Math.ceil(words / 200))} min read`;
-    }
-    contentEl.innerHTML = post.content || '<p>No content available.</p>';
-
-    if (shareBar) {
-      const shareUrl = `https://vijaykumarcode.space/blog/${slug}`;
-      const shareTitle = encodeURIComponent(post.title);
-      shareBar.innerHTML = `
-        <span class="share-label">Share</span>
-        <a href="https://twitter.com/intent/tweet?text=${shareTitle}&url=${encodeURIComponent(shareUrl)}" target="_blank" rel="noopener">𝕏</a>
-        <a href="https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${shareTitle}" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/VijayKumarCode" target="_blank" rel="noopener">GitHub</a>
-      `;
+    if (!post) {
+      showError(`Post "${escHtml(slug)}" not found. <a href="/blog.html">Browse all posts</a>`);
+      return;
     }
 
-    if (postNav && allPosts.length > 1) {
-      const sorted = allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-      const idx = sorted.findIndex(p => (p.slug || p.id || '').trim().toLowerCase() === slug);
-      const prev = sorted[idx - 1];
-      const next = sorted[idx + 1];
-      postNav.innerHTML = `
-        <div class="post-nav-inner">
-          ${prev ? `<a href="/blog/${prev.slug || prev.id}" class="post-nav-link prev">← ${escHtml(prev.title)}</a>` : '<span></span>'}
-          ${next ? `<a href="/blog/${next.slug || next.id}" class="post-nav-link next">${escHtml(next.title)} →</a>` : '<span></span>'}
-        </div>
-      `;
-    }
+    renderPost(post, posts);
+  } catch (err) {
+    console.error('[Post] Failed to load post:', err);
+    showError('Failed to load post. <a href="/blog.html">Browse all posts</a>');
+  }
+}
+
+// ─── Post Renderer ───
+function renderPost(post, allPosts) {
+  // Hide loading, show content
+  if (els.loading) els.loading.style.display = 'none';
+  if (els.content) els.content.style.display = '';
+  if (els.error) els.error.style.display = 'none';
+
+  // Update document title
+  document.title = `${post.title} — ${SITE.name}`;
+
+  // Update meta tags
+  const description = post.excerpt || stripHtml(post.content || '').substring(0, 160);
+  const canonicalUrl = `${SITE.url}/blog/${post.slug}`;
+
+  if (els.ogTitle) els.ogTitle.content = post.title;
+  if (els.ogDesc) els.ogDesc.content = description;
+  if (els.ogUrl) els.ogUrl.content = canonicalUrl;
+  if (els.twitterTitle) els.twitterTitle.content = post.title;
+  if (els.twitterDesc) els.twitterDesc.content = description;
+  if (els.canonical) els.canonical.href = canonicalUrl;
+
+  // Render title
+  if (els.title) els.title.textContent = post.title;
+
+  // Render meta
+  if (els.meta) {
+    const dateStr = formatDate(post.date || post.createdAt);
+    const readTime = readingTime(post.content || '');
+    els.meta.innerHTML = `
+      <time datetime="${post.date || post.createdAt || ''}">${dateStr}</time>
+      <span aria-hidden="true">·</span>
+      <span>${readTime} min read</span>
+      ${post.author ? `<span aria-hidden="true">·</span><span>By ${escHtml(post.author)}</span>` : ''}
+    `;
   }
 
-  function showError(msg) {
-    document.title = 'Post Not Found | Engineering Log';
-    if (pageTitle) pageTitle.textContent = document.title;
-    if (titleEl) titleEl.textContent = 'Post Not Found';
-    if (contentEl) contentEl.innerHTML = `<p>⚠️ ${msg}</p><a href="/blog">← All entries</a>`;
-    if (breadcrumbTitle) breadcrumbTitle.textContent = 'Not found';
-    if (shareBar) shareBar.innerHTML = '';
-    if (postNav) postNav.innerHTML = '';
+  // Render body
+  if (els.body) {
+    els.body.innerHTML = post.content || '<p>No content available.</p>';
   }
 
-  function setMeta(selector, attr, value) {
-    const el = document.querySelector(selector);
-    if (el) el.setAttribute(attr, value);
+  // Render tags
+  if (els.tags && post.tags && post.tags.length > 0) {
+    els.tags.innerHTML = post.tags
+      .map(tag => `<span class="post-tag">${escHtml(tag)}</span>`)
+      .join('');
   }
-});
+
+  // Build TOC from headings
+  buildTOC();
+
+  // Render prev/next navigation
+  renderNav(allPosts, post);
+}
+
+// ─── Table of Contents ───
+function buildTOC() {
+  if (!els.toc || !els.body) return;
+
+  const headings = els.body.querySelectorAll('h2, h3');
+  if (headings.length === 0) {
+    els.toc.style.display = 'none';
+    return;
+  }
+
+  const tocList = document.createElement('ul');
+  tocList.className = 'toc-list';
+
+  headings.forEach((heading, index) => {
+    const id = heading.id || `section-${index}`;
+    heading.id = id;
+
+    const li = document.createElement('li');
+    li.className = heading.tagName === 'H3' ? 'toc-sub-item' : 'toc-item';
+    li.innerHTML = `<a href="#${id}">${escHtml(heading.textContent)}</a>`;
+    tocList.appendChild(li);
+  });
+
+  els.toc.innerHTML = '<h3 class="toc-title">Contents</h3>';
+  els.toc.appendChild(tocList);
+}
+
+// ─── Prev/Next Navigation ───
+function renderNav(allPosts, currentPost) {
+  if (!els.nav || !allPosts || allPosts.length === 0) return;
+
+  const sorted = [...allPosts].sort((a, b) => {
+    return new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0);
+  });
+
+  const idx = sorted.findIndex(p => p.id === currentPost.id || p.slug === currentPost.slug);
+
+  const prev = idx >= 0 && idx < sorted.length - 1 ? sorted[idx + 1] : null;
+  const next = idx > 0 ? sorted[idx - 1] : null;
+
+  els.nav.innerHTML = `
+    ${prev ? `
+      <a href="/blog/${prev.slug}" class="post-nav-link post-nav-prev">
+        <span class="post-nav-label">← Previous</span>
+        <span class="post-nav-title">${escHtml(prev.title)}</span>
+      </a>
+    ` : '<span></span>'}
+    ${next ? `
+      <a href="/blog/${next.slug}" class="post-nav-link post-nav-next">
+        <span class="post-nav-label">Next →</span>
+        <span class="post-nav-title">${escHtml(next.title)}</span>
+      </a>
+    ` : '<span></span>'}
+  `;
+}
+
+// ─── Error Handler ───
+function showError(message) {
+  if (els.loading) els.loading.style.display = 'none';
+  if (els.content) els.content.style.display = 'none';
+  if (els.error) {
+    els.error.style.display = '';
+    els.error.innerHTML = `
+      <div class="post-error-icon">⚠️</div>
+      <h2>Post Not Found</h2>
+      <p>${message}</p>
+    `;
+  }
+}
+
+// ─── Simple HTML stripper for meta description ───
+function stripHtml(html) {
+  if (!html) return '';
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+// ─── Initialize ───
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadPost);
+} else {
+  loadPost();
+}
