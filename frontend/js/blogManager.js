@@ -1,73 +1,102 @@
-export class BlogManager {
-  constructor(containerId, dataPath) {
-    this.container = document.getElementById(containerId);
-    this.dataPath = dataPath;
-  }
+/**
+ * Blog Manager — Home Page Preview
+ * Loads and renders latest 3 posts on the homepage
+ */
 
-  async init() {
+import { formatDate, stripHtml } from './helpers.js';
+
+const BlogManager = {
+  container: null,
+  fallback: null,
+
+  init() {
+    this.container = document.getElementById('home-blog-grid');
+    this.fallback = document.getElementById('home-blog-fallback');
+
     if (!this.container) return;
-    await this.fetchAndRender();
-  }
 
-  async fetchAndRender() {
+    this.loadPosts();
+  },
+
+  async loadPosts() {
     try {
-      const path = this.dataPath.startsWith('/') ? this.dataPath : `/${this.dataPath}`;
-      const res = await fetch(path);
+      const res = await fetch('/data/posts.json');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const posts = await res.json();
 
-      if (!posts || posts.length === 0) {
-        this.container.innerHTML =
-          '<p class="blog-empty">No entries published yet.</p>';
+      const data = await res.json();
+      // Defensive: handle both array and object with .posts
+      const posts = Array.isArray(data) ? data : data.posts || [];
+      const latest = posts
+        .sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0))
+        .slice(0, 3);
+
+      if (latest.length === 0) {
+        this.showFallback('No posts yet.');
         return;
       }
 
-      const latest = [...posts]
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 3);
-
-      this.container.innerHTML = latest.map(post => {
-        const plainText = this.#stripHtml(post.content || '');
-        const excerpt = plainText.split(/\s+/).slice(0, 20).join(' ') + '\u2026';
-
-        return `
-          <article class="blog-card reveal">
-            <span class="category-tag">${this.#escape(post.category || 'Engineering')}</span>
-            <h3 class="blog-card-title">${this.#escape(post.title || 'Untitled')}</h3>
-            <p class="blog-card-excerpt">${this.#escape(excerpt)}</p>
-            <a href="/blog/${this.#encodeSlug(post.slug)}" class="blog-card-read">
-              Read more \u2192
-            </a>
-          </article>
-        `;
-      }).join('');
-
+      this.render(latest);
     } catch (err) {
       console.error('[BlogManager] Failed to load posts:', err);
-      this.container.innerHTML =
-        '<p class="blog-empty">Could not load entries.</p>';
+      this.showFallback('Unable to load posts.');
     }
-  }
+  },
 
-  #stripHtml(html) {
-    if (!html) return '';
-    try {
-      return new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
-    } catch {
-      return html.replace(/<[^>]*>/g, '');
+  render(posts) {
+    if (!this.container) return;
+
+    this.container.innerHTML = '';
+    this.container.style.display = '';
+    if (this.fallback) this.fallback.style.display = 'none';
+
+    posts.forEach((post, index) => {
+      const card = document.createElement('article');
+      card.className = 'blog-article-card fade-in';
+      card.style.transitionDelay = `${index * 100}ms`;
+
+      const excerpt = post.excerpt
+        ? post.excerpt
+        : stripHtml(post.content || '').substring(0, 140) + '...';
+
+      card.innerHTML = `
+        <div class="blog-card-meta">
+          <time datetime="${post.date || post.createdAt || ''}">${formatDate(post.date || post.createdAt)}</time>
+        </div>
+        <h3 class="blog-card-title"><a href="/blog/${post.slug}">${this.escHtml(post.title)}</a></h3>
+        <p class="blog-card-excerpt">${this.escHtml(excerpt)}</p>
+        <a href="/blog/${post.slug}" class="blog-card-link">Read more →</a>
+      `;
+
+      this.container.appendChild(card);
+
+      requestAnimationFrame(() => {
+        card.classList.add('visible');
+      });
+    });
+  },
+
+  showFallback(message) {
+    if (this.container) this.container.style.display = 'none';
+    if (this.fallback) {
+      this.fallback.style.display = '';
+      const msgEl = this.fallback.querySelector('p');
+      if (msgEl) msgEl.textContent = message;
     }
-  }
+  },
 
-  #escape(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+  escHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
   }
+};
 
-  #encodeSlug(slug) {
-    return encodeURIComponent(String(slug));
-  }
+// Initialize
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => BlogManager.init());
+} else {
+  BlogManager.init();
 }
+
+export default BlogManager;
