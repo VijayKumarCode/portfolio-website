@@ -295,10 +295,11 @@ section {
   transition: background var(--transition-fast);
 }
 
-/* --- Mobile-first: show hamburger, hide desktop --- */
+/* Mobile-first: show hamburger, hide desktop */
 #desktop-nav {
   display: none;
 }
+
 #hamburger-nav {
   display: flex;           /* visible on mobile */
   align-items: center;
@@ -308,7 +309,6 @@ section {
   max-width: 1200px;
   margin: 0 auto;
 }
-
 /* The desktop nav stays hidden until larger screens */
 
 .logo-container {
