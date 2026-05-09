@@ -414,6 +414,12 @@ section {
   visibility: visible;
 }
 
+.menu-links.open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
 .menu-links a {
   display: block;
   padding: var(--space-3) var(--space-4);
