@@ -1400,3 +1400,13 @@ footer {
 .fade-in:nth-child(4) { transition-delay: 300ms; }
 .fade-in:nth-child(5) { transition-delay: 400ms; }
 .fade-in:nth-child(6) { transition-delay: 500ms; }
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+/* Keep the title underline aligned to the centred text */
+.section-header .section-title {
+  display: inline-block;
+}
