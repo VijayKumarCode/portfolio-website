@@ -78,10 +78,7 @@
   }
 
   #profile {
-    flex-direction: column-reverse;
-    text-align: center;
-    padding: calc(72px + var(--space-8)) var(--space-4) var(--space-12);
-    gap: var(--space-8);
+    flex-direction: column;
   }
 
   .hero-content {
@@ -89,7 +86,8 @@
   }
 
   .hero-photo-wrap {
-    order: -1;
+    order: -1;               /* moves photo above text */
+    margin-bottom: var(--space-8);
   }
 
   .hero-photo-frame {
