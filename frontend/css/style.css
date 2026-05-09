@@ -251,6 +251,8 @@ a:focus-visible {
 
 section {
   padding: var(--space-20) 0;
+  padding-left: var(--space-6);   /* ← new */
+  padding-right: var(--space-6);  /* ← new */
   position: relative;
 }
 
