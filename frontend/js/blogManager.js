@@ -3,7 +3,7 @@
  * Loads and renders latest 3 posts on the homepage
  */
 
-import { formatDate, stripHtml } from './helpers.js';
+import { formatDate, stripHtml } from '../src/utils/helpers.js';
 
 const BlogManager = {
   container: null,
