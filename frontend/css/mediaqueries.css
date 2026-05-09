@@ -211,8 +211,8 @@
   }
 
   .hero-photo-frame {
-    width: 180px;
-    height: 180px;
+    width: min(180px, 45vw);
+    height: auto; aspect-ratio: 1/1;
   }
 
   .hero-name {
@@ -269,8 +269,8 @@
 /* ─── 400px - 479px (Small Mobile) ─── */
 @media screen and (max-width: 400px) {
   .hero-photo-frame {
-    width: 160px;
-    height: 160px;
+    width: min(160px, 50vw);
+    height: auto; aspect-ratio: 1/1;
   }
 
   .hero-name {
@@ -299,8 +299,8 @@
 /* ─── 320px (Tiny Mobile) ─── */
 @media screen and (max-width: 320px) {
   .hero-photo-frame {
-    width: 140px;
-    height: 140px;
+    width: min(140px, 55vw);
+    height: auto; aspect-ratio: 1/1;
   }
 
   .about-pic-wrap {
