@@ -295,9 +295,12 @@ section {
   transition: background var(--transition-fast);
 }
 
-#desktop-nav,
-#hamburger-nav {
+/* --- Mobile-first: show hamburger, hide desktop --- */
+#desktop-nav {
   display: none;
+}
+#hamburger-nav {
+  display: flex;           /* visible on mobile */
   align-items: center;
   justify-content: space-between;
   height: 72px;
@@ -305,6 +308,8 @@ section {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+/* The desktop nav stays hidden until larger screens */
 
 .logo-container {
   display: flex;
