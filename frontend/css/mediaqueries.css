@@ -148,8 +148,8 @@
   }
 }
 
-/* ─── 641px+ (Tablet & Desktop) ─── */
-@media screen and (min-width: 641px) {
+  /* ─── 768px+ (Tablet & Desktop) ─── */
+@media screen and (min-width: 768px) {
   #desktop-nav {
     display: flex;
   }
@@ -157,6 +157,8 @@
     display: none;
   }
 }
+
+
 
 /* ─── 640px - 767px (Large Mobile) ─── */
 @media screen and (max-width: 640px) {
@@ -274,6 +276,16 @@
 
   .form-group {
     margin-bottom: var(--space-4);
+  }
+}
+
+/* ─── 641px+ (Tablet & Desktop) ─── */
+@media screen and (min-width: 641px) {
+  #desktop-nav {
+    display: flex;
+  }
+  #hamburger-nav {
+    display: none;
   }
 }
 
