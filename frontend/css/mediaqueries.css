@@ -148,6 +148,16 @@
   }
 }
 
+/* ─── 641px+ (Tablet & Desktop) ─── */
+@media screen and (min-width: 641px) {
+  #desktop-nav {
+    display: flex;
+  }
+  #hamburger-nav {
+    display: none;
+  }
+}
+
 /* ─── 640px - 767px (Large Mobile) ─── */
 @media screen and (max-width: 640px) {
   #desktop-nav {
@@ -193,6 +203,8 @@
     justify-content: center;
   }
 }
+
+
 
 /* ─── 480px - 639px (Mobile) ─── */
 @media screen and (max-width: 480px) {
