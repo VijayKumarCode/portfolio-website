@@ -23,6 +23,13 @@
   .contact-grid { gap: var(--space-8); }
 }
 
+@media screen and (max-width: 992px) {
+  .about-grid {
+    grid-template-columns: 1fr; /* Stacks only when screen gets too narrow */
+    justify-items: center;
+  }
+}
+
 /* ─── 769px - 1023px (Tablet) ─── */
 @media screen and (min-width: 769px) and (max-width: 1023px) {
   /* Desktop nav visible, hamburger hidden */

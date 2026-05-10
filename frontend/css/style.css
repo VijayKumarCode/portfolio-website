@@ -235,8 +235,12 @@ a:focus-visible {
 }
 
 section {
-  padding: var(--space-20) var(--space-6);
+  padding: var(--space-16) var(--space-6); /* Tightened vertical padding */
   position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  background: transparent !important; /* Forces removal of all backgrounds */
 }
 
 /* ─── Section Header (centered) ─── */
@@ -428,16 +432,15 @@ section {
 
 /* ─── Hero / Profile ─── */
 #profile {
-  min-height: 100vh;
+  min-height: auto; /* Changed from 100vh to fit content perfectly */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-16);
-  padding: calc(72px + var(--space-16)) var(--space-6) var(--space-16);
-  background: var(--gradient-hero);
-  position: relative;
-  overflow: hidden;
+  padding: calc(80px + var(--space-12)) var(--space-6) var(--space-12);
+  background: none !important;
+  width: 100%;
 }
+
 #profile::before {
   content: '';
   position: absolute;
@@ -603,21 +606,30 @@ section {
 #about { 
   background: var(--color-bg-secondary); 
 }
+
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: var(--space-12);
-  align-items: start;
+  /* FORCED SYMMETRY: repeat(2, 1fr) with minmax(0) prevents text from pushing the column wider */
+  grid-template-columns: repeat(2, minmax(0, 1fr)); 
+  /* ADEQUATE GAP: 4rem provides professional breathing room */
+  gap: var(--space-16); 
+  align-items: center; 
+  width: 100%;
 }
+
 .about-pic-wrap {
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--color-border);
-  aspect-ratio: 5/6;
-  max-height: 440px;
+  /* PERFECT FIT: ensures it scales exactly to the grid cell width */
+  aspect-ratio: 1 / 1; 
+  width: 100%; 
+  max-width: 100%; 
+  margin: 0; 
   background: var(--color-bg-tertiary);
   position: relative;
 }
+
 .about-pic-wrap::before {
   content: ''; 
   position: absolute; 
@@ -626,26 +638,35 @@ section {
   pointer-events: none; 
   z-index: 1;
 }
+
 .about-pic {
   width: 100%; 
   height: 100%;
-  object-fit: cover; object-position: center 20%;
+  object-fit: cover; 
+  object-position: center 20%;
   display: block;
   transition: transform var(--transition-slow);
 }
+
 .about-pic-wrap:hover .about-pic { 
   transform: scale(1.03); 
 }
-.about-content { 
-  display: flex; 
-  flex-direction: column; 
-  gap: var(--space-6); 
+
+/* ─── About Content & Cards ─── */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%; 
+  gap: var(--space-6);
 }
+
 .about-cards { 
   display: grid; 
   grid-template-columns: 1fr 1fr; 
   gap: var(--space-4); 
 }
+
 .about-card {
   background: var(--color-bg-elevated); 
   border: 1px solid var(--color-border);
@@ -653,30 +674,40 @@ section {
   padding: var(--space-6); 
   text-align: center;
   transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
 .about-card:hover { 
   border-color: var(--color-border-hover); 
   transform: translateY(-2px); 
 }
+
 .about-card-icon { 
   width: 32px; 
   height: 32px; 
   margin-bottom: var(--space-3); 
   opacity: 0.9; 
 }
+
 .about-card h3 { 
   font-size: var(--text-base); 
   margin-bottom: var(--space-1); 
 }
+
 .about-card p { 
   font-size: var(--text-sm); 
   color: var(--color-text-muted); 
 }
+
 .about-text { 
   font-size: var(--text-base); 
   line-height: 1.8; 
   color: var(--color-text-secondary); 
 }
+
 .about-text strong { 
   color: var(--color-text-primary); 
   font-weight: 600; 
@@ -689,7 +720,8 @@ section {
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* Equal columns here as well */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-8);
 }
 
@@ -697,7 +729,11 @@ section {
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-8);
+  /* Trimming padding to reduce the "bulky" look */
+  padding: var(--space-6) var(--space-8); 
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .skills-group-title {
