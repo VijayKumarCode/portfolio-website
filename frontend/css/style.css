@@ -241,37 +241,38 @@ section {
 
 /* ─── Section Header (centered) ─── */
 .section-header {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Ensures all flex children center perfectly */
+  text-align: center;  /* Centers actual text inside the children */
   margin-bottom: var(--space-12);
-}
-.section-header .section__text__p1 {
-  text-align: center;
-}
-.section-header .section-title {
-  display: inline-block;   /* keeps underline aligned */
-  margin: 0 auto var(--space-12) auto;
 }
 
 .section__text__p1 {
+  width: fit-content;
+  margin-inline: auto; /* Defensively centers the block box itself */
+  margin-bottom: var(--space-2);
+  color: var(--color-accent);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--color-accent);
-  margin-bottom: var(--space-2);
 }
 
 .section-title {
-  font-size: var(--text-3xl);
-  margin-bottom: var(--space-12);
   position: relative;
   display: inline-block;
+  margin-bottom: var(--space-12);
+  font-size: var(--text-3xl);
 }
+
+/* Accent Underline */
 .section-title::after {
   content: '';
   position: absolute;
   bottom: -8px;
-  left: 0;
+  left: 50%; /* Professionally centers the underline beneath the text */
+  transform: translateX(-50%);
   width: 60px;
   height: 3px;
   background: var(--gradient-accent);
@@ -1340,12 +1341,3 @@ footer {
   transition-delay: 500ms; 
 }
 
-.section-header {
-  text-align: center;
-  margin-bottom: var(--space-12);
-}
-
-/* Keep the title underline aligned to the centred text */
-.section-header .section-title {
-  display: inline-block;
-}
