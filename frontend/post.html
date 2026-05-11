@@ -1,133 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Engineering log post by Vijay Kumar." id="post-meta-desc" />
+  <meta name="robots" content="index, follow" />
+  <title>Engineering Log | Vijay Kumar</title>
 
-  <base href="/">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-  <title>Loading… | Engineering Log</title>
-  <meta name="description" content="Backend engineering articles by Vijay Kumar.">
-  <link rel="icon" type="image/png" href="assets/profilePic.png">
-  <link rel="canonical" href="https://vijaykumarcode.space/blog/">
-
-   <!-- Open Graph and Twitter Card metadata for better sharing -->
-   <meta property="og:type"          content="article">
-   <meta property="og:title"         content="Loading… | Engineering Log">
-   <meta property="og:description"   content="Backend engineering articles by Vijay Kumar.">
-   <meta property="og:url"           content="https://vijaykumarcode.space/blog/">
-   <meta name="twitter:title"        content="Loading… | Engineering Log">
-   <meta name="twitter:description"  content="Backend engineering articles by Vijay Kumar.">
-   <meta name="twitter:card"         content="summary_large_image">
-
-   <!-- Same fonts as main portfolio -->
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/blog.css">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/blog.css" />
+  <link rel="stylesheet" href="/css/mediaqueries.css" />
 </head>
+<body>
 
-<body class="single-post-page">
+  <nav class="nav nav--blog" aria-label="Site navigation">
+    <div class="nav__inner">
+      <a href="/blog" class="nav__back" aria-label="Back to Engineering Log">← Engineering Log</a>
+    </div>
+  </nav>
 
-  <header id="site-header" role="banner">
-    <nav id="blog-nav" aria-label="Post navigation">
-      <a href="/" class="logo-container" aria-label="Back to portfolio">
-        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img">
-      </a>
-      <div class="blog-nav-right">
-        <a href="/blog" class="nav-back">← All entries</a>
-      </div>
-    </nav>
-  </header>
+  <main id="main-content" class="post-page">
 
-  <main>
-    <article class="post-wrap" id="post-article">
+    <!-- Loading state -->
+    <div id="post-loading" class="blog-state blog-state--loading" aria-label="Loading post">
+      <div class="skeleton-card skeleton-card--post"></div>
+    </div>
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <ol role="list">
-          <li><a href="/blog">Engineering Log</a></li>
-          <li aria-hidden="true">/</li>
-          <li id="breadcrumb-title" aria-current="page">Loading…</li>
-        </ol>
-      </nav>
+    <!-- Post container — hidden by default -->
+    <article id="post-container" class="post hidden" aria-labelledby="post-title">
 
-      <!-- Post header -->
-      <header class="post-header">
-        <span class="category-tag" id="post-category"></span>
-        <h1 class="post-title" id="post-title"></h1>
-        <div class="post-meta" aria-label="Post metadata">
-          <span class="post-meta-author">
-            <img src="assets/profilePic.png" alt="" class="post-avatar" aria-hidden="true">
-            Vijay Kumar
-          </span>
-          <span class="post-meta-sep" aria-hidden="true">·</span>
-          <time id="post-date"></time>
-          <span class="post-meta-sep" aria-hidden="true">·</span>
-          <span id="post-read-time"></span>
+      <header class="post__header">
+        <div class="post__meta" id="post-meta">
+          <span id="post-category" class="post__category"></span>
+          <span id="post-date"     class="post__date"></span>
+          <span id="post-read-time" class="post__read-time"></span>
         </div>
-
-        <!--
-          SHARE BAR — injected here, between post-meta and the divider.
-          post.js populates #share-bar with correct URL + title after
-          the post is found. Platform links open in a new tab.
-        -->
-        <div class="share-bar" id="share-bar" aria-label="Share this article">
-          <span class="share-label">Share</span>
-          <!-- Buttons populated by post.js with correct slug URL -->
-        </div>
+        <h1 id="post-title" class="post__title"></h1>
+        <div id="post-tags" class="post__tags"></div>
       </header>
 
-      <!-- Divider -->
-      <div class="post-divider" aria-hidden="true"></div>
+      <div id="post-body" class="post__body prose"></div>
 
-      <!-- Article body -->
-      <div class="post-content" id="post-content" role="main"></div>
-
-      <!-- Divider -->
-      <div class="post-divider" aria-hidden="true"></div>
-
-      <!-- Prev / Next -->
-      <nav class="post-navigation" id="post-navigation" aria-label="Navigate between posts"></nav>
-
-      <!-- Author -->
-      <aside class="author-box" aria-label="About the author">
-        <div class="author-box-inner">
-          <img src="assets/profilePic.png"
-               alt="Vijay Kumar"
-               class="author-avatar"
-               width="52" height="52">
-          <div class="author-info">
-            <p class="author-name">Vijay Kumar</p>
-            <p class="author-bio">
-              Backend engineer building real-time systems with Java 17 and Spring Boot 3.
-              Currently shipping
-              <a href="https://nexusgame.space" target="_blank" rel="noopener">Nexus</a>
-              and writing about the problems I run into.
-            </p>
-            <div class="author-links">
-              <a href="https://github.com/VijayKumarCode" target="_blank" rel="noopener">GitHub</a>
-              <a href="https://linkedin.com/in/vijaykumarcode" target="_blank" rel="noopener">LinkedIn</a>
-            </div>
-          </div>
-        </div>
-      </aside>
+      <footer class="post__footer">
+        <a href="/blog" class="btn btn--outline">← Back to Log</a>
+      </footer>
 
     </article>
+
+    <!-- Not found state — hidden by default -->
+    <div id="post-not-found" class="blog-state blog-state--empty hidden" role="status">
+      <span class="blog-state__icon" aria-hidden="true">🔍</span>
+      <h1 class="blog-state__title">Post Not Found</h1>
+      <p class="blog-state__body">This entry doesn't exist or has been moved.</p>
+      <a href="/blog" class="btn btn--outline">← Back to Log</a>
+    </div>
+
+    <!-- Error state — hidden by default -->
+    <div id="post-error" class="blog-state blog-state--error hidden" role="alert">
+      <span class="blog-state__icon" aria-hidden="true">⚡</span>
+      <h2 class="blog-state__title">Failed to Load Post</h2>
+      <p class="blog-state__body">The post is temporarily unavailable.</p>
+      <button id="post-retry" class="blog-state__retry">Retry</button>
+    </div>
+
   </main>
 
-  <footer class="blog-footer" role="contentinfo">
-    <div class="blog-footer-inner">
-      <p class="footer-copy">© 2026 Vijay Kumar</p>
-      <nav aria-label="Footer links">
-        <ul role="list">
-          <li><a href="/">Portfolio</a></li>
-          <li><a href="/blog">All entries</a></li>
-        </ul>
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__copy">© 2026 Vijay Kumar</span>
+      <nav class="footer__links" aria-label="Footer links">
+        <a href="/" class="footer__link">Portfolio</a>
+        <a href="https://github.com/VijayKumarCode" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a>
       </nav>
     </div>
   </footer>
