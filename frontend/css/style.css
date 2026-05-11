@@ -235,12 +235,11 @@ a:focus-visible {
 }
 
 section {
-  padding: var(--space-16) var(--space-6); /* Tightened vertical padding */
+  padding: var(--space-16) var(--space-6);
   position: relative;
   width: 100%;
   max-width: 1200px;
-  margin-inline: auto;
-  background: transparent !important; /* Forces removal of all backgrounds */
+  margin-inline: auto; 
 }
 
 /* ─── Section Header (centered) ─── */
@@ -432,13 +431,15 @@ section {
 
 /* ─── Hero / Profile ─── */
 #profile {
-  min-height: auto; /* Changed from 100vh to fit content perfectly */
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-16);
   padding: calc(80px + var(--space-12)) var(--space-6) var(--space-12);
-  background: none !important;
-  width: 100%;
+  /* background: var(--gradient-hero); */
+  position: relative;
+  overflow: hidden;
 }
 
 #profile::before {
@@ -602,18 +603,18 @@ section {
   transform: scale(1.03); 
 }
 
-/* ─── About ─── */
+/* ─── About ─── 
 #about { 
   background: var(--color-bg-secondary); 
-}
+}*/
 
 .about-grid {
-  display: grid;
-  /* FORCED SYMMETRY: repeat(2, 1fr) with minmax(0) prevents text from pushing the column wider */
-  grid-template-columns: repeat(2, minmax(0, 1fr)); 
-  /* ADEQUATE GAP: 4rem provides professional breathing room */
-  gap: var(--space-16); 
-  align-items: center; 
+ display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-12);
+  align-items: stretch;
+  max-width: 1000px;
+  margin-inline: auto;
   width: 100%;
 }
 
@@ -621,11 +622,8 @@ section {
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--color-border);
-  /* PERFECT FIT: ensures it scales exactly to the grid cell width */
-  aspect-ratio: 1 / 1; 
-  width: 100%; 
-  max-width: 100%; 
-  margin: 0; 
+  aspect-ratio: 1 / 1;
+  width: 100%;
   background: var(--color-bg-tertiary);
   position: relative;
 }
@@ -656,22 +654,27 @@ section {
 .about-content {
   display: flex;
   flex-direction: column;
+  /* CRITICAL FIX: 100% height makes the flex container fill
+     the stretched grid cell. justify-content: center then
+     centers the cards+text within that full height. */
+  height: 100%;
   justify-content: center;
-  height: 100%; 
+  /* Increased from space-4 to space-6 so content breathes
+     inside the now-taller column. */
   gap: var(--space-6);
 }
 
 .about-cards { 
   display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  gap: var(--space-4); 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: var(--space-3); /* Reduced gap between cards */
 }
 
 .about-card {
+  padding: var(--space-4); /* Reduced internal padding to shrink card size */
   background: var(--color-bg-elevated); 
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg); 
-  padding: var(--space-6); 
   text-align: center;
   transition: all var(--transition-fast);
   display: flex;
@@ -713,10 +716,10 @@ section {
   font-weight: 600; 
 }
 
-/* ─── Skills Section ─── */
+/* ─── Skills Section ─── 
 #skills {
   background: var(--color-bg-primary);
-}
+}*/
 
 .skills-grid {
   display: grid;
@@ -787,10 +790,10 @@ section {
   border-radius: var(--radius-full);
 }
 
-/* ─── Projects Section ─── */
+/* ─── Projects Section ─── 
 #projects {
   background: var(--color-bg-secondary);
-}
+}*/
 
 .project-card {
   background: var(--color-bg-primary);
@@ -943,10 +946,10 @@ section {
   font-size: var(--text-sm);
 }
 
-/* ─── Blog Preview Section ─── */
+/* ─── Blog Preview Section ─── 
 #blog {
   background: var(--color-bg-primary);
-}
+}*/
 
 .blog-grid {
   display: grid;
@@ -1123,10 +1126,10 @@ section {
   transform: translateX(4px);
 }
 
-/* ─── Contact Section ─── */
+/* ─── Contact Section ─── 
 #contact {
   background: var(--color-bg-secondary);
-}
+}*/
 
 .contact-grid {
   display: grid;
