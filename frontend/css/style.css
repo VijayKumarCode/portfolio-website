@@ -437,7 +437,7 @@ section {
   justify-content: center;
   gap: var(--space-16);
   padding: calc(80px + var(--space-12)) var(--space-6) var(--space-12);
-  background: var(--gradient-hero);
+  /*background: var(--gradient-hero);*/
   position: relative;
   overflow: hidden;
 }

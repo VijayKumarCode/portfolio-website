@@ -1,159 +1,170 @@
-/**
- * post.js
- * Renders a single blog post on post.html.
- * Works with Vercel clean URLs: /blog/:slug
- *
- * Slug resolution order:
- *   1. URL path segment (for /blog/my-slug clean URLs)
- *   2. ?slug= query param (fallback for direct .html access)
- */
+'use strict';
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+import { SITE } from '../src/config/config.js';
+import { formatDate, readingTime, escHtml } from '../src/utils/helpers.js';
 
-function escHtml(str) {
-  if (typeof str !== 'string') return String(str ?? '');
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function show(el) { if (el) el.classList.remove('hidden'); }
-function hide(el) { if (el) el.classList.add('hidden'); }
-
-/**
- * Resolves the post slug from the current URL.
- * Handles both /blog/my-slug (Vercel clean URL) and ?slug=my-slug.
- * @returns {string|null}
- */
-function resolveSlug() {
-  // 1. Check query param first (direct .html access)
-  const params = new URLSearchParams(window.location.search);
-  if (params.has('slug')) return params.get('slug');
-
-  // 2. Extract from URL path: /blog/my-slug → 'my-slug'
-  const segments = window.location.pathname.split('/').filter(Boolean);
-  // Path is /blog/:slug so slug is at index 1
-  if (segments.length >= 2 && segments[0] === 'blog') {
-    return segments[1];
-  }
-
-  return null;
-}
-
-// ─── Fetch ──────────────────────────────────────────────────────────────────
-
-async function fetchPosts() {
-  const res = await fetch('/data/posts.json', {
-    cache: 'no-cache',
-    headers: { Accept: 'application/json' },
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  return Array.isArray(data) ? data : (data.posts ?? []);
-}
-
-// ─── Render ─────────────────────────────────────────────────────────────────
-
-function formatDate(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-}
-
-function renderPost(post) {
-  const els = {
-    container:  document.getElementById('post-container'),
-    title:      document.getElementById('post-title'),
-    meta:       document.getElementById('post-meta'),
-    category:   document.getElementById('post-category'),
-    date:       document.getElementById('post-date'),
-    readTime:   document.getElementById('post-read-time'),
-    tags:       document.getElementById('post-tags'),
-    body:       document.getElementById('post-body'),
-    loading:    document.getElementById('post-loading'),
-    error:      document.getElementById('post-error'),
-    notFound:   document.getElementById('post-not-found'),
-  };
-
-  hide(els.loading);
-  hide(els.error);
-  hide(els.notFound);
-
-  // Update document title
-  document.title = `${post.title} | Vijay Kumar`;
-
-  // Update meta for SEO
-  const descMeta = document.querySelector('meta[name="description"]');
-  if (descMeta) descMeta.setAttribute('content', post.excerpt);
-
-  // Populate fields
-  if (els.title)    els.title.textContent   = post.title;
-  if (els.category) els.category.textContent = post.category;
-  if (els.date)     els.date.textContent    = formatDate(post.date);
-  if (els.readTime) els.readTime.textContent = post.readTime;
-
-  // Tags
-  if (els.tags && post.tags) {
-    els.tags.innerHTML = post.tags
-      .map(t => `<span class="post-tag">${escHtml(t)}</span>`)
-      .join('');
-  }
-
-  // Body — post.content is trusted HTML authored in posts.json
-  // Only inject content from your own data file, never from user input
-  if (els.body) els.body.innerHTML = post.content;
-
-  show(els.container);
-}
-
-// ─── Init ───────────────────────────────────────────────────────────────────
-
-async function init() {
-  const els = {
-    loading:  document.getElementById('post-loading'),
-    error:    document.getElementById('post-error'),
-    notFound: document.getElementById('post-not-found'),
-    container: document.getElementById('post-container'),
-  };
-
-  // Show loading, hide all else
-  show(els.loading);
-  hide(els.error);
-  hide(els.notFound);
-  hide(els.container);
-
-  const slug = resolveSlug();
+document.addEventListener('DOMContentLoaded', async () => {
+  const slug = getSlugFromUrl();
+  const postWrap = document.querySelector('.post-wrap');
+  const postNav = document.querySelector('.post-navigation');
 
   if (!slug) {
-    hide(els.loading);
-    show(els.notFound);
+    showError(postWrap, 'Post not found. Invalid URL.');
+    document.title = 'Not Found | Engineering Log';
+    return;
+  }
+
+  if (!postWrap) {
+    console.error('[post.js] .post-wrap not found in DOM');
     return;
   }
 
   try {
-    const posts = await fetchPosts();
+    const res = await fetch('/data/posts.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // CRITICAL FIX: Handle both plain array and { posts: [...] } wrapper
+    const posts = Array.isArray(data) ? data : (data.posts || []);
     const post = posts.find(p => p.slug === slug);
 
     if (!post) {
-      hide(els.loading);
-      show(els.notFound);
+      showError(postWrap, 'Post not found.');
+      document.title = 'Not Found | Engineering Log';
       return;
     }
 
-    renderPost(post);
+    renderPost(postWrap, post);
+    renderNav(postNav, posts, post);
+    updateMeta(post);
+    updateShareButtons(post);
 
   } catch (err) {
-    console.error('[post.js] Failed to load post:', err);
-    hide(els.loading);
-    show(els.error);
+    console.error('[post.js]', err);
+    showError(postWrap, 'Could not load post. Please refresh.');
+  }
+});
 
-    const retryBtn = document.getElementById('post-retry');
-    if (retryBtn) {
-      retryBtn.addEventListener('click', () => init(), { once: true });
+function getSlugFromUrl() {
+  const path = window.location.pathname;
+  // FIX: Support both /blog/:slug and /blog/:slug/ trailing slash
+  const match = path.match(/\/blog\/([^/]+)\/?$/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function renderPost(container, post) {
+  const titleEl = container.querySelector('.post-title');
+  const contentEl = container.querySelector('.post-content');
+  const metaEl = container.querySelector('.post-meta');
+  const categoryEl = container.querySelector('.category-tag');
+
+  if (categoryEl) categoryEl.textContent = post.category || 'Engineering';
+  if (titleEl) titleEl.textContent = post.title || 'Untitled';
+  if (metaEl) {
+    const readTime = post.readTime || readingTime(post.content || '');
+    metaEl.innerHTML = `
+      <span class="post-meta-author">
+        <img src="/assets/avatar.jpg" alt="Vijay Kumar" class="post-avatar" loading="lazy">
+        <span>Vijay Kumar</span>
+      </span>
+      <span class="post-meta-sep" aria-hidden="true">·</span>
+      <time datetime="${post.date || ''}">${formatDate(post.date)}</time>
+      <span class="post-meta-sep" aria-hidden="true">·</span>
+      <span>${escHtml(readTime)}</span>
+    `;
+  }
+  if (contentEl) {
+    // FIX: Decode escaped newlines for proper HTML rendering
+    const decoded = (post.content || '')
+      .replace(/\\\\n/g, '\n')
+      .replace(/\\n/g, '\n');
+    contentEl.innerHTML = decoded
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+    if (!contentEl.innerHTML.startsWith('<')) {
+      contentEl.innerHTML = `<p>${contentEl.innerHTML}</p>`;
     }
   }
 }
 
-document.addEventListener('DOMContentLoaded', init);
+function renderNav(container, posts, currentPost) {
+  if (!container) return;
+  const sorted = [...posts].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+  const idx = sorted.findIndex(p => p.id === currentPost.id);
+
+  const prev = sorted[idx + 1];
+  const next = sorted[idx - 1];
+
+  container.innerHTML = `
+    <div class="post-nav-inner">
+      ${prev ? `
+        <a href="/blog/${prev.slug}" class="post-nav-link post-nav-prev" rel="prev">
+          <span aria-hidden="true">←</span> ${escHtml(prev.title)}
+        </a>
+      ` : '<span></span>'}
+      ${next ? `
+        <a href="/blog/${next.slug}" class="post-nav-link post-nav-next" rel="next">
+          ${escHtml(next.title)} <span aria-hidden="true">→</span>
+        </a>
+      ` : '<span></span>'}
+    </div>
+  `;
+}
+
+function updateMeta(post) {
+  document.title = `${escHtml(post.title)} | Engineering Log`;
+  const desc = stripHtml(post.content || '').slice(0, 160);
+  updateMetaTag('description', desc);
+  updateMetaTag('og:title', post.title);
+  updateMetaTag('og:description', desc);
+  updateMetaTag('og:url', `${SITE.portfolio}/blog/${post.slug}`);
+  updateMetaTag('twitter:title', post.title);
+  updateMetaTag('twitter:description', desc);
+}
+
+function updateMetaTag(property, content) {
+  let el = document.querySelector(`meta[property="${property}"], meta[name="${property}"]`);
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute(property.startsWith('og:') ? 'property' : 'name', property);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', content);
+}
+
+function updateShareButtons(post) {
+  const url = encodeURIComponent(`${SITE.portfolio}/blog/${post.slug}`);
+  const text = encodeURIComponent(post.title);
+
+  document.querySelectorAll('.share-btn--x').forEach(btn => {
+    btn.href = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+  });
+  document.querySelectorAll('.share-btn--linkedin').forEach(btn => {
+    btn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+  });
+  document.querySelectorAll('.share-btn--whatsapp').forEach(btn => {
+    btn.href = `https://wa.me/?text=${text}%20${url}`;
+  });
+  document.querySelectorAll('.share-btn--email').forEach(btn => {
+    btn.href = `mailto:?subject=${text}&body=${url}`;
+  });
+}
+
+function showError(container, message) {
+  if (!container) return;
+  container.innerHTML = `
+    <div class="post-error">
+      <h2>${escHtml(message)}</h2>
+      <p><a href="/blog">← Back to all posts</a></p>
+    </div>
+  `;
+}
+
+function stripHtml(html) {
+  if (!html) return '';
+  try {
+    return new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
+  } catch {
+    return html.replace(/<[^>]*>/g, '');
+  }
+}

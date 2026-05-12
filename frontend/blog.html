@@ -1,123 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Engineering logs on Java, Spring Boot, DSA, and backend systems by Vijay Kumar." />
-  <meta name="robots" content="index, follow" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Engineering Log | Vijay Kumar</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-
-  <!-- Stylesheets — root-relative paths, safe for Vercel clean URLs -->
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/blog.css" />
-  <link rel="stylesheet" href="/css/mediaqueries.css" />
-
-  <!-- Canonical -->
-  <link rel="canonical" href="https://vijaykumarcode.space/blog" />
+  <meta name="description" content="Practical notes on Java, Spring Boot, DSA, and backend systems. Things I built, broke, and fixed.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/blog.css">
+  <link rel="stylesheet" href="css/mediaqueries.css">
 </head>
 <body>
+  <a href="#main-content" id="skip-link">Skip to content</a>
 
-  <!-- ── NAV ─────────────────────────────────────────────────────────────── -->
-  <nav class="nav nav--blog" aria-label="Site navigation">
-    <div class="nav__inner">
-      <a href="/" class="nav__back" aria-label="Back to portfolio">← Portfolio</a>
-    </div>
-  </nav>
-
-  <!-- ── MAIN ────────────────────────────────────────────────────────────── -->
-  <main id="main-content" class="blog-page">
-
-    <!-- Page header -->
-    <header class="blog-header">
-      <p class="blog-header__label">Writing</p>
-      <h1 class="blog-header__title">Engineering Log</h1>
-      <p class="blog-header__subtitle">
-        Practical notes on Java, Spring Boot, DSA, and backend systems.<br />
-        Things I built, broke, and fixed.
-      </p>
-    </header>
-
-    <!-- Filters -->
-    <section class="blog-filters" aria-label="Filter posts by category">
-      <div class="blog-filters__inner">
-        <button class="filter-btn active" data-category="all" aria-pressed="true">All</button>
-        <button class="filter-btn" data-category="Architecture" aria-pressed="false">Architecture</button>
-        <button class="filter-btn" data-category="Backend" aria-pressed="false">Backend</button>
-        <button class="filter-btn" data-category="DevOps" aria-pressed="false">DevOps</button>
-        <button class="filter-btn" data-category="DSA" aria-pressed="false">DSA</button>
+  <header id="site-header">
+    <nav id="blog-nav" aria-label="Blog navigation">
+      <a href="/" class="logo-container" aria-label="Vijay Kumar home">
+        <span>Vijay Kumar</span>
+      </a>
+      <div class="blog-nav-right">
+        <a href="/" class="nav-back">← Back to Portfolio</a>
       </div>
-      <!-- Search -->
-      <div class="blog-search">
-        <label for="blog-search" class="sr-only">Search posts</label>
-        <input
-          type="search"
-          id="blog-search"
-          class="blog-search__input"
-          placeholder="Search entries…"
-          autocomplete="off"
-          spellcheck="false"
-        />
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="blog-hero" aria-labelledby="blog-hero-title">
+      <div class="blog-hero-inner">
+        <p class="blog-eyebrow">Engineering Log</p>
+        <h1 id="blog-hero-title" class="blog-hero-title">Writing</h1>
+        <p class="blog-hero-sub">Practical notes on Java, Spring Boot, DSA, and backend systems. Things I built, broke, and fixed.</p>
       </div>
     </section>
 
-    <!-- Content area -->
-    <section class="blog-content" aria-live="polite" aria-atomic="true">
+    <section class="blog-content-section" aria-label="Blog posts">
+      <div class="blog-list-wrap">
+        <div class="blog-filter-bar">
+          <input
+            type="search"
+            id="blog-search"
+            class="blog-search-input"
+            placeholder="Search articles..."
+            aria-label="Search blog posts"
+          />
+          <div id="blog-filter-tags" class="blog-filter-tags">
+            <button class="filter-tag active" data-tag="all">All</button>
+          </div>
+        </div>
 
-      <!-- Loading state — shown by default, hidden via JS after fetch -->
-      <div id="blog-loading" class="blog-state blog-state--loading" aria-label="Loading posts">
-        <div class="skeleton-card"></div>
-        <div class="skeleton-card"></div>
-        <div class="skeleton-card"></div>
+        <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
+          <article class="blog-skeleton-card">
+            <div class="sk-tag"></div>
+            <div class="sk-title"></div>
+            <div class="sk-body"></div>
+            <div class="sk-link"></div>
+          </article>
+          <article class="blog-skeleton-card">
+            <div class="sk-tag"></div>
+            <div class="sk-title"></div>
+            <div class="sk-body"></div>
+            <div class="sk-link"></div>
+          </article>
+          <article class="blog-skeleton-card">
+            <div class="sk-tag"></div>
+            <div class="sk-title"></div>
+            <div class="sk-body"></div>
+            <div class="sk-link"></div>
+          </article>
+        </div>
+
+        <div id="blog-container" class="blog-grid"></div>
+
+        <div id="blog-empty" class="blog-empty-state">
+          <div class="blog-empty-icon">📝</div>
+          <h3>No posts found</h3>
+          <p>Try adjusting your search or filter criteria.</p>
+        </div>
+
+        <div id="blog-error" class="blog-error-state">
+          <div class="blog-error-icon">⚠️</div>
+          <h3>Unable to load posts</h3>
+          <p>Something went wrong while fetching the blog posts. Please try again later.</p>
+        </div>
+
+        <div class="blog-footer-link">
+          <button id="load-more-btn" class="btn btn-ghost btn-blog-all" style="display:none;">
+            Load more <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
-
-      <!-- Post grid — hidden by default -->
-      <div id="blog-grid" class="blog-grid hidden" aria-label="Blog posts"></div>
-
-      <!-- Empty state — hidden by default -->
-      <div id="blog-empty" class="blog-state blog-state--empty hidden" role="status">
-        <span class="blog-state__icon" aria-hidden="true">📝</span>
-        <h2 class="blog-state__title">No entries published yet.</h2>
-        <p class="blog-state__body">Engineering logs are in progress. Check back soon.</p>
-      </div>
-
-      <!-- Error state — hidden by default -->
-      <div id="blog-error" class="blog-state blog-state--error hidden" role="alert">
-        <span class="blog-state__icon" aria-hidden="true">⚡</span>
-        <h2 class="blog-state__title">Failed to Load Posts</h2>
-        <p class="blog-state__body">The engineering log is temporarily unavailable.</p>
-        <button id="blog-retry" class="blog-state__retry">Retry</button>
-      </div>
-
     </section>
-
-    <!-- Load more — hidden by default, shown by JS when more posts exist -->
-    <div class="blog-load-more">
-      <button id="load-more-btn" class="btn btn--outline hidden" aria-label="Load more entries">
-        Load more entries
-      </button>
-    </div>
-
   </main>
 
-  <!-- ── FOOTER ───────────────────────────────────────────────────────────── -->
-  <footer class="footer">
-    <div class="footer__inner">
-      <span class="footer__copy">© 2026 Vijay Kumar</span>
-      <nav class="footer__links" aria-label="Footer links">
-        <a href="/" class="footer__link">Portfolio</a>
-        <a href="https://github.com/VijayKumarCode" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a>
+  <footer class="blog-footer">
+    <div class="blog-footer-inner">
+      <p class="footer-copy">© 2026 Vijay Kumar. All rights reserved.</p>
+      <nav aria-label="Footer navigation">
+        <ul>
+          <li><a href="/">Portfolio</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="https://github.com/VijayKumarCode" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        </ul>
       </nav>
     </div>
   </footer>
 
-  <!-- ── SCRIPTS ──────────────────────────────────────────────────────────── -->
-  <!-- Root-relative path: safe for /blog clean URL via Vercel rewrite -->
-  <script type="module" src="/js/blog.js"></script>
-
+  <script type="module" src="js/blog.js"></script>
 </body>
 </html>

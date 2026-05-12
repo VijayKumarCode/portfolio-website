@@ -484,3 +484,133 @@
 .blog-footer-inner nav a:hover {
   color: var(--color-accent);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   BLOG.CSS FIXES — Grid, Responsive, Accessibility
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Blog Grid Layout (CRITICAL FIX) ───────────────────────── */
+#blog-container,
+#blog-container-skeleton {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  width: 100%;
+}
+
+#blog-container .blog-article-card,
+#blog-container-skeleton .blog-skeleton-card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ── State Visibility Fixes ───────────────────────────────── */
+#blog-empty,
+#blog-error {
+  display: none;
+}
+
+/* ── Load More Button ─────────────────────────────────────── */
+.blog-footer-link {
+  text-align: center;
+  margin-top: var(--space-10);
+}
+
+/* ── Responsive Blog Grid ─────────────────────────────────── */
+@media screen and (max-width: 1024px) {
+  #blog-container,
+  #blog-container-skeleton {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #blog-container,
+  #blog-container-skeleton {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .blog-search-input {
+    min-width: 100%;
+  }
+
+  .blog-hero {
+    padding: var(--space-12) var(--space-4) var(--space-8);
+  }
+
+  .blog-hero-title {
+    font-size: var(--text-2xl);
+  }
+
+  .blog-content-section {
+    padding: var(--space-8) var(--space-4) var(--space-12);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .blog-article-card {
+    padding: var(--space-4);
+  }
+
+  .blog-card-title {
+    font-size: var(--text-lg);
+  }
+
+  .blog-card-excerpt {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ── Post Page Responsive ─────────────────────────────────── */
+@media screen and (max-width: 768px) {
+  .post-wrap {
+    padding: calc(72px + var(--space-4)) var(--space-4) var(--space-8);
+  }
+
+  .post-title {
+    font-size: var(--text-2xl);
+  }
+
+  .post-nav-inner {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .post-nav-link {
+    font-size: var(--text-xs);
+  }
+
+  .author-box-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .share-bar {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}
+
+/* ── Accessibility Focus States ───────────────────────────── */
+.filter-tag:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.blog-card-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.blog-search-input:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+}
