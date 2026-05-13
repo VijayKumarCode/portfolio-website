@@ -5,7 +5,7 @@
       "destination": "/blog.html"
     },
     {
-      "source": "/blog/:slug",
+      "source": "/blog/(.*)",
       "destination": "/post.html"
     },
     {
@@ -89,6 +89,6 @@
       ]
     }
   ],
-  "cleanUrls": true,
+  "cleanUrls": false,
   "trailingSlash": false
 }
