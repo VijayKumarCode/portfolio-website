@@ -1,6 +1,6 @@
 'use strict';
 
-import { formatDate, readingTime, escHtml } from '../src/utils/helpers.js';
+import { formatDate, escHtml } from '../src/utils/helpers.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const slug = getSlugFromUrl();
@@ -40,12 +40,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    // Convert raw \n to HTML paragraphs
+    const htmlContent = convertNewlinesToHtml(post.content || '');
+
     // Render post
     if (categoryEl) categoryEl.textContent = post.category || 'Engineering';
     if (dateEl)     dateEl.textContent = formatDate(post.date);
-    if (readTimeEl) readTimeEl.textContent = post.readTime || readingTime(post.content || '');
+    if (readTimeEl) readTimeEl.textContent = post.readTime || estimateReadingTime(post.content || '');
     if (titleEl)    titleEl.textContent = post.title || 'Untitled';
-    if (bodyEl)     bodyEl.innerHTML = post.content || '';
+    if (bodyEl)     bodyEl.innerHTML = htmlContent;
 
     if (tagsEl && post.tags) {
       tagsEl.innerHTML = post.tags.map(t =>
@@ -84,6 +87,21 @@ function getSlugFromUrl() {
   // Support /blog/:slug and /blog/:slug/
   const match = path.match(/\/blog\/([^/]+)\/?$/);
   return match ? decodeURIComponent(match[1]) : null;
+}
+
+function convertNewlinesToHtml(content) {
+  if (!content) return '';
+  // Replace double newlines with paragraph breaks
+  return content
+    .replace(/\\n\\n/g, '</p><p>')
+    .replace(/\\n/g, '<br>');
+}
+
+function estimateReadingTime(content) {
+  const text = content.replace(/<[^>]*>/g, '').replace(/\\n/g, ' ');
+  const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min read`;
 }
 
 function updateMetaDescription(post) {

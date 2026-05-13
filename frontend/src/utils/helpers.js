@@ -15,3 +15,16 @@ export function escHtml(str) {
   div.appendChild(document.createTextNode(str));
   return div.innerHTML;
 }
+
+/**
+ * Estimate reading time from HTML content
+ * @param {string} content - HTML content
+ * @returns {string} - "X min read"
+ */
+export function readingTime(content) {
+  if (!content) return '1 min read';
+  const text = stripHtml(content);
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / 200);
+  return `${minutes} min read`;
+}
