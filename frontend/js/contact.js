@@ -3,7 +3,7 @@
  * Handles validation, submission, and user feedback
  */
 
-import { API_ENDPOINTS } from '../src/config/config.js';
+import { CONTACT_ENDPOINT } from '../src/config/config.js';
 import { sanitizeInput } from '../src/utils/helpers.js';
 
 const ContactForm = {
@@ -99,7 +99,7 @@ const ContactForm = {
 
     try {
       const result = await this.submitWithTimeout(data, 15000);
-      this.showStatus('Message sent successfully! I\'ll get back to you soon.', 'success');
+      this.showStatus("Message sent successfully! I'll get back to you soon.", 'success');
       this.form.reset();
     } catch (err) {
       console.error('[Contact] Submission failed:', err);
@@ -117,7 +117,7 @@ const ContactForm = {
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
     try {
-      const response = await fetch(API_ENDPOINTS.contact, {
+      const response = await fetch(CONTACT_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
