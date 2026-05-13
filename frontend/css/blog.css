@@ -40,7 +40,7 @@
 /* ── Blog hero ─────────────────────────────────────────────── */
 .blog-hero {
   border-bottom: 1px solid var(--color-border);
-  padding: var(--space-16) var(--space-8) var(--space-12);
+   padding-top: calc(72px + var(--space-12));
 }
 
 .blog-eyebrow {
@@ -839,6 +839,10 @@
 @media screen and (max-width: 768px) {
   .post-page {
     padding: calc(72px + var(--space-4)) var(--space-4) var(--space-8);
+  }
+
+   .blog-hero {
+    padding-top: calc(72px + var(--space-8));
   }
 
   .post__title {
