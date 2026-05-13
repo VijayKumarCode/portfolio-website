@@ -6,7 +6,7 @@
     },
     {
       "source": "/blog/:slug",
-      "destination": "/post.html?slug=:slug"
+      "destination": "/post.html"
     },
     {
       "source": "/contact",
