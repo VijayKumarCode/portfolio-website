@@ -1,168 +1,139 @@
 /**
- * home-blog.js
- * ─────────────────────────────────────────────────────────
- * Renders the 3 most recent blog posts on the homepage.
- *
- * DEPENDENCY: blogManager.js must be loaded first.
- * TARGET: <div id="home-blog-list"> in index.html
- * PATTERN: Self-executing IIFE with DOMContentLoaded guard.
- * ─────────────────────────────────────────────────────────
+ * Home Page Blog Preview Loader
+ * Fetches from API with fallback to static JSON
  */
 
-(function () {
-  'use strict';
+import { apiFetch } from '../src/utils/api.js';
+import { BLOG_ENDPOINT, BLOG_FALLBACK } from '../src/config/config.js';
+import { stripHtml, formatDate } from '../src/utils/helpers.js';
 
-  // ─── Template: Single blog card ─────────────────────────
-  function createBlogCard(post) {
-    var bm = window.BlogManager;
-    var url = bm.getPostURL(post.slug);
-    var date = bm.formatDate(post.date);
-    var thumbnail = post.thumbnail || '/assets/blog/blog-default.jpg';
-    var readTime = post.readTime || '5 min read';
+const HomeBlog = {
+  skeletonContainer: null,
+  blogContainer: null,
+  fallbackContainer: null,
+  maxPosts: 3,
 
-    var tagsHTML = '';
-    if (Array.isArray(post.tags) && post.tags.length > 0) {
-      tagsHTML = '<div class="blog-card__tags" aria-label="Tags">';
-      post.tags.slice(0, 2).forEach(function (tag) {
-        tagsHTML += '<span class="blog-tag">' + bm.escapeHTML(tag) + '</span>';
-      });
-      tagsHTML += '</div>';
-    }
+  init() {
+    this.skeletonContainer = document.getElementById('blog-container-skeleton');
+    this.blogContainer = document.getElementById('blog-container');
+    this.fallbackContainer = document.getElementById('blog-fallback');
 
-    return (
-      '<article class="blog-card reveal" role="article">' +
-        '<a href="' + url + '" class="blog-card__image-link" tabindex="-1" aria-hidden="true">' +
-          '<div class="blog-card__image-wrapper">' +
-            '<img' +
-              ' src="' + bm.escapeHTML(thumbnail) + '"' +
-              ' alt="' + bm.escapeHTML(post.title) + '"' +
-              ' class="blog-card__image"' +
-              ' loading="lazy"' +
-              ' width="400"' +
-              ' height="225"' +
-              ' onerror="this.src=\'/assets/blog/blog-default.jpg\'"' +
-            '/>' +
-          '</div>' +
-        '</a>' +
-        '<div class="blog-card__body">' +
-          tagsHTML +
-          '<h3 class="blog-card__title">' +
-            '<a href="' + url + '" class="blog-card__title-link">' +
-              bm.escapeHTML(post.title) +
-            '</a>' +
-          '</h3>' +
-          '<p class="blog-card__excerpt">' + bm.escapeHTML(post.excerpt) + '</p>' +
-          '<div class="blog-card__footer">' +
-            '<time class="blog-card__date" datetime="' + bm.escapeHTML(post.date) + '">' +
-              bm.escapeHTML(date) +
-            '</time>' +
-            '<span class="blog-card__read-time">' + bm.escapeHTML(readTime) + '</span>' +
-          '</div>' +
-          '<a href="' + url + '" class="blog-card__cta" aria-label="Read: ' + bm.escapeHTML(post.title) + '">' +
-            'Read Article' +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-              '<path d="M5 12h14M12 5l7 7-7 7"/>' +
-            '</svg>' +
-          '</a>' +
-        '</div>' +
-      '</article>'
-    );
-  }
+    if (!this.blogContainer) return;
 
-  // ─── Template: Loading skeletons ────────────────────────
-  function createSkeletons(count) {
-    var html = '';
-    for (var i = 0; i < count; i++) {
-      html += (
-        '<div class="blog-card blog-card--skeleton" aria-hidden="true">' +
-          '<div class="blog-card__image-wrapper skeleton-box"></div>' +
-          '<div class="blog-card__body">' +
-            '<div class="skeleton-line skeleton-line--short"></div>' +
-            '<div class="skeleton-line"></div>' +
-            '<div class="skeleton-line skeleton-line--medium"></div>' +
-            '<div class="skeleton-line skeleton-line--short"></div>' +
-          '</div>' +
-        '</div>'
-      );
-    }
-    return html;
-  }
+    this.fetchPosts();
+  },
 
-  // ─── Template: Error state ───────────────────────────────
-  function createErrorState() {
-    return (
-      '<div class="blog-state blog-state--error" role="alert">' +
-        '<p>Could not load articles. Please refresh the page to try again.</p>' +
-      '</div>'
-    );
-  }
-
-  // ─── Template: Empty state ───────────────────────────────
-  function createEmptyState() {
-    return (
-      '<div class="blog-state blog-state--empty">' +
-        '<p>No articles yet. Engineering content coming soon.</p>' +
-      '</div>'
-    );
-  }
-
-  // ─── Main render function ────────────────────────────────
-  async function renderHomepageBlogs() {
-    // 1. Guard: ensure we are on the homepage (container must exist)
-    var container = document.getElementById('home-blog-list');
-    if (!container) {
-      return; // Not on index.html — exit silently
-    }
-
-    // 2. Guard: BlogManager must be available
-    if (!window.BlogManager) {
-      console.error('[home-blog.js] BlogManager not found. Verify blogManager.js loads before home-blog.js.');
-      container.innerHTML = createErrorState();
-      return;
-    }
-
-    // 3. Show loading skeletons immediately (prevents layout shift)
-    container.innerHTML = createSkeletons(3);
-    container.setAttribute('aria-busy', 'true');
-    container.setAttribute('aria-label', 'Loading recent articles');
-
+  async fetchPosts() {
     try {
-      // 4. Fetch 3 most recent posts
-      var posts = await window.BlogManager.getRecentPosts(3);
+      // Try primary endpoint
+      let data = await apiFetch(BLOG_ENDPOINT, {}, 1);
 
-      // 5. Handle empty data
-      if (!posts || posts.length === 0) {
-        container.innerHTML = createEmptyState();
-        return;
+      // Ensure we have posts array
+      const posts = Array.isArray(data) ? data : data.posts || [];
+
+      if (!Array.isArray(posts) || posts.length === 0) {
+        return this.showEmpty();
       }
 
-      // 6. Render cards
-      var html = '';
-      posts.forEach(function (post) {
-        html += createBlogCard(post);
-      });
-      container.innerHTML = html;
-      container.setAttribute('aria-label', 'Recent articles');
+      const recentPosts = posts
+        .sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt))
+        .slice(0, this.maxPosts);
 
-      // 7. Trigger scroll reveal for cards
-      if (window.initScrollReveal) {
-        window.initScrollReveal();
+      this.renderPosts(recentPosts);
+    } catch (error) {
+      console.warn('Primary blog fetch failed, trying fallback:', error.message);
+
+      // Try fallback (static JSON)
+      try {
+        const response = await fetch(BLOG_FALLBACK);
+        if (!response.ok) throw new Error('Fallback fetch failed');
+        const fallbackData = await response.json();
+
+        // CRITICAL FIX: Handle both plain array and { posts: [...] } wrapper
+        const posts = Array.isArray(fallbackData) ? fallbackData : fallbackData.posts || [];
+
+        if (posts.length === 0) return this.showEmpty();
+
+        const recentPosts = posts
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, this.maxPosts);
+
+        this.renderPosts(recentPosts);
+      } catch (fallbackError) {
+        console.error('Both blog fetches failed:', fallbackError);
+        this.showError();
       }
-
-    } catch (err) {
-      console.error('[home-blog.js] Render failed:', err);
-      container.innerHTML = createErrorState();
-    } finally {
-      container.removeAttribute('aria-busy');
     }
-  }
+  },
 
-  // ─── Init: DOMContentLoaded guard ───────────────────────
-  // Works correctly whether script is deferred or inline
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderHomepageBlogs);
-  } else {
-    renderHomepageBlogs();
-  }
+  renderPosts(posts) {
+    // Hide skeletons
+    if (this.skeletonContainer) {
+      this.skeletonContainer.style.display = 'none';
+    }
 
-})();
+    // Clear and show container
+    this.blogContainer.innerHTML = '';
+    this.blogContainer.style.display = '';
+
+    posts.forEach(post => {
+      const article = document.createElement('article');
+      article.className = 'blog-article-card fade-in';
+      article.innerHTML = `
+        <div class="blog-card-meta">
+          <time>${formatDate(post.date || post.createdAt)}</time>
+          ${post.tags ? post.tags.slice(0, 2).map(tag =>
+            `<span class="blog-card-tag">#${tag}</span>`
+          ).join('') : ''}
+        </div>
+        <h3 class="blog-card-title">${post.title}</h3>
+        <p class="blog-card-excerpt">${post.excerpt || stripHtml(post.content || '').substring(0, 150) + '...'}</p>
+        <a href="/blog/${post.slug}" class="blog-card-link">Read more →</a>
+      `;
+      this.blogContainer.appendChild(article);
+    });
+
+    // Trigger animations
+    requestAnimationFrame(() => {
+      this.blogContainer.querySelectorAll('.fade-in').forEach((el, i) => {
+        el.style.animationDelay = `${i * 0.1}s`;
+        el.classList.add('visible');
+      });
+    });
+  },
+
+  showEmpty() {
+    this.hideAll();
+    const emptyEl = document.getElementById('blog-empty');
+    if (emptyEl) {
+      emptyEl.closest('#blog-fallback').style.display = '';
+      emptyEl.style.display = '';
+    }
+  },
+
+  showError() {
+    this.hideAll();
+    const errorEl = document.getElementById('blog-error');
+    if (errorEl) {
+      errorEl.closest('#blog-fallback').style.display = '';
+      errorEl.style.display = '';
+
+      // Retry button
+      const retryBtn = document.getElementById('blog-retry-btn');
+      retryBtn?.addEventListener('click', () => {
+        if (this.skeletonContainer) this.skeletonContainer.style.display = '';
+        if (this.fallbackContainer) this.fallbackContainer.style.display = 'none';
+        if (this.blogContainer) this.blogContainer.style.display = 'none';
+        this.fetchPosts();
+      }, { once: true });
+    }
+  },
+
+  hideAll() {
+    if (this.skeletonContainer) this.skeletonContainer.style.display = 'none';
+    if (this.blogContainer) this.blogContainer.style.display = 'none';
+    if (this.fallbackContainer) this.fallbackContainer.style.display = 'none';
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => HomeBlog.init());
