@@ -1,166 +1,195 @@
-/**
- * blog.js
- * ─────────────────────────────────────────────────────────
- * Renders all blog posts on the blog listing page (blog.html).
- *
- * DEPENDENCY: blogManager.js must be loaded first.
- * TARGET: <div id="blog-list-container"> in blog.html
- * ─────────────────────────────────────────────────────────
- */
+import { formatDate, stripHtml } from '../src/utils/helpers.js';
 
-(function () {
-  'use strict';
+const BlogListing = {
+  posts: [],
+  currentTag: 'all',
+  searchTerm: '',
+  pageSize: 6,
+  currentPage: 1,
 
-  // ─── Template: Blog list card ────────────────────────────
-  function createBlogListCard(post) {
-    var bm = window.BlogManager;
-    var url = bm.getPostURL(post.slug);
-    var date = bm.formatDate(post.date);
-    var thumbnail = post.thumbnail || '/assets/blog/blog-default.jpg';
-    var readTime = post.readTime || '5 min read';
+  init() {
+    this.container = document.getElementById('blog-container');
+    this.searchInput = document.getElementById('blog-search');
+    this.filterContainer = document.getElementById('blog-filter-tags');
+    this.loadMoreBtn = document.getElementById('load-more-btn');
+    this.skeleton = document.getElementById('blog-container-skeleton');
+    this.emptyState = document.getElementById('blog-empty');
+    this.errorState = document.getElementById('blog-error');
 
-    var tagsHTML = '';
-    if (Array.isArray(post.tags) && post.tags.length > 0) {
-      tagsHTML = '<div class="blog-card__tags" aria-label="Tags">';
-      post.tags.forEach(function (tag) {
-        tagsHTML += '<span class="blog-tag">' + bm.escapeHTML(tag) + '</span>';
-      });
-      tagsHTML += '</div>';
-    }
-
-    return (
-      '<article class="blog-card blog-card--list reveal" role="article">' +
-        '<a href="' + url + '" class="blog-card__image-link" tabindex="-1" aria-hidden="true">' +
-          '<div class="blog-card__image-wrapper">' +
-            '<img' +
-              ' src="' + bm.escapeHTML(thumbnail) + '"' +
-              ' alt="' + bm.escapeHTML(post.title) + '"' +
-              ' class="blog-card__image"' +
-              ' loading="lazy"' +
-              ' width="400"' +
-              ' height="225"' +
-              ' onerror="this.src=\'/assets/blog/blog-default.jpg\'"' +
-            '/>' +
-          '</div>' +
-        '</a>' +
-        '<div class="blog-card__body">' +
-          tagsHTML +
-          '<h2 class="blog-card__title">' +
-            '<a href="' + url + '" class="blog-card__title-link">' +
-              bm.escapeHTML(post.title) +
-            '</a>' +
-          '</h2>' +
-          '<p class="blog-card__excerpt">' + bm.escapeHTML(post.excerpt) + '</p>' +
-          '<div class="blog-card__footer">' +
-            '<time class="blog-card__date" datetime="' + bm.escapeHTML(post.date) + '">' +
-              bm.escapeHTML(date) +
-            '</time>' +
-            '<span class="blog-card__read-time">' + bm.escapeHTML(readTime) + '</span>' +
-            '<a href="' + url + '" class="btn btn--secondary btn--sm" aria-label="Read ' + bm.escapeHTML(post.title) + '">' +
-              'Read Article' +
-            '</a>' +
-          '</div>' +
-        '</div>' +
-      '</article>'
-    );
-  }
-
-  // ─── Template: Skeletons ─────────────────────────────────
-  function createSkeletons(count) {
-    var html = '';
-    for (var i = 0; i < count; i++) {
-      html += (
-        '<div class="blog-card blog-card--list blog-card--skeleton" aria-hidden="true">' +
-          '<div class="blog-card__image-wrapper skeleton-box"></div>' +
-          '<div class="blog-card__body">' +
-            '<div class="skeleton-line skeleton-line--short"></div>' +
-            '<div class="skeleton-line"></div>' +
-            '<div class="skeleton-line skeleton-line--medium"></div>' +
-            '<div class="skeleton-line skeleton-line--short"></div>' +
-          '</div>' +
-        '</div>'
-      );
-    }
-    return html;
-  }
-
-  // ─── Template: Error state ───────────────────────────────
-  function createErrorState() {
-    return (
-      '<div class="blog-state blog-state--error" role="alert">' +
-        '<h2>Could Not Load Articles</h2>' +
-        '<p>There was an error fetching the articles. Please refresh to try again.</p>' +
-        '<button class="btn btn--primary" onclick="window.location.reload()">Retry</button>' +
-      '</div>'
-    );
-  }
-
-  // ─── Template: Empty state ───────────────────────────────
-  function createEmptyState() {
-    return (
-      '<div class="blog-state blog-state--empty">' +
-        '<h2>No Articles Yet</h2>' +
-        '<p>Engineering articles on backend systems, databases, and infrastructure are coming soon.</p>' +
-        '<a href="/" class="btn btn--primary">Back to Home</a>' +
-      '</div>'
-    );
-  }
-
-  // ─── Main render function ────────────────────────────────
-  async function renderBlogList() {
-    // 1. Guard: only run on blog.html
-    var container = document.getElementById('blog-list-container');
-    if (!container) {
+    if (!this.container) {
+      console.error('[BlogListing] #blog-container not found in DOM');
       return;
     }
 
-    // 2. Guard: BlogManager required
-    if (!window.BlogManager) {
-      console.error('[blog.js] BlogManager not found.');
-      container.innerHTML = createErrorState();
-      return;
-    }
+    this.bindEvents();
+    this.fetchPosts();
+  },
 
-    // 3. Show skeletons
-    container.innerHTML = createSkeletons(4);
-    container.setAttribute('aria-busy', 'true');
+  bindEvents() {
+    this.searchInput?.addEventListener('input', (e) => {
+      this.searchTerm = e.target.value.toLowerCase().trim();
+      this.currentPage = 1;
+      this.render();
+    });
 
+    this.filterContainer?.addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-tag')) {
+        this.currentTag = e.target.dataset.tag;
+        this.currentPage = 1;
+        this.updateFilterActiveState();
+        this.render();
+      }
+    });
+
+    this.loadMoreBtn?.addEventListener('click', () => {
+      this.currentPage++;
+      this.render(true);
+    });
+  },
+
+  async fetchPosts() {
     try {
-      // 4. Fetch all posts
-      var posts = await window.BlogManager.fetchPosts();
+      const res = await fetch('/data/posts.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
 
-      // 5. Handle empty
-      if (!posts || posts.length === 0) {
-        container.innerHTML = createEmptyState();
+      // CRITICAL FIX: Handle both plain array and { posts: [...] } wrapper
+      this.posts = Array.isArray(data) ? data : (data.posts || []);
+
+      if (this.posts.length === 0) {
+        this.showEmpty();
         return;
       }
 
-      // 6. Update post count badge if it exists
-      var countEl = document.getElementById('blog-post-count');
-      if (countEl) {
-        countEl.textContent = posts.length + ' ' + (posts.length === 1 ? 'Article' : 'Articles');
-      }
-
-      // 7. Render all cards
-      var html = '';
-      posts.forEach(function (post) {
-        html += createBlogListCard(post);
-      });
-      container.innerHTML = html;
-
+      this.buildFilters();
+      this.render();
     } catch (err) {
-      console.error('[blog.js] Render failed:', err);
-      container.innerHTML = createErrorState();
-    } finally {
-      container.removeAttribute('aria-busy');
+      console.error('[BlogListing] Failed to load posts:', err);
+      this.showError();
     }
-  }
+  },
 
-  // ─── Init ─────────────────────────────────────────────────
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderBlogList);
-  } else {
-    renderBlogList();
-  }
+  buildFilters() {
+    const tags = new Set();
+    this.posts.forEach(p => {
+      // FIX: Fallback to category if tags missing
+      if (p.tags && Array.isArray(p.tags)) {
+        p.tags.forEach(t => tags.add(t));
+      } else if (p.category) {
+        tags.add(p.category);
+      }
+    });
 
-})();
+    if (this.filterContainer) {
+      this.filterContainer.innerHTML = `
+        <button class="filter-tag active" data-tag="all">All</button>
+        ${[...tags].map(t => `<button class="filter-tag" data-tag="${this.escHtml(t)}">${this.escHtml(t)}</button>`).join('')}
+      `;
+    }
+  },
+
+  updateFilterActiveState() {
+    this.filterContainer?.querySelectorAll('.filter-tag').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tag === this.currentTag);
+    });
+  },
+
+  filterPosts() {
+    let result = [...this.posts];
+    if (this.currentTag !== 'all') {
+      result = result.filter(p => {
+        const postTags = p.tags || [];
+        const categories = p.category ? [p.category] : [];
+        return postTags.includes(this.currentTag) || categories.includes(this.currentTag);
+      });
+    }
+    if (this.searchTerm) {
+      result = result.filter(p =>
+        (p.title || '').toLowerCase().includes(this.searchTerm) ||
+        (p.excerpt || '').toLowerCase().includes(this.searchTerm) ||
+        stripHtml(p.content || '').toLowerCase().includes(this.searchTerm)
+      );
+    }
+    return result;
+  },
+
+  render(append = false) {
+    const filtered = this.filterPosts();
+    if (!append) {
+      this.container.innerHTML = '';
+      this.hideStates();
+    }
+
+    const start = (this.currentPage - 1) * this.pageSize;
+    const pagePosts = filtered.slice(start, start + this.pageSize);
+
+    if (pagePosts.length === 0 && !append) {
+      this.showEmpty();
+      return;
+    }
+
+    pagePosts.forEach((post, index) => {
+      const card = document.createElement('article');
+      card.className = 'blog-article-card fade-in';
+      card.style.transitionDelay = `${index * 100}ms`;
+
+      const tags = post.tags || (post.category ? [post.category] : []);
+      const excerpt = post.excerpt
+        ? post.excerpt
+        : stripHtml(post.content || '').substring(0, 150) + '...';
+
+      card.innerHTML = `
+        <div class="blog-card-meta">
+          <time datetime="${post.date || ''}">${formatDate(post.date)}</time>
+          ${tags.map(t => `<span class="blog-card-tag">${this.escHtml(t)}</span>`).join('')}
+        </div>
+        <h3 class="blog-card-title">
+          <a href="/blog/${post.slug}" rel="bookmark">${this.escHtml(post.title)}</a>
+        </h3>
+        <p class="blog-card-excerpt">${this.escHtml(excerpt)}</p>
+        <a class="blog-card-link" href="/blog/${post.slug}" aria-label="Read ${this.escHtml(post.title)}">
+          Read more <span aria-hidden="true">→</span>
+        </a>
+      `;
+      this.container.appendChild(card);
+
+      requestAnimationFrame(() => {
+        card.classList.add('visible');
+      });
+    });
+
+    if (this.loadMoreBtn) {
+      this.loadMoreBtn.style.display = start + this.pageSize < filtered.length ? '' : 'none';
+    }
+
+    if (this.skeleton) this.skeleton.style.display = 'none';
+    this.container.style.display = 'grid';
+  },
+
+  hideStates() {
+    if (this.emptyState) this.emptyState.style.display = 'none';
+    if (this.errorState) this.errorState.style.display = 'none';
+    if (this.skeleton) this.skeleton.style.display = 'none';
+  },
+
+  showEmpty() {
+    this.hideStates();
+    if (this.emptyState) this.emptyState.style.display = '';
+    this.container.style.display = 'none';
+  },
+
+  showError() {
+    this.hideStates();
+    if (this.errorState) this.errorState.style.display = '';
+    this.container.style.display = 'none';
+  },
+
+  escHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => BlogListing.init());
