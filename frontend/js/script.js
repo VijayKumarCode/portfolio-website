@@ -1,200 +1,189 @@
 /**
- * script.js
- * ─────────────────────────────────────────────────────────
- * Site-wide JavaScript: navigation, scroll, active states.
- *
- * CRITICAL: Every DOM operation is null-guarded.
- * This file runs on index.html, blog.html, AND post.html.
- * Not all pages have all elements — must never crash.
- * ─────────────────────────────────────────────────────────
+ * VIJAY KUMAR — PORTFOLIO
+ * Production-Grade JavaScript
+ * 
+ * Features:
+ * - Accessible mobile nav with focus trap & backdrop
+ * - Scroll spy active nav link
+ * - IntersectionObserver scroll reveal
+ * - Skills bar animation
+ * - Header shrink on scroll
+ * - Smooth scroll for all anchor links
+ * - Back-to-top button
  */
 
-(function () {
-  'use strict';
+'use strict';
 
-  // ─────────────────────────────────────────────────────────
-  // HAMBURGER MENU — Toggle mobile nav
-  // ─────────────────────────────────────────────────────────
-  function initHamburgerMenu() {
-    var hamburger = document.querySelector('.hamburger');
-    var navMenu   = document.querySelector('.nav-menu');
+document.addEventListener('DOMContentLoaded', () => {
+  // --- DOM ELEMENTS ---
+  const header = document.getElementById('site-header');
+  const hamburgerBtn = document.getElementById('hamburger-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.menu-links a');
+  const mobileBackdrop = document.getElementById('menu-backdrop');
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('#desktop-nav .nav-links a, .menu-links a');
+  const backToTopBtn = document.getElementById('back-to-top');
+  const revealElements = document.querySelectorAll('.reveal, .project-card, .about-card, .skills-group, .fade-in');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (!hamburger || !navMenu) {
-      return; // Either element missing — not an error, just not applicable
-    }
+  // --- MOBILE NAVIGATION (with backdrop & focus trap) ---
+  let lastFocusedElement = null;
 
-    function openMenu() {
-      navMenu.classList.add('nav-menu--active');
-      hamburger.classList.add('hamburger--active');
-      hamburger.setAttribute('aria-expanded', 'true');
-      document.body.classList.add('nav-open');
-    }
+  function openMenu() {
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    hamburgerBtn.classList.add('active');
+    mobileMenu.classList.add('open'); // using .open class for mobile menu visibility
+    if (mobileBackdrop) mobileBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lastFocusedElement = document.activeElement;
+    const firstLink = mobileMenu.querySelector('a');
+    if (firstLink) firstLink.focus();
+  }
 
-    function closeMenu() {
-      navMenu.classList.remove('nav-menu--active');
-      hamburger.classList.remove('hamburger--active');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.classList.remove('nav-open');
-    }
+  function closeMenu() {
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    hamburgerBtn.classList.remove('active');
+    mobileMenu.classList.remove('open');
+    if (mobileBackdrop) mobileBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
 
-    // Toggle on hamburger click
-    hamburger.addEventListener('click', function () {
-      var isOpen = navMenu.classList.contains('nav-menu--active');
-      if (isOpen) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
+  if (hamburgerBtn && mobileMenu) {
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = hamburgerBtn.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
     });
 
-    // Close when any nav link is clicked (mobile UX)
-    var navLinks = navMenu.querySelectorAll('.nav-link');
-    navLinks.forEach(function (link) {
+    mobileLinks.forEach(link => {
       link.addEventListener('click', closeMenu);
     });
 
-    // Close on Escape key (accessibility)
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && navMenu.classList.contains('nav-menu--active')) {
-        closeMenu();
-        hamburger.focus(); // Return focus to trigger element
-      }
-    });
-
-    // Close when clicking outside menu area
-    document.addEventListener('click', function (e) {
-      if (
-        navMenu.classList.contains('nav-menu--active') &&
-        !navMenu.contains(e.target) &&
-        !hamburger.contains(e.target)
-      ) {
-        closeMenu();
-      }
-    });
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // ACTIVE NAV LINK — Mark current page link as active
-  // ─────────────────────────────────────────────────────────
-  function setActiveNavLink() {
-    var navLinks = document.querySelectorAll('.nav-link');
-    if (!navLinks.length) return;
-
-    var path = window.location.pathname;
-
-    navLinks.forEach(function (link) {
-      var href = link.getAttribute('href');
-      if (!href) return;
-
-      var isActive = false;
-
-      if (href === '/' || href === '/index.html') {
-        isActive = (path === '/' || path === '/index.html');
-      } else if (href.includes('blog.html')) {
-        // Active on blog.html AND post.html (both are blog-related)
-        isActive = path.includes('blog.html') || path.includes('post.html');
-      } else {
-        isActive = path === href || path.startsWith(href.replace('.html', ''));
-      }
-
-      link.classList.toggle('nav-link--active', isActive);
-
-      if (isActive) {
-        link.setAttribute('aria-current', 'page');
-      } else {
-        link.removeAttribute('aria-current');
-      }
-    });
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // NAVBAR SCROLL SHADOW — Add visual depth on scroll
-  // ─────────────────────────────────────────────────────────
-  function initNavScrollBehavior() {
-    var navbar = document.querySelector('.navbar');
-    if (!navbar) return;
-
-    function onScroll() {
-      navbar.classList.toggle('navbar--scrolled', window.scrollY > 20);
+    // Close on backdrop click
+    if (mobileBackdrop) {
+      mobileBackdrop.addEventListener('click', closeMenu);
     }
 
-    // Passive listener — does not block scrolling
-    window.addEventListener('scroll', onScroll, { passive: true });
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        closeMenu();
+      }
+    });
 
-    // Run once on load to handle page restored at scroll position
-    onScroll();
-  }
+    // Focus trap inside mobile menu
+    mobileMenu.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const focusable = mobileMenu.querySelectorAll('a[href], button');
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
 
-  // ─────────────────────────────────────────────────────────
-  // SMOOTH SCROLL — Internal anchor links
-  // ─────────────────────────────────────────────────────────
-  function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-      anchor.addEventListener('click', function (e) {
-        var targetId = this.getAttribute('href').slice(1);
-        if (!targetId) return;
-
-        var target = document.getElementById(targetId);
-        if (!target) return;
-
+      if (e.shiftKey && document.activeElement === first) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        // Move focus for keyboard/screen reader users
-        target.setAttribute('tabindex', '-1');
-        target.focus({ preventScroll: true });
-      });
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     });
   }
 
-  // ─────────────────────────────────────────────────────────
-  // SCROLL REVEAL — Animate .reveal elements into view
-  // ─────────────────────────────────────────────────────────
-  function initScrollReveal() {
-    if (!('IntersectionObserver' in window)) {
-      // Fallback: show all elements without animation
-      document.querySelectorAll('.reveal').forEach(function (el) {
-        el.classList.add('reveal--visible');
-      });
-      return;
-    }
-
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
+  // --- SCROLL REVEAL & SKILLS ANIMATION ---
+  if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('reveal--visible');
-          observer.unobserve(entry.target); // Animate once only
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
         }
       });
-    }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
-    });
+    }, { rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
 
-    var revealEls = document.querySelectorAll('.reveal');
-    revealEls.forEach(function (el) {
-      observer.observe(el);
-    });
-  }
+    revealElements.forEach(el => revealObserver.observe(el));
 
-  // Expose for re-use by home-blog.js after dynamic render
-  window.initScrollReveal = initScrollReveal;
-
-  // ─────────────────────────────────────────────────────────
-  // INIT — Run all modules after DOM is ready
-  // ─────────────────────────────────────────────────────────
-  function init() {
-    initHamburgerMenu();
-    setActiveNavLink();
-    initNavScrollBehavior();
-    initSmoothScroll();
-    initScrollReveal();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    // Skills section special animation
+    const skillsSection = document.getElementById('skills');
+    if (skillsSection) {
+      const skillsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+            skillsObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      skillsObserver.observe(skillsSection);
+    }
   } else {
-    init();
+    // Reduced motion fallback: show all immediately
+    [...revealElements, document.getElementById('skills')].forEach(el => {
+      if (el) el.classList.add('visible', 'animate');
+    });
   }
 
-})();
+  // --- HEADER SHRINK ON SCROLL ---
+  if (header) {
+    window.addEventListener('scroll', () => {
+      header.style.borderBottomColor =
+        window.scrollY > 20
+          ? 'rgba(255,255,255,0.1)'
+          : 'rgba(255,255,255,0.06)';
+    }, { passive: true });
+  }
+
+  // --- ACTIVE NAV LINK (SCROLL SPY) ---
+  const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 80;
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          const isActive = link.getAttribute('href') === `#${id}`;
+          link.classList.toggle('active', isActive);
+          link.setAttribute('aria-current', isActive ? 'page' : 'false');
+        });
+      }
+    });
+  }, {
+    rootMargin: `-${navHeight}px 0px -60% 0px`,
+    threshold: 0
+  });
+
+  sections.forEach(s => navObserver.observe(s));
+
+  // --- SMOOTH SCROLL FOR ALL ANCHOR LINKS ---
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', (e) => {
+      const targetId = anchor.getAttribute('href');
+      if (targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        const headerH = header ? header.offsetHeight : 72;
+        const targetPos = target.offsetTop - headerH - 12;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // --- BACK-TO-TOP BUTTON ---
+  if (backToTopBtn) {
+    window.addEventListener('scroll', () => {
+      backToTopBtn.classList.toggle('visible', window.scrollY > 500);
+    }, { passive: true });
+
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  // --- INIT LOG ---
+  console.log(
+    '%c🚀 Portfolio Ready %c| %cVijay Kumar',
+    'color: #8b5cf6; font-weight: bold;',
+    '',
+    'color: #0d9488;'
+  );
+});
