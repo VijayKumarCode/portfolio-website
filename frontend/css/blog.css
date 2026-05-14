@@ -5,36 +5,45 @@
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── Blog nav ─────────────────────────────────────────────── */
-#blog-nav {
+.nav-blog .nav-inner {
+  display: flex;
+  justify-content: space-between;  /* logo left, nav-right right */
+  align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--space-6);
-  height: 72px;
+  padding: 0 var(--space-6m, 1.5rem);
+}
+
+/* Right side wrapper */
+.nav-right {
   display: flex;
+  gap: 1.5rem;
   align-items: center;
-  justify-content: space-between;
 }
 
-.blog-nav-right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
+/* Logo styling */
+.logo-container {
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: inherit;
 }
 
-.nav-back {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--color-text-secondary);
-  padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+/* Navigation links */
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
 }
 
-.nav-back:hover {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-  background: var(--color-bg-elevated);
+.nav-link:hover {
+  opacity: 0.7;
+}
+
+/* Optional: remove any conflicting absolute/relative positioning */
+.nav-blog {
+  position: relative;
+  width: 100%;
 }
 
 /* ── Blog hero ─────────────────────────────────────────────── */
