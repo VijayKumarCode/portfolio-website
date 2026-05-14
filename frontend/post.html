@@ -3,88 +3,159 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Engineering log post by Vijay Kumar." id="post-meta-desc" />
-  <meta name="robots" content="index, follow" />
-  <title>Engineering Log | Vijay Kumar</title>
+  <!-- Meta description updated dynamically by post.js -->
+  <meta name="description" content="Blog article by Vijay Kumar — Backend Engineer" />
+  <meta name="author" content="Vijay Kumar" />
+
+  <!-- Title updated dynamically by post.js -->
+  <title>Loading Article... | Vijay Kumar</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/blog.css" />
-  <link rel="stylesheet" href="/css/mediaqueries.css" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/mediaqueries.css" />
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
 </head>
 <body>
-
-  <nav class="nav nav--blog" aria-label="Site navigation">
-    <div class="nav__inner">
-      <a href="/" class="logo-container" aria-label="Vijay Kumar — Home">
-        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img" width="48" height="48">
+  <!-- NAVIGATION -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar__inner">
+      <a href="/" class="navbar__logo" aria-label="Vijay Kumar — Home">
+        Vijay Kumar
       </a>
-      <div class="blog-nav-right">
-        <a href="/blog" class="nav-back" aria-label="Back to Engineering Log">← Engineering Log</a>
-      </div>
+      <button
+        class="hamburger"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        type="button"
+      >
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+      </button>
+      <ul class="nav-menu" id="nav-menu" role="list">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/#about" class="nav-link">About</a></li>
+        <li><a href="/#projects" class="nav-link">Projects</a></li>
+        <li><a href="/blog.html" class="nav-link" aria-current="page">Blog</a></li>
+        <li><a href="/#contact" class="nav-link">Contact</a></li>
+      </ul>
     </div>
   </nav>
 
-  <main id="main-content" class="post-page">
-
-    <!-- Loading state -->
-    <div id="post-loading" class="blog-state blog-state--loading" aria-label="Loading post">
-      <div class="skeleton-card skeleton-card--post"></div>
+  <main id="main-content">
+    <!-- ═══════════════════════════════════════ -->
+    <!-- LOADING STATE (shown until post loads) -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="post-loading" class="post-loading section" aria-live="polite" aria-label="Loading article">
+      <div class="container">
+        <div class="post-skeleton">
+          <div class="skeleton-line skeleton-line--short" style="height: 1rem; margin-bottom: 1rem;"></div>
+          <div class="skeleton-line" style="height: 2.5rem; margin-bottom: 1.5rem;"></div>
+          <div class="skeleton-line skeleton-line--medium" style="height: 1rem; margin-bottom: 3rem;"></div>
+          <div class="skeleton-box" style="height: 300px; margin-bottom: 2rem;"></div>
+          <div class="skeleton-line" style="margin-bottom: 0.75rem;"></div>
+          <div class="skeleton-line" style="margin-bottom: 0.75rem;"></div>
+          <div class="skeleton-line skeleton-line--medium" style="margin-bottom: 0.75rem;"></div>
+          <div class="skeleton-line" style="margin-bottom: 0.75rem;"></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Post container — hidden by default -->
-    <article id="post-container" class="post hidden" aria-labelledby="post-title">
+    <!-- ═══════════════════════════════════════ -->
+    <!-- POST CONTAINER (hidden until loaded) -->
+    <!-- ═══════════════════════════════════════ -->
+    <article id="post-container" class="post section" style="display: none;" aria-label="Blog post">
+      <div class="container post__inner">
 
-      <header class="post__header">
-        <div class="post__meta" id="post-meta">
-          <span id="post-category" class="post__category"></span>
-          <span id="post-date"     class="post__date"></span>
-          <span id="post-read-time" class="post__read-time"></span>
+        <!-- Breadcrumb -->
+        <nav class="post__breadcrumb" aria-label="Breadcrumb">
+          <a href="/blog.html" id="post-back-link" class="post__back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            All Articles
+          </a>
+        </nav>
+
+        <!-- Post Header -->
+        <header class="post__header">
+          <div id="post-tags" class="post__tags"></div>
+          <h1 id="post-title" class="post__title">Loading...</h1>
+          <div class="post__meta">
+            <span class="post__author">By <strong id="post-author"></strong></span>
+            <span class="post__meta-divider" aria-hidden="true">&middot;</span>
+            <time id="post-date" class="post__date"></time>
+          </div>
+        </header>
+
+        <!-- Post Thumbnail -->
+        <div class="post__thumbnail-wrapper">
+          <img
+            id="post-thumbnail"
+            src=""
+            alt=""
+            class="post__thumbnail"
+            loading="lazy"
+            style="display: none;"
+            width="800"
+            height="450"
+          />
         </div>
-        <h1 id="post-title" class="post__title"></h1>
-        <div id="post-tags" class="post__tags"></div>
-      </header>
 
-      <div id="post-body" class="post__body prose"></div>
+        <!-- Post Body -->
+        <div id="post-content" class="post__content prose"></div>
 
-      <footer class="post__footer">
-        <a href="/blog" class="btn btn--outline">← Back to Log</a>
-      </footer>
-
+        <!-- Post Footer Navigation -->
+        <footer class="post__footer">
+          <a href="/blog.html" class="btn btn--secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            Back to All Articles
+          </a>
+        </footer>
+      </div>
     </article>
 
-    <!-- Not found state — hidden by default -->
-    <div id="post-not-found" class="blog-state blog-state--empty hidden" role="status">
-      <span class="blog-state__icon" aria-hidden="true">🔍</span>
-      <h1 class="blog-state__title">Post Not Found</h1>
-      <p class="blog-state__body">This entry doesn't exist or has been moved.</p>
-      <a href="/blog" class="btn btn--outline">← Back to Log</a>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- NOT FOUND STATE (shown if slug invalid) -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="post-not-found" class="post-not-found section" style="display: none;" aria-live="polite">
+      <div class="container">
+        <div class="post-not-found__inner">
+          <h1>Article Not Found</h1>
+          <p>The article you're looking for doesn't exist or may have been moved.</p>
+          <div class="post-not-found__actions">
+            <a href="/blog.html" class="btn btn--primary">Browse All Articles</a>
+            <a href="/" class="btn btn--secondary">Back to Home</a>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Error state — hidden by default -->
-    <div id="post-error" class="blog-state blog-state--error hidden" role="alert">
-      <span class="blog-state__icon" aria-hidden="true">⚡</span>
-      <h2 class="blog-state__title">Failed to Load Post</h2>
-      <p class="blog-state__body">The post is temporarily unavailable.</p>
-      <button id="post-retry" class="blog-state__retry">Retry</button>
-    </div>
-
   </main>
 
-  <footer class="footer">
-    <div class="footer__inner">
-      <span class="footer__copy">© 2026 Vijay Kumar</span>
-      <nav class="footer__links" aria-label="Footer links">
-        <a href="/" class="footer__link">Portfolio</a>
-        <a href="https://github.com/VijayKumarCode" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a>
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__inner">
+      <p class="footer__copy">
+        &copy; <span id="footer-year"></span> Vijay Kumar. Designed and built with care.
+      </p>
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <a href="/" class="footer__link">Home</a>
+        <a href="/blog.html" class="footer__link">Blog</a>
+        <a href="/#contact" class="footer__link">Contact</a>
       </nav>
     </div>
   </footer>
 
-  <script type="module" src="/js/post.js"></script>
-
+  <script src="/blogManager.js" defer></script>
+  <script src="/post.js" defer></script>
+  <script src="/script.js" defer></script>
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
