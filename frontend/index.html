@@ -1,363 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- Primary Meta -->
-  <title>Vijay Kumar | Java Backend Engineer — Real-Time Distributed Systems</title>
-  <meta name="description" content="Java Backend Engineer building production-grade distributed systems with Spring Boot 3, WebSocket, and PostgreSQL. Creator of Nexus — a live multiplayer platform. Open to remote backend roles.">
-  <meta name="keywords" content="Java Backend Engineer, Spring Boot, WebSocket, PostgreSQL, Distributed Systems, Remote, Vijay Kumar">
-  <meta name="author" content="Vijay Kumar">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://vijaykumarcode.space/">
-  <!-- Theme -->
-  <meta name="theme-color" content="#0a0d13">
-  <meta name="color-scheme" content="dark">
-  <!-- Performance: Preconnect -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://portfolio-backend-v17c.onrender.com">
-  <link rel="dns-prefetch" href="https://portfolio-backend-v17c.onrender.com">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Vijay Kumar — Backend Engineer specializing in Node.js, PostgreSQL, Docker, and scalable system design. View projects, blog articles, and professional experience." />
+  <meta name="author" content="Vijay Kumar" />
+  <meta property="og:title" content="Vijay Kumar | Backend Engineer" />
+  <meta property="og:description" content="Backend engineer building scalable systems with Node.js, PostgreSQL, and Docker." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.vijaykumarcode.space/" />
+
+  <title>Vijay Kumar | Backend Engineer</title>
+
+  <!-- Preconnect for Google Fonts performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Typography: Syne (headings) + Inter (body) — distinctive and professional -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/mediaqueries.css">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="mediaqueries.css" />
+
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="manifest" href="manifest.json">
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://vijaykumarcode.space/">
-  <meta property="og:title" content="Vijay Kumar | Java Backend Engineer">
-  <meta property="og:description" content="Java Backend Engineer building real-time distributed systems with Spring Boot 3, WebSocket, and PostgreSQL.">
-  <meta property="og:image" content="https://vijaykumarcode.space/assets/og-image.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:site_name" content="Vijay Kumar — Backend Engineer">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@VijayKumarCode">
-  <meta name="twitter:creator" content="@VijayKumarCode">
-  <meta name="twitter:title" content="Vijay Kumar | Java Backend Engineer">
-  <meta name="twitter:description" content="Java Backend Engineer building real-time distributed systems with Spring Boot 3, WebSocket, and PostgreSQL.">
-  <meta name="twitter:image" content="https://vijaykumarcode.space/assets/og-image.jpg">
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Vijay Kumar",
-    "jobTitle": "Java Backend Engineer",
-    "url": "https://vijaykumarcode.space",
-    "image": "https://vijaykumarcode.space/assets/profilePic.png",
-    "sameAs": [
-      "https://github.com/VijayKumarCode",
-      "https://linkedin.com/in/vijaykumarcode",
-      "https://x.com/VijayKumarCode"
-    ],
-    "knowsAbout": [
-      "Java",
-      "Spring Boot",
-      "WebSocket",
-      "PostgreSQL",
-      "Distributed Systems",
-      "REST APIs",
-      "Docker",
-      "GitHub Actions"
-    ],
-    "description": "Java Backend Engineer building production-grade distributed systems. Creator of Nexus — a live real-time multiplayer platform with STOMP WebSocket sessions and automated CI/CD."
-  }
-  </script>
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
 </head>
 <body>
-  <a href="#main-content" class="sr-only" id="skip-link">Skip to main content</a>
-
-  <!-- ═════ Header ═════ -->
-  <header id="site-header" role="banner">
-    <nav id="desktop-nav" aria-label="Desktop navigation">
-      <a href="/" class="logo-container" aria-label="Vijay Kumar — Home">
-        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img" width="48" height="48">
+  <!-- ═══════════════════════════════════════ -->
+  <!-- NAVIGATION -->
+  <!-- ═══════════════════════════════════════ -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar__inner">
+      <a href="/" class="navbar__logo" aria-label="Vijay Kumar — Home">
+        Vijay Kumar
       </a>
-      <ul class="nav-links" role="list">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#blog">Log</a></li>
-        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      <button
+        class="hamburger"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        type="button"
+      >
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+        <span class="hamburger__line"></span>
+      </button>
+      <ul class="nav-menu" id="nav-menu" role="list">
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#blog" class="nav-link">Blog</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
-    </nav>
-    <nav id="hamburger-nav" aria-label="Mobile navigation">
-      <a href="/" class="logo-container" aria-label="Vijay Kumar — Home">
-        <img src="assets/logo.png" alt="Vijay Kumar" class="logo-img" width="40" height="40">
-      </a>
-      <div class="hamburger-menu">
-        <button class="hamburger-icon"
-                id="hamburger-toggle"
-                aria-label="Toggle navigation menu"
-                aria-expanded="false"
-                aria-controls="mobile-menu">
-          <span></span><span></span><span></span>
-        </button>
-        <ul class="menu-links" id="mobile-menu" role="list">
-          <li><a href="#about" onclick="closeMenu()">About</a></li>
-          <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
-          <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
-          <li><a href="#blog" onclick="closeMenu()">Log</a></li>
-          <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
-        </ul>
-      </div>
-      <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
-    </nav>
-  </header>
+    </div>
+  </nav>
 
   <main id="main-content">
-
-    <!-- ═════ Hero ═════ -->
-    <section id="profile">
-      <div class="hero-content">
-        <span class="hero-tag">
-          <span class="tag-dot" aria-hidden="true"></span>
-          Open to remote backend roles
-        </span>
-        <h1 class="hero-name">Vijay Kumar</h1>
-        <p class="hero-role"><span class="hero-role-text">Java Backend Engineer</span></p>
-        <p class="hero-stack">Spring Boot 3 · WebSocket · PostgreSQL · Java 17</p>
-        <p class="hero-proof">
-          Built <a href="https://nexusgame.space" target="_blank" rel="noopener noreferrer" class="hero-proof-link">Nexus</a>
-          — a live real-time multiplayer platform with STOMP WebSocket sessions,
-          concurrent game state, and automated CI/CD to Oracle Cloud.
-        </p>
-        <div class="hero-actions">
-          <a href="https://nexusgame.space" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View Live Project ↗</a>
-          <a href="#contact" class="btn btn-ghost">Get in Touch</a>
-        </div>
-        <div id="socials-container" aria-label="Social profiles">
-          <a href="https://github.com/VijayKumarCode" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            aria-label="GitHub Profile">
-            <img src="assets/github-icon.png" 
-            alt="" 
-            loading="lazy" 
-            decoding="async" 
-            width="28" height="28">
-          </a>
-          <a href="https://linkedin.com/in/vijaykumarcode" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            aria-label="LinkedIn Profile">
-            <img src="assets/linkedin.png" 
-            alt="" 
-            loading="lazy" 
-            decoding="async" 
-            width="28" height="28">
-          </a>
-          <a href="https://x.com/VijayKumarCode" 
-            target="_blank" rel="noopener noreferrer"
-            aria-label="X (Twitter) Profile">
-            <img src="assets/x.png" 
-            alt="" 
-            loading="lazy" 
-            decoding="async" 
-            width="28" height="28">
-          </a>
-          <a href="assets/VijayKumar.pdf"
-            download aria-label="Download resume (PDF)">
-            <span class="social-cv-link">CV ↓
-            </span>
-          </a>
-        </div>
-      </div>
-      <div class="hero-photo-wrap">
-        <div class="hero-photo-frame">
-          <img src="assets/profilePic.png" alt="Vijay Kumar — Java Backend Engineer" loading="eager" decoding="async" fetchpriority="high" width="320" height="320">
-        </div>
-      </div>
-    </section>
-
-    <!-- ═════ About ═════ -->
-    <section id="about" aria-labelledby="about-heading">
-      <div class="section-header">
-        <p class="section__text__p1">Background</p>
-        <h2 class="section-title" id="about-heading">About Me</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-pic-wrap">
-          <img src="assets/aboutPic.png" alt="Vijay Kumar working" class="about-pic" loading="lazy" width="400" height="400">
-        </div>
-        <div class="about-content">
-          <div class="about-cards">
-            <div class="about-card">
-              <img src="assets/experience.png" alt="" class="about-card-icon" aria-hidden="true" width="32" height="32">
-              <h3>Experience</h3>
-              <p>Independent Backend Engineer</p>
-            </div>
-            <div class="about-card">
-              <img src="assets/education.png" alt="" class="about-card-icon" aria-hidden="true" width="32" height="32">
-              <h3>Education</h3>
-              <p>MCA · BCA</p>
-            </div>
-          </div>
-          <p class="about-text">
-            Backend engineer with production experience building real-time distributed
-            systems using <strong>Java 17</strong> and <strong>Spring Boot 3</strong>.
-            Designed and shipped <strong>Nexus</strong> — a live multiplayer game platform
-            with STOMP WebSocket sessions, PostgreSQL persistence, and automated CI/CD
-            via GitHub Actions. Focused on clean architecture, concurrency, and systems
-            that hold up under real user load. Actively contributing to open-source and
-            targeting remote backend engineering roles.
+    <!-- ═══════════════════════════════════════ -->
+    <!-- HERO SECTION -->
+    <!-- ═══════════════════════════════════════ -->
+    <section class="hero section" id="hero" aria-label="Introduction">
+      <div class="container hero__inner">
+        <div class="hero__content reveal">
+          <p class="hero__greeting">Hello, I'm</p>
+          <h1 class="hero__name">Vijay Kumar</h1>
+          <h2 class="hero__title">Backend Engineer</h2>
+          <p class="hero__bio">
+            I build scalable, production-grade backend systems using Node.js,
+            PostgreSQL, and Docker. Passionate about clean architecture,
+            performance optimization, and developer experience.
           </p>
+          <div class="hero__actions">
+            <a href="#projects" class="btn btn--primary">View Projects</a>
+            <a href="#contact" class="btn btn--secondary">Get In Touch</a>
+          </div>
+          <div class="hero__social">
+            <a href="https://github.com/VijayKumarCode" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" class="social-link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+              </svg>
+            </a>
+            <a href="https://linkedin.com/in/vijaykumarcode" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="social-link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero__image-wrapper reveal reveal--delay">
+          <div class="hero__image-frame">
+            <img
+              src="/assets/profile-pic.png"
+              alt="Vijay Kumar — Backend Engineer"
+              class="hero__image"
+              width="400"
+              height="400"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ═════ Skills ═════ -->
-    <section id="skills" aria-labelledby="skills-heading">
-      <div class="section-header">
-        <p class="section__text__p1">Technical Expertise</p>
-        <h2 class="section-title" id="skills-heading">Stack</h2>
-      </div>
-      <div class="skills-grid">
-        <div class="skills-group">
-          <h3 class="skills-group-title">Core & Backend</h3>
-          <ul class="skills-list" role="list">
-            <li class="skill-item"><span class="skill-name" id="skill-label-java">Java 17</span><meter class="skill-bar" min="0" max="100" value="90" aria-labelledby="skill-label-java">90%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-spring">Spring Boot 3</span><meter class="skill-bar" min="0" max="100" value="85" aria-labelledby="skill-label-spring">85%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-jpa">Spring Data JPA</span><meter class="skill-bar" min="0" max="100" value="80" aria-labelledby="skill-label-jpa">80%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-ws">WebSocket / STOMP</span><meter class="skill-bar" min="0" max="100" value="85" aria-labelledby="skill-label-ws">85%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-pg">PostgreSQL</span><meter class="skill-bar" min="0" max="100" value="78" aria-labelledby="skill-label-pg">78%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-dsa">DSA</span><meter class="skill-bar" min="0" max="100" value="88" aria-labelledby="skill-label-dsa">88%</meter></li>
-          </ul>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- ABOUT SECTION -->
+    <!-- ═══════════════════════════════════════ -->
+    <section class="about section" id="about" aria-labelledby="about-heading">
+      <div class="container about__inner">
+        <div class="about__image-wrapper reveal">
+          <div class="about__image-frame">
+            <img
+              src="/assets/about-pic.png"
+              alt="Vijay Kumar working on backend systems"
+              class="about__image"
+              width="480"
+              height="480"
+              loading="lazy"
+            />
+          </div>
         </div>
-        <div class="skills-group">
-          <h3 class="skills-group-title">Tools & Infrastructure</h3>
-          <ul class="skills-list" role="list">
-            <li class="skill-item"><span class="skill-name" id="skill-label-git">Git & GitHub</span><meter class="skill-bar" min="0" max="100" value="92" aria-labelledby="skill-label-git">92%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-gha">GitHub Actions</span><meter class="skill-bar" min="0" max="100" value="78" aria-labelledby="skill-label-gha">78%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-docker">Docker</span><meter class="skill-bar" min="0" max="100" value="68" aria-labelledby="skill-label-docker">68%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-linux">Linux (Ubuntu)</span><meter class="skill-bar" min="0" max="100" value="78" aria-labelledby="skill-label-linux">78%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-maven">Maven / JUnit</span><meter class="skill-bar" min="0" max="100" value="75" aria-labelledby="skill-label-maven">75%</meter></li>
-            <li class="skill-item"><span class="skill-name" id="skill-label-rest">REST APIs</span><meter class="skill-bar" min="0" max="100" value="90" aria-labelledby="skill-label-rest">90%</meter></li>
-          </ul>
+        <div class="about__content reveal reveal--delay">
+          <p class="section__label">Get To Know More</p>
+          <h2 id="about-heading" class="section__title">About Me</h2>
+          <p class="about__bio">
+            I'm a backend engineer with a strong foundation in designing and
+            building scalable distributed systems. My expertise spans REST API
+            design, database optimization, container orchestration, and CI/CD
+            pipeline engineering.
+          </p>
+          <p class="about__bio">
+            I believe great software is built at the intersection of clean
+            architecture, operational excellence, and deep understanding of
+            the problem domain. I write about backend engineering on this blog.
+          </p>
+          <div class="about__cards">
+            <div class="info-card">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+              <div>
+                <h3 class="info-card__title">Education</h3>
+                <p class="info-card__text">B.E. Computer Science</p>
+              </div>
+            </div>
+            <div class="info-card">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              <div>
+                <h3 class="info-card__title">Experience</h3>
+                <p class="info-card__text">2+ Years Backend Engineering</p>
+              </div>
+            </div>
+          </div>
+          <a href="#contact" class="btn btn--primary">Contact Me</a>
         </div>
       </div>
     </section>
 
-    <!-- ═════ Projects ═════ -->
-    <section id="projects" aria-labelledby="projects-heading">
-      <div class="section-header">
-        <p class="section__text__p1">What I've Built</p>
-        <h2 class="section-title" id="projects-heading">Projects</h2>
-      </div>
-      <!-- Featured Project -->
-      <article class="project-card project-featured" aria-label="Nexus Multiplayer Arena">
-        <span class="project-badge" aria-label="Live deployment">Live</span>
-        <div class="project-img-wrap">
-          <img src="assets/nexus.png" alt="Nexus Multiplayer Arena project screenshot showing real-time game interface" loading="lazy" decoding="async" width="600" height="340">
-          <div class="project-img-fallback" aria-hidden="true">⚔️</div>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- PROJECTS SECTION -->
+    <!-- ═══════════════════════════════════════ -->
+    <section class="projects section" id="projects" aria-labelledby="projects-heading">
+      <div class="container">
+        <p class="section__label">Browse My Recent</p>
+        <h2 id="projects-heading" class="section__title">Projects</h2>
+        <div class="projects__grid">
+          <article class="project-card reveal">
+            <div class="project-card__header">
+              <svg class="project-card__icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <h3 class="project-card__title">REST API Service</h3>
+            <p class="project-card__desc">Production-grade Node.js REST API with JWT auth, rate limiting, and PostgreSQL integration.</p>
+            <div class="project-card__tags">
+              <span class="project-tag">Node.js</span>
+              <span class="project-tag">Express</span>
+              <span class="project-tag">PostgreSQL</span>
+            </div>
+            <div class="project-card__actions">
+              <a href="#" class="btn btn--secondary btn--sm" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a href="#" class="btn btn--primary btn--sm" target="_blank" rel="noopener noreferrer">Live Demo</a>
+            </div>
+          </article>
         </div>
-        <div class="project-info">
-          <div class="project-stack">Java 17 · Spring Boot 3 · WebSocket (STOMP/SockJS) · PostgreSQL</div>
-          <h3 class="project-title">Nexus Multiplayer Arena</h3>
-          <p class="project-desc">Real-time multiplayer game platform with STOMP WebSocket sessions, bcrypt authentication, email activation via Resend HTTP API, and automated CI/CD via GitHub Actions to Oracle Cloud.</p>
-          <ul class="project-claims" aria-label="Technical highlights">
-            <li>Concurrent game state managed in ConcurrentHashMap — no race conditions under load</li>
-            <li>Diagnosed Railway port-587 SMTP block; replaced with Resend HTTP API for reliable email delivery</li>
-            <li>Fixed JPQL enum inner-class crash causing move rejections every 10 seconds</li>
-            <li>WebSocket session lifecycle with connect/disconnect presence tracking</li>
-          </ul>
-          <div class="btn-container project-ctas">
-            <a href="https://nexusgame.space" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Live Demo ↗</a>
-            <a href="https://github.com/VijayKumarCode/nexus" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">GitHub</a>
-          </div>
-        </div>
-      </article>
-      <div class="projects-grid">
-        <article class="project-card">
-          <div class="project-img-wrap"><img src="assets/TicTacToe.png" alt="TicTacToe network multiplayer game" loading="lazy" decoding="async" width="400" height="240"></div>
-          <div class="project-info">
-            <div class="project-stack">Java · Sockets · Multithreading</div>
-            <h3 class="project-title">TicTacToe (Network Multiplayer)</h3>
-            <p class="project-desc">Network-based multiplayer game using raw Java Sockets. Handles concurrent sessions with dedicated threads. Architectural predecessor to Nexus.</p>
-            <div class="btn-container"><a href="https://github.com/VijayKumarCode/TicTacToe_java" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">GitHub ↗</a></div>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-img-wrap"><img src="assets/dsa.png" alt="Data Structures and Algorithms implementations in Java" loading="lazy" decoding="async" width="400" height="240"></div>
-          <div class="project-info">
-            <div class="project-stack">Java 17 · Algorithms · Data Structures</div>
-            <h3 class="project-title">DSA In Java</h3>
-            <p class="project-desc">Documented implementations of Trees, Graphs, Linked Lists, and sorting algorithms. Each solution includes verified time and space complexity analysis with test cases.</p>
-            <div class="btn-container"><a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">GitHub ↗</a></div>
-          </div>
-        </article>
       </div>
     </section>
 
-    <!-- ═════ Blog Preview ═════ -->
-    <section id="blog" aria-labelledby="blog-heading">
-      <div class="section-header">
-        <p class="section__text__p1">Writing</p>
-        <h2 class="section-title" id="blog-heading">Engineering Log</h2>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- BLOG SECTION (HOMEPAGE PREVIEW) -->
+    <!-- ═══════════════════════════════════════ -->
+    <section class="blog-preview section" id="blog" aria-labelledby="blog-heading">
+      <div class="container">
+        <p class="section__label">Recent Articles</p>
+        <h2 id="blog-heading" class="section__title">Blog</h2>
+
+        <!-- Blog cards rendered by home-blog.js -->
+        <div
+          id="home-blog-list"
+          class="blog-grid"
+          aria-label="Recent blog posts"
+          aria-live="polite"
+        ></div>
+
+        <div class="blog-preview__cta">
+          <a href="/blog.html" class="btn btn--secondary">View All Articles</a>
+        </div>
       </div>
-      <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
-        <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
-        <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
-        <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
-      </div>
-      <div id="blog-container" class="blog-grid" style="display:none;"></div>
-      <div id="blog-fallback" style="display:none;" aria-live="polite">
-        <div id="blog-empty" class="blog-empty-state" role="status"><p class="blog-empty-icon" aria-hidden="true">📝</p><h3>No Posts Yet</h3><p>Engineering logs are in progress. Check back soon.</p></div>
-        <div id="blog-error" class="blog-error-state" role="alert"><p class="blog-error-icon" aria-hidden="true">⚡</p><h3>Failed to Load Posts</h3><p>The engineering log is temporarily unavailable.</p><button id="blog-retry-btn" class="btn btn-ghost btn-sm" type="button">Retry</button></div>
-      </div>
-      <div class="blog-footer-link"><a href="/blog" class="btn btn-ghost btn-blog-all">View all entries <span class="btn-arrow" aria-hidden="true">→</span></a></div>
     </section>
 
-    <!-- ═════ Contact ═════ -->
-    <section id="contact" aria-labelledby="contact-heading">
-      <div class="section-header">
-        <p class="section__text__p1">Get In Touch</p>
-        <h2 class="section-title" id="contact-heading">Contact</h2>
-      </div>
-      <div class="contact-grid">
-        <div class="contact-info">
-          <p class="contact-tagline">Open to remote backend engineering roles.<br>Reach out — I reply within 24 hours.</p>
-          <div class="contact-links">
-            <a href="mailto:vkumar.kumar31@gmail.com" class="contact-link"><img src="assets/email.png" alt="" aria-hidden="true" class="contact-icon" width="20" height="20">vkumar.kumar31@gmail.com</a>
-            <a href="https://linkedin.com/in/vijaykumarcode" target="_blank" rel="noopener noreferrer" class="contact-link"><img src="assets/linkedin.png" alt="" aria-hidden="true" class="contact-icon" width="20" height="20">linkedin.com/in/vijaykumarcode</a>
-          </div>
-        </div>
-        <div class="contact-form-wrap">
-          <form id="contact-form" novalidate>
-            <div class="form-group"><label for="name">Name <span aria-hidden="true">*</span></label><input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" required minlength="2" maxlength="100"><span class="field-error" id="name-error" role="alert"></span></div>
-            <div class="form-group"><label for="email">Email <span aria-hidden="true">*</span></label><input type="email" id="email" name="email" placeholder="your@email.com" autocomplete="email" required><span class="field-error" id="email-error" role="alert"></span></div>
-            <div class="form-group"><label for="message">Message <span aria-hidden="true">*</span></label><textarea id="message" name="message" placeholder="What would you like to discuss?" rows="5" required minlength="10" maxlength="5000"></textarea><span class="field-error" id="message-error" role="alert"></span></div>
-            <button type="submit" class="btn btn-primary btn-full" id="submit-btn"><span class="btn-text">Send Message</span><span class="btn-spinner" aria-hidden="true"></span></button>
-            <div id="form-status" role="alert" aria-live="polite"></div>
-          </form>
+    <!-- ═══════════════════════════════════════ -->
+    <!-- CONTACT SECTION -->
+    <!-- ═══════════════════════════════════════ -->
+    <section class="contact section" id="contact" aria-labelledby="contact-heading">
+      <div class="container contact__inner">
+        <p class="section__label">Get In Touch</p>
+        <h2 id="contact-heading" class="section__title">Contact Me</h2>
+        <div class="contact__cards">
+          <a href="mailto:vijay@vijaykumarcode.space" class="contact-card" aria-label="Send email to Vijay Kumar">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <div>
+              <p class="contact-card__label">Email</p>
+              <p class="contact-card__value">vijay@vijaykumarcode.space</p>
+            </div>
+          </a>
+          <a href="https://linkedin.com/in/vijaykumarcode" target="_blank" rel="noopener noreferrer" class="contact-card" aria-label="Connect on LinkedIn">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            <div>
+              <p class="contact-card__label">LinkedIn</p>
+              <p class="contact-card__value">linkedin.com/in/vijaykumarcode</p>
+            </div>
+          </a>
         </div>
       </div>
     </section>
   </main>
 
-  <footer role="contentinfo">
-    <div class="footer-inner">
-      <nav aria-label="Footer navigation">
-        <ul class="footer-links" role="list">
-          <li><a href="#about">About</a></li><li><a href="#skills">Skills</a></li><li><a href="#projects">Projects</a></li><li><a href="#blog">Log</a></li><li><a href="#contact">Contact</a></li>
-        </ul>
+  <!-- ═══════════════════════════════════════ -->
+  <!-- FOOTER -->
+  <!-- ═══════════════════════════════════════ -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__inner">
+      <p class="footer__copy">
+        &copy; <span id="footer-year"></span> Vijay Kumar. Designed and built with care.
+      </p>
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <a href="#about" class="footer__link">About</a>
+        <a href="#projects" class="footer__link">Projects</a>
+        <a href="/blog.html" class="footer__link">Blog</a>
+        <a href="#contact" class="footer__link">Contact</a>
       </nav>
-      <p class="footer-copy">© 2026 Vijay Kumar. Built with Spring Boot on the backend, precision on the frontend.</p>
     </div>
   </footer>
-  <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
 
-  <!-- Scripts -->
-  <script type="module" src="js/script.js"></script>
-  <script type="module" src="js/contact.js"></script>
-  <script type="module" src="js/home-blog.js"></script>
+  <!-- Scripts loaded with defer for non-blocking rendering -->
+  <script src="blogManager.js" defer></script>
+  <script src="home-blog.js" defer></script>
+  <script src="script.js" defer></script>
+  <script>
+    // Inline minimal script for footer year — no defer needed, very lightweight
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
