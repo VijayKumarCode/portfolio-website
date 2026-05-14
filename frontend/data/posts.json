@@ -4,32 +4,35 @@
     "slug": "building-rest-apis-with-nodejs",
     "title": "Building Production-Grade REST APIs with Node.js",
     "excerpt": "A deep dive into designing robust, scalable REST APIs using Node.js, Express, and best practices for production deployment.",
-    "content": "<h2>Introduction</h2><p>Building production-grade REST APIs requires careful planning around security, scalability, and maintainability. In this post, we explore the architectural decisions that separate hobby projects from enterprise-ready services.</p><h2>Project Structure</h2><p>A well-organized Node.js API separates concerns cleanly: routes handle HTTP mapping, controllers handle business logic, services handle data operations, and middleware handles cross-cutting concerns like auth and logging.</p><h2>Error Handling Strategy</h2><p>Every route must be wrapped in a centralized error handler. Never leak stack traces to clients. Use structured error responses with consistent shape: <code>{ success, message, data, errors }</code>.</p><h2>Authentication</h2><p>Use JWT with short expiry for access tokens and long-lived refresh tokens stored in httpOnly cookies. Never store tokens in localStorage.</p><h2>Conclusion</h2><p>Production APIs are defined by their failure modes, not their happy paths. Design for resilience first.</p>",
+    "content": "<h2>Introduction</h2><p>Building production-grade REST APIs requires careful planning around security, scalability, and maintainability. In this post we explore the architectural decisions that separate hobby projects from enterprise-ready services.</p><h2>Project Structure</h2><p>A well-organized Node.js API separates concerns cleanly: routes handle HTTP mapping, controllers handle business logic, services handle data operations, and middleware handles cross-cutting concerns like auth and logging.</p><h2>Error Handling Strategy</h2><p>Every route must be wrapped in a centralized error handler. Never leak stack traces to clients. Use structured error responses with a consistent shape: <code>{ success, message, data, errors }</code>.</p><h2>Authentication</h2><p>Use JWT with short expiry for access tokens and long-lived refresh tokens stored in httpOnly cookies. Never store tokens in localStorage.</p><h2>Conclusion</h2><p>Production APIs are defined by their failure modes, not their happy paths. Design for resilience first.</p>",
     "date": "2025-04-12",
     "author": "Vijay Kumar",
     "thumbnail": "/assets/blog/blog-rest-api.jpg",
-    "tags": ["Node.js", "REST API", "Backend", "Express"]
+    "tags": ["Node.js", "REST API", "Backend", "Express"],
+    "readTime": "7 min read"
   },
   {
     "id": 2,
     "slug": "database-optimization-postgresql",
     "title": "PostgreSQL Query Optimization: From Slow to Sub-100ms",
     "excerpt": "Practical techniques for diagnosing and resolving slow PostgreSQL queries using EXPLAIN ANALYZE, indexing strategies, and query restructuring.",
-    "content": "<h2>The Problem</h2><p>Slow queries are the most common performance bottleneck in backend systems. A query that takes 3 seconds under light load can take 30 seconds under production traffic. Understanding the query planner is essential.</p><h2>EXPLAIN ANALYZE</h2><p>Always start with <code>EXPLAIN ANALYZE</code>. Look for sequential scans on large tables, high cost nodes, and row estimate mismatches. These are your smoking guns.</p><h2>Indexing Strategy</h2><p>Create partial indexes for filtered queries. Use composite indexes in column order matching your WHERE and ORDER BY clauses. Avoid over-indexing — each index costs write performance.</p><h2>Connection Pooling</h2><p>Never connect directly from application servers. Use PgBouncer or pg-pool. Configure pool size based on: <code>pool_size = (core_count * 2) + effective_spindle_count</code>.</p><h2>Results</h2><p>With proper indexing and query restructuring, most slow queries can be brought under 100ms without changing business logic.</p>",
+    "content": "<h2>The Problem</h2><p>Slow queries are the most common performance bottleneck in backend systems. A query taking 3 seconds under light load can take 30 seconds under production traffic. Understanding the query planner is essential.</p><h2>EXPLAIN ANALYZE</h2><p>Always start with <code>EXPLAIN ANALYZE</code>. Look for sequential scans on large tables, high-cost nodes, and row estimate mismatches.</p><h2>Indexing Strategy</h2><p>Create partial indexes for filtered queries. Use composite indexes in column order matching your WHERE and ORDER BY clauses. Avoid over-indexing — each index costs write performance.</p><h2>Connection Pooling</h2><p>Never connect directly from application servers. Use PgBouncer or pg-pool. Configure pool size based on: <code>pool_size = (core_count * 2) + effective_spindle_count</code>.</p><h2>Results</h2><p>With proper indexing and query restructuring, most slow queries can be brought under 100ms without changing business logic.</p>",
     "date": "2025-03-28",
     "author": "Vijay Kumar",
     "thumbnail": "/assets/blog/blog-postgres.jpg",
-    "tags": ["PostgreSQL", "Database", "Performance", "Backend"]
+    "tags": ["PostgreSQL", "Database", "Performance", "Backend"],
+    "readTime": "9 min read"
   },
   {
     "id": 3,
     "slug": "docker-containerization-guide",
     "title": "Containerizing Backend Services with Docker: A Production Playbook",
     "excerpt": "From Dockerfile best practices to multi-stage builds and container security hardening for production backend deployments.",
-    "content": "<h2>Why Containerize</h2><p>Containers solve the classic 'works on my machine' problem by packaging application code with its runtime environment. For backend services, this means predictable deployments across dev, staging, and production.</p><h2>Multi-Stage Builds</h2><p>Always use multi-stage builds for production images. Build in a full Node image, copy only the dist output to a slim Alpine base. This reduces image size from ~900MB to ~80MB.</p><h2>Security Hardening</h2><p>Never run containers as root. Use a dedicated non-root user. Scan images with Trivy or Snyk before pushing to registry. Pin base image versions — never use <code>:latest</code> in production.</p><h2>Health Checks</h2><p>Add a <code>HEALTHCHECK</code> instruction to every Dockerfile. This enables orchestrators like Kubernetes to route traffic only to healthy instances.</p><h2>Conclusion</h2><p>A well-crafted Dockerfile is as important as your application code. Treat it with the same engineering rigor.</p>",
+    "content": "<h2>Why Containerize</h2><p>Containers solve the classic works-on-my-machine problem by packaging application code with its runtime environment. For backend services, this means predictable deployments across dev, staging, and production.</p><h2>Multi-Stage Builds</h2><p>Always use multi-stage builds for production images. Build in a full Node image, copy only the dist output to a slim Alpine base. This reduces image size from ~900MB to ~80MB.</p><h2>Security Hardening</h2><p>Never run containers as root. Use a dedicated non-root user. Scan images with Trivy or Snyk before pushing to registry. Pin base image versions — never use <code>:latest</code> in production.</p><h2>Health Checks</h2><p>Add a <code>HEALTHCHECK</code> instruction to every Dockerfile. This enables orchestrators like Kubernetes to route traffic only to healthy instances.</p><h2>Conclusion</h2><p>A well-crafted Dockerfile is as important as your application code. Treat it with the same engineering rigor.</p>",
     "date": "2025-03-10",
     "author": "Vijay Kumar",
     "thumbnail": "/assets/blog/blog-docker.jpg",
-    "tags": ["Docker", "DevOps", "Containers", "Backend"]
+    "tags": ["Docker", "DevOps", "Containers", "Backend"],
+    "readTime": "8 min read"
   }
 ]
