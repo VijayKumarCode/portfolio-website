@@ -1,244 +1,125 @@
-/**
- * post.js
- * ─────────────────────────────────────────────────────────
- * Renders an individual blog post on post.html.
- *
- * SLUG EXTRACTION:
- *   CORRECT: URLSearchParams — /post.html?slug=my-slug
- *   WRONG:   pathname — /post.html gives "/post.html" not slug
- *
- * DEPENDENCY: blogManager.js must be loaded first.
- * ─────────────────────────────────────────────────────────
- */
+'use strict';
 
-(function () {
-  'use strict';
+import { formatDate, escHtml } from '../src/utils/helpers.js';
 
-  // ─────────────────────────────────────────────────────────
-  // getSlugFromURL
-  // FIXED: Uses URLSearchParams — the ONLY correct approach
-  // for static HTML deployments.
-  // URL pattern: /post.html?slug=my-post-slug
-  // ─────────────────────────────────────────────────────────
-  function getSlugFromURL() {
-    var params = new URLSearchParams(window.location.search);
-    var slug = params.get('slug');
-    return (slug && slug.trim() !== '') ? slug.trim() : null;
+document.addEventListener('DOMContentLoaded', async () => {
+  const slug = getSlugFromUrl();
+
+  // DOM refs matching post.html IDs exactly
+  const loadingEl   = document.getElementById('post-loading');
+  const containerEl = document.getElementById('post-container');
+  const notFoundEl  = document.getElementById('post-not-found');
+  const errorEl     = document.getElementById('post-error');
+  const retryBtn    = document.getElementById('post-retry');
+
+  // Post content refs
+  const categoryEl  = document.getElementById('post-category');
+  const dateEl      = document.getElementById('post-date');
+  const readTimeEl  = document.getElementById('post-read-time');
+  const titleEl     = document.getElementById('post-title');
+  const tagsEl      = document.getElementById('post-tags');
+  const bodyEl      = document.getElementById('post-body');
+
+  if (!slug) {
+    showState('not-found');
+    return;
   }
 
-  // ─── Set a DOM element's text content safely ─────────────
-  function setText(id, value) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = (typeof value === 'string') ? value : '';
-  }
+  try {
+    const res = await fetch('/data/posts.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
 
-  // ─── Set a DOM element's attribute safely ────────────────
-  function setAttr(id, attr, value) {
-    var el = document.getElementById(id);
-    if (el && typeof value === 'string') el.setAttribute(attr, value);
-  }
+    // DEFENSIVE: handle both plain array and { posts: [...] } wrapper
+    const posts = Array.isArray(data) ? data : (data.posts || []);
+    const post = posts.find(p => p.slug === slug);
 
-  // ─────────────────────────────────────────────────────────
-  // renderPost
-  // Populates all post DOM elements with post data.
-  // ─────────────────────────────────────────────────────────
-  function renderPost(post) {
-    var bm = window.BlogManager;
-
-    // SEO: Update page title and meta description
-    document.title = bm.escapeHTML(post.title) + ' | Vijay Kumar';
-    var metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute('content', post.excerpt || '');
-
-    // Open Graph tags for social sharing
-    var ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) ogTitle.setAttribute('content', post.title);
-    var ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) ogDesc.setAttribute('content', post.excerpt || '');
-
-    // Post header fields
-    setText('post-title', post.title);
-    setText('post-author', post.author || 'Vijay Kumar');
-    setText('post-read-time', post.readTime || '5 min read');
-
-    // Date — use <time> element with datetime attribute
-    var dateEl = document.getElementById('post-date');
-    if (dateEl) {
-      dateEl.textContent = bm.formatDate(post.date);
-      dateEl.setAttribute('datetime', post.date);
-    }
-
-    // Tags
-    var tagsEl = document.getElementById('post-tags');
-    if (tagsEl && Array.isArray(post.tags) && post.tags.length > 0) {
-      var tagsHTML = '';
-      post.tags.forEach(function (tag) {
-        tagsHTML += '<span class="blog-tag">' + bm.escapeHTML(tag) + '</span>';
-      });
-      tagsEl.innerHTML = tagsHTML;
-    }
-
-    // Hero thumbnail
-    var thumbEl = document.getElementById('post-thumbnail');
-    if (thumbEl) {
-      if (post.thumbnail) {
-        thumbEl.src = post.thumbnail;
-        thumbEl.alt = post.title;
-        thumbEl.style.display = 'block';
-        thumbEl.onerror = function () {
-          this.style.display = 'none';
-        };
-      } else {
-        thumbEl.style.display = 'none';
-      }
-    }
-
-    // Post body — trusted HTML content from posts.json
-    var contentEl = document.getElementById('post-content');
-    if (contentEl) {
-      contentEl.innerHTML = post.content || '<p>This post has no content yet.</p>';
-    }
-
-    // Back link
-    var backEl = document.getElementById('post-back-link');
-    if (backEl) {
-      backEl.href = '/blog.html';
-      backEl.textContent = 'Back to Articles';
-    }
-
-    // Show post, hide loading state
-    var loadingEl = document.getElementById('post-loading');
-    if (loadingEl) loadingEl.style.display = 'none';
-
-    var postContainer = document.getElementById('post-container');
-    if (postContainer) postContainer.style.display = 'block';
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // renderNotFound — shown when slug has no matching post
-  // ─────────────────────────────────────────────────────────
-  function renderNotFound(slug) {
-    document.title = 'Article Not Found | Vijay Kumar';
-
-    var loadingEl = document.getElementById('post-loading');
-    if (loadingEl) loadingEl.style.display = 'none';
-
-    var notFoundEl = document.getElementById('post-not-found');
-    if (notFoundEl) {
-      notFoundEl.style.display = 'block';
+    if (!post) {
+      showState('not-found');
+      document.title = 'Not Found | Engineering Log';
       return;
     }
 
-    // Fallback inject if #post-not-found doesn't exist in HTML
-    var main = document.querySelector('main') || document.body;
-    var div = document.createElement('div');
-    div.className = 'post-state post-state--not-found';
-    div.setAttribute('role', 'main');
-    div.innerHTML = (
-      '<div class="post-state__inner">' +
-        '<h1>Article Not Found</h1>' +
-        '<p>The article you are looking for does not exist or may have been moved.</p>' +
-        (slug
-          ? '<p class="post-state__slug">Requested slug: <code>' + window.BlogManager.escapeHTML(slug) + '</code></p>'
-          : ''
-        ) +
-        '<div class="post-state__actions">' +
-          '<a href="/blog.html" class="btn btn--primary">Browse All Articles</a>' +
-          '<a href="/" class="btn btn--secondary">Back to Home</a>' +
-        '</div>' +
-      '</div>'
-    );
-    main.appendChild(div);
-  }
+    // Convert raw \n to HTML paragraphs
+    const htmlContent = convertNewlinesToHtml(post.content || '');
 
-  // ─────────────────────────────────────────────────────────
-  // renderError — shown when fetch itself fails
-  // ─────────────────────────────────────────────────────────
-  function renderError() {
-    document.title = 'Error | Vijay Kumar';
+    // Render post
+    if (categoryEl) categoryEl.textContent = post.category || 'Engineering';
+    if (dateEl)     dateEl.textContent = formatDate(post.date);
+    if (readTimeEl) readTimeEl.textContent = post.readTime || estimateReadingTime(post.content || '');
+    if (titleEl)    titleEl.textContent = post.title || 'Untitled';
+    if (bodyEl)     bodyEl.innerHTML = htmlContent;
 
-    var loadingEl = document.getElementById('post-loading');
-    if (loadingEl) loadingEl.style.display = 'none';
-
-    var main = document.querySelector('main') || document.body;
-    var div = document.createElement('div');
-    div.className = 'post-state post-state--error';
-    div.setAttribute('role', 'alert');
-    div.innerHTML = (
-      '<div class="post-state__inner">' +
-        '<h1>Failed to Load Article</h1>' +
-        '<p>There was a problem loading this article. Please check your connection and try again.</p>' +
-        '<div class="post-state__actions">' +
-          '<button class="btn btn--primary" onclick="window.location.reload()">Try Again</button>' +
-          '<a href="/blog.html" class="btn btn--secondary">Browse Articles</a>' +
-        '</div>' +
-      '</div>'
-    );
-    main.appendChild(div);
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // renderNoSlug — shown when URL has no ?slug= parameter
-  // ─────────────────────────────────────────────────────────
-  function renderNoSlug() {
-    console.warn('[post.js] No slug parameter in URL. Cannot load post.');
-    renderNotFound(null);
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // initPostPage — main entry point
-  // ─────────────────────────────────────────────────────────
-  async function initPostPage() {
-    // Guard: only run on post.html
-    if (!document.getElementById('post-container') &&
-        !document.getElementById('post-loading')) {
-      return;
+    if (tagsEl && post.tags) {
+      tagsEl.innerHTML = post.tags.map(t =>
+        `<span class="post__tag">${escHtml(t)}</span>`
+      ).join('');
     }
 
-    // Guard: BlogManager required
-    if (!window.BlogManager) {
-      console.error('[post.js] BlogManager not loaded. Verify script order in post.html.');
-      renderError();
-      return;
-    }
+    // Update page title & meta
+    document.title = `${escHtml(post.title)} | Engineering Log`;
+    updateMetaDescription(post);
 
-    // Extract slug from URL query parameters
-    // URL must be: /post.html?slug=my-post-slug
-    var slug = getSlugFromURL();
+    // Show post, hide loading
+    showState('post');
 
-    if (!slug) {
-      renderNoSlug();
-      return;
-    }
-
-    // Show loading state
-    var loadingEl = document.getElementById('post-loading');
-    if (loadingEl) loadingEl.style.display = 'block';
-
-    var postContainer = document.getElementById('post-container');
-    if (postContainer) postContainer.style.display = 'none';
-
-    try {
-      var post = await window.BlogManager.getPostBySlug(slug);
-
-      if (!post) {
-        renderNotFound(slug);
-        return;
-      }
-
-      renderPost(post);
-
-    } catch (err) {
-      console.error('[post.js] Failed to load post for slug "' + slug + '":', err);
-      renderError();
-    }
+  } catch (err) {
+    console.error('[post.js]', err);
+    showState('error');
   }
 
-  // ─── Init ─────────────────────────────────────────────────
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPostPage);
-  } else {
-    initPostPage();
-  }
+  // Retry handler
+  retryBtn?.addEventListener('click', () => {
+    window.location.reload();
+  });
 
-})();
+  // State helper
+  function showState(state) {
+    loadingEl?.classList.toggle('hidden', state !== 'loading');
+    containerEl?.classList.toggle('hidden', state !== 'post');
+    notFoundEl?.classList.toggle('hidden', state !== 'not-found');
+    errorEl?.classList.toggle('hidden', state !== 'error');
+  }
+});
+
+function getSlugFromUrl() {
+  const path = window.location.pathname;
+  // Support /blog/:slug and /blog/:slug/
+  const match = path.match(/\/blog\/([^/]+)\/?$/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function convertNewlinesToHtml(content) {
+  if (!content) return '';
+  // Replace double newlines with paragraph breaks
+  return content
+    .replace(/\\n\\n/g, '</p><p>')
+    .replace(/\\n/g, '<br>');
+}
+
+function estimateReadingTime(content) {
+  const text = content.replace(/<[^>]*>/g, '').replace(/\\n/g, ' ');
+  const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} min read`;
+}
+
+function updateMetaDescription(post) {
+  const desc = stripHtml(post.content || '').slice(0, 160);
+  let meta = document.querySelector('meta[name="description"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute('name', 'description');
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', desc);
+}
+
+function stripHtml(html) {
+  if (!html) return '';
+  try {
+    return new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
+  } catch {
+    return html.replace(/<[^>]*>/g, '');
+  }
+}
