@@ -21,7 +21,7 @@
   gap: var(--space-6);
 }
 
-/*.nav-back {
+.nav-back {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--color-text-secondary);
@@ -29,7 +29,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
-}*/
+}
 
 .nav-back:hover {
   color: var(--color-accent);
