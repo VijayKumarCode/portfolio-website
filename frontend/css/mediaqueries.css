@@ -221,6 +221,18 @@
     width: 100%; 
   }
 
+  .footer_inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: 0 var(--space-4);
+  }
+
+  .footer_links {
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
 }
 
 /* ─── 480px - 639px ─── */
@@ -309,8 +321,21 @@
   .blog-article-card { 
     padding: var(--space-4); 
   }
+  
   .contact-link {
     font-size: var(--text-xs); word-break: break-all; 
+  }
+
+  .footer_inner {
+    padding: 0 var(--space-3);
+  }
+
+  .footer_copy {
+    font-size: 0.7rem;
+  }
+
+  .footer_links a {
+    font-size: var(--text-xs);
   }
 
 }
@@ -375,5 +400,5 @@
   section { 
     padding: 2rem 0; page-break-inside: avoid; 
   }
-  
+
 }
