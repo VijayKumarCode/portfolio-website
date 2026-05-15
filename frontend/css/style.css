@@ -1350,60 +1350,36 @@ footer {
   background: var(--color-bg-primary);
   border-top: 1px solid var(--color-border);
   padding: var(--space-8) 0;
-  width: 100%;
 }
 
-/* ─── Footer Inner — Flex Layout ─── */
-.footer_inner {
+.footer-inner {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-6);
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--space-8);   /* generous side padding */
-  flex-wrap: wrap;             /* stack on very small screens */
+  gap: var(--space-4);
 }
 
-/* ─── Copyright — Bottom Left ─── */
-.footer_copy {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  white-space: nowrap;
-  flex-shrink: 0;
-  /* sits naturally on the left via flex + justify-content: space-between */
-}
-
-/* ─── Footer Links — Bottom Right ─── */
-.footer_links {
+.footer-links {
   display: flex;
   list-style: none;
-  gap: var(--space-6);         /* gap between nav items */
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  flex-shrink: 0;
+  gap: var(--space-6);
 }
 
-.footer_links a {
+.footer-links a {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
-  font-weight: 500;
   transition: color var(--transition-fast);
-  white-space: nowrap;
 }
 
-.footer_links a:hover,
-.footer_links a:focus {
-  color: var(--color-accent);
+.footer-links a:hover {
+  color: var(--color-text-secondary);
 }
 
-.footer_links a:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+.footer-copy {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: center;
 }
-
 
 /* ─── Back to Top ─── */
 #back-to-top {
