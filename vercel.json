@@ -11,6 +11,10 @@
     {
       "source": "/contact",
       "destination": "/index.html#contact"
+    },
+    {
+      "source": "/resume",
+      "destination": "/resume.html"
     }
   ],
   "redirects": [
@@ -27,6 +31,16 @@
     {
       "source": "/index.html",
       "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/resume.html",
+      "destination": "/resume",
+      "permanent": true
+    },
+    {
+      "source": "/resume/",
+      "destination": "/resume",
       "permanent": true
     }
   ],
@@ -85,6 +99,15 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=3600"
+        }
+      ]
+    },
+    {
+      "source": "/resume",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }

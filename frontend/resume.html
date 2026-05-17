@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Vijay Kumar — Java Backend Engineer. Production experience with Spring Boot 3, WebSocket, PostgreSQL, and real-time distributed systems.">
+<meta name="author" content="Vijay Kumar">
+<meta property="og:title" content="Vijay Kumar — Java Backend Engineer">
+<meta property="og:description" content="Backend engineer specializing in Java 17, Spring Boot 3, and real-time distributed systems. View portfolio at vijaykumarcode.space">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://vijaykumarcode.space/resume">
+<meta name="twitter:card" content="summary">
+<title>Vijay Kumar — Java Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Vijay Kumar",
+  "jobTitle": "Java Backend Engineer",
+  "url": "https://vijaykumarcode.space",
+  "sameAs": [
+    "https://github.com/VijayKumarCode",
+    "https://linkedin.com/in/vijaykumarcode"
+  ],
+  "knowsAbout": ["Java", "Spring Boot", "WebSocket", "PostgreSQL", "System Design", "Distributed Systems", "CI/CD"],
+  "seeks": {
+    "@type": "JobPosting",
+    "title": "Remote Backend Engineer",
+    "employmentType": "FULL_TIME",
+    "jobLocationType": "TELECOMMUTE"
+  }
+}
+</script>
+<style>
+  /* ═══════════════════════════════════════════════════════════════
+     UNIFIED DESIGN SYSTEM — Portfolio + Resume + Blog
+     Source of Truth: portfolio-website/frontend/css/style.css
+     All tokens below map 1:1 to the portfolio design system.
+     ═══════════════════════════════════════════════════════════════ */
+  :root {
+    /* ── Backgrounds (exact portfolio match) ── */
+    --bg-page:     #0c0f14;
+    --bg-card:     #11151c;
+    --bg-tertiary: #141920;
+    --bg-elevated: #1c2330;
+    --bg-input:    #0f131a;
+    --bg-code:     rgba(167, 139, 250, 0.08);
+
+    /* ── Text (exact portfolio match) ── */
+    --ink:         #e8ecf1;
+    --ink-light:   #94a3b8;
+    --ink-muted:   #64748b;
+
+    /* ── Borders (exact portfolio match) ── */
+    --rule:        rgba(148, 163, 184, 0.12);
+    --rule-light:  rgba(148, 163, 184, 0.25);
+
+    /* ── Accents (exact portfolio match) ── */
+    --accent:       #a78bfa;
+    --accent-light: #c4b5fd;
+    --accent-dark:  #7c3aed;
+    --accent-teal:  #22d3ee;
+
+    /* ── Status ── */
+    --success:      #22c55e;
+    --success-bg:   rgba(34, 197, 94, 0.12);
+    --success-border:rgba(34, 197, 94, 0.25);
+
+    /* ── Gradients (exact portfolio match) ── */
+    --gradient-accent: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
+    --gradient-hero:   linear-gradient(135deg, #0c0f14 0%, #11151c 50%, #141920 100%);
+    --gradient-border: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.3), transparent);
+
+    /* ── Typography (exact portfolio match) ── */
+    --font-sans:  'DM Sans', system-ui, -apple-system, sans-serif;
+    --font-mono:  'IBM Plex Mono', 'Fira Code', monospace;
+
+    /* ── Spacing (rem-based, 4px grid — portfolio match) ── */
+    --space-1:  0.25rem;   /* 4px  */
+    --space-2:  0.5rem;    /* 8px  */
+    --space-3:  0.75rem;   /* 12px */
+    --space-4:  1rem;      /* 16px */
+    --space-6:  1.5rem;    /* 24px */
+    --space-8:  2rem;      /* 32px */
+    --space-10: 2.5rem;    /* 40px */
+    --space-12: 3rem;      /* 48px */
+    --space-16: 4rem;      /* 64px */
+
+    /* ── Border Radius (exact portfolio match) ── */
+    --radius-sm:  6px;
+    --radius-md:  10px;
+    --radius-lg:  14px;
+    --radius-xl:  18px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    /* ── Shadows (exact portfolio match) ── */
+    --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-xl:   0 16px 48px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 20px rgba(167, 139, 250, 0.15);
+
+    /* ── Transitions (exact portfolio match) ── */
+    --transition-fast:   150ms ease;
+    --transition-base:   250ms ease;
+    --transition-slow:   400ms ease;
+
+    /* ── Layout ── */
+    --page-w: 860px;
+    --leading-tight:  1.2;
+    --leading-normal: 1.65;
+    --leading-relaxed:1.75;
+  }
+
+  /* Light mode — respects user preference */
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg-page:     #f8f8f6;
+      --bg-card:     #ffffff;
+      --bg-tertiary: #f3f4f6;
+      --bg-elevated: #f3f4f6;
+      --bg-input:    #f3f4f6;
+      --bg-code:     rgba(124, 58, 237, 0.06);
+      --ink:         #1a1a1a;
+      --ink-light:   #3d3d3d;
+      --ink-muted:   #6b7280;
+      --rule:        rgba(148, 163, 184, 0.25);
+      --rule-light:  rgba(148, 163, 184, 0.15);
+      --accent:      #7c3aed;
+      --accent-light:#8b5cf6;
+      --accent-dark: #6d28d9;
+      --accent-teal: #0d9488;
+      --success:     #16a34a;
+      --success-bg:  #dcfce7;
+      --success-border:rgba(22, 163, 74, 0.30);
+      --shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md:   0 4px 12px rgba(0,0,0,0.07);
+      --shadow-lg:   0 8px 32px rgba(0,0,0,0.08);
+      --shadow-xl:   0 16px 48px rgba(0,0,0,0.10);
+      --shadow-glow: 0 0 20px rgba(124, 58, 237, 0.10);
+    }
+  }
+
+  /* Print — forces light, high-contrast, ATS-optimized mode */
+  @media print {
+    :root {
+      --bg-page:     #ffffff !important;
+      --bg-card:     #ffffff !important;
+      --bg-tertiary: #ffffff !important;
+      --bg-elevated: #ffffff !important;
+      --bg-input:    #f3f4f6 !important;
+      --bg-code:     #f3f4f6 !important;
+      --ink:         #1a1a1a !important;
+      --ink-light:   #3d3d3d !important;
+      --ink-muted:   #6b7280 !important;
+      --rule:        #d1d5db !important;
+      --rule-light:  #e5e7eb !important;
+      --accent:      #7c3aed !important;
+      --accent-light:#8b5cf6 !important;
+      --accent-dark: #6d28d9 !important;
+      --accent-teal: #0d9488 !important;
+      --success:     #16a34a !important;
+      --success-bg:  #dcfce7 !important;
+      --success-border:rgba(22, 163, 74, 0.30) !important;
+      --shadow-sm:   none !important;
+      --shadow-md:   none !important;
+      --shadow-lg:   none !important;
+      --shadow-xl:   none !important;
+      --shadow-glow: none !important;
+    }
+  }
+
+  /* ── RESET & BASE (portfolio-aligned) ── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    font-size: 16px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-scheme: dark light;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-base, 1rem);
+    line-height: var(--leading-normal);
+    color: var(--ink);
+    background: var(--bg-page);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: var(--space-8) var(--space-4);
+    overflow-x: hidden;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  ::selection {
+    background: rgba(167, 139, 250, 0.3);
+    color: var(--ink);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* ── PAGE CONTAINER ── */
+  .page {
+    background: var(--bg-card);
+    width: var(--page-w);
+    max-width: 100%;
+    padding: var(--space-12) var(--space-8) var(--space-8);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-lg);
+    position: relative;
+    border: 1px solid var(--rule);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--gradient-accent);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    print-color-adjust: exact;
+  }
+
+  /* ── HEADER ── */
+  .resume-header {
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-6);
+    border-bottom: 1.5px solid var(--rule);
+  }
+
+  .name {
+    font-size: clamp(1.8rem, 2.4rem, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-1);
+    font-family: var(--font-sans);
+  }
+
+  .title-line {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+    font-weight: 500;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    align-items: center;
+    margin-bottom: var(--space-2);
+    font-style: normal;
+  }
+
+  .contact-item {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color var(--transition-fast);
+    word-break: break-all;
+  }
+
+  .contact-item:hover { color: var(--accent); }
+
+  .contact-sep {
+    color: var(--rule-light);
+    font-size: 0.85rem;
+    user-select: none;
+  }
+
+  .availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--success);
+    background: var(--success-bg);
+    border: 1px solid var(--success-border);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    margin-top: var(--space-4);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  .availability-dot {
+    width: 6px; height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @media print {
+    .availability-dot { animation: none; opacity: 1; }
+  }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: var(--space-8); }
+  .section:last-child { margin-bottom: 0; }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gradient-border);
+    min-width: 40px;
+  }
+
+  /* ── SUMMARY ── */
+  .summary {
+    font-size: 1rem;
+    line-height: var(--leading-relaxed);
+    color: var(--ink-light);
+    max-width: 72ch;
+  }
+
+  .summary strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2) var(--space-8);
+  }
+
+  .skill-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .skill-category {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    min-width: 100px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .skill-values {
+    font-size: 0.92rem;
+    color: var(--ink-light);
+    line-height: 1.5;
+  }
+
+  /* ── PROJECTS ── */
+  .project {
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .project:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-1);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .project-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: var(--leading-tight);
+  }
+
+  .project-links {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .project-link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-decoration: none;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--rule-light);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .project-link:hover {
+    background: var(--accent);
+    color: var(--bg-page);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .project-link.live-badge {
+    background: var(--success-bg);
+    color: var(--success);
+    border-color: var(--success-border);
+    cursor: default;
+  }
+
+  .project-link.live-badge:hover {
+    background: var(--success-bg);
+    color: var(--success);
+    border-color: var(--success-border);
+    box-shadow: none;
+  }
+
+  .project-stack {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    margin-bottom: var(--space-2);
+    letter-spacing: 0.02em;
+  }
+
+  .project-desc {
+    font-size: 0.94rem;
+    color: var(--ink-light);
+    line-height: 1.65;
+    margin-bottom: var(--space-2);
+    max-width: 70ch;
+  }
+
+  .bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .bullets li {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+    padding-left: var(--space-4);
+    position: relative;
+  }
+
+  .bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 10px;
+    width: 5px; height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+
+  .bullets li strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-code);
+    padding: 1px 5px;
+    border-radius: var(--radius-sm);
+    color: var(--accent-light);
+    border: 1px solid var(--rule);
+    word-break: break-word;
+  }
+
+  /* ── EDUCATION ── */
+  .education-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .education-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .edu-degree {
+    font-size: 0.96rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .edu-institution {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+  }
+
+  .edu-meta {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .edu-year {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+
+  .edu-location {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+  }
+
+  /* ── SCREEN-ONLY HELPERS ── */
+  .screen-only {
+    display: block;
+    text-align: center;
+    margin-top: var(--space-8);
+    padding: var(--space-4);
+    border: 1px dashed var(--rule);
+    border-radius: var(--radius-md);
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+    background: var(--bg-elevated);
+  }
+
+  .screen-only kbd {
+    font-family: var(--font-mono);
+    background: var(--bg-card);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--rule);
+    font-size: 0.8em;
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media print {
+    .screen-only { display: none !important; }
+  }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    @page {
+      margin: 0;
+      size: auto;
+    }
+    body {
+      background: #ffffff !important;
+      padding: 0;
+    }
+    .page {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      border: none !important;
+      padding: 36px 48px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    .page::before {
+      border-radius: 0 !important;
+      height: 3px !important;
+      background: linear-gradient(90deg, #7c3aed, #0d9488) !important;
+    }
+    a {
+      text-decoration: none !important;
+      color: var(--ink) !important;
+    }
+    .project-link, .availability-badge {
+      border: 1px solid var(--rule) !important;
+      background: transparent !important;
+    }
+    .project-link.live-badge {
+      background: var(--success-bg) !important;
+      color: var(--success) !important;
+      border-color: var(--success-border) !important;
+    }
+    .contact-item:hover,
+    .project-link:hover {
+      color: var(--ink) !important;
+      background: transparent !important;
+    }
+    code {
+      background: var(--bg-code) !important;
+      border-color: var(--rule) !important;
+    }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media screen and (max-width: 720px) {
+    html { font-size: 15px; }
+    body { padding: var(--space-4); }
+    .page {
+      padding: var(--space-6) var(--space-4);
+      border-radius: var(--radius-md);
+    }
+    .name { font-size: 1.9rem; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .project-header { flex-direction: column; }
+    .contact-row { gap: var(--space-1) var(--space-4); }
+    .education-row { flex-direction: column; gap: var(--space-1); }
+    .section-label::after { min-width: 20px; }
+  }
+
+  @media screen and (max-width: 480px) {
+    html { font-size: 14px; }
+    .page { padding: var(--space-4); }
+    .name { font-size: 1.7rem; }
+    .project-links { flex-wrap: wrap; }
+    .title-line { font-size: 0.7rem; }
+  }
+</style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ════════════════════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════════════════════ -->
+  <header class="resume-header">
+    <h1 class="name" itemprop="name">Vijay Kumar</h1>
+    <div class="title-line">Backend Engineer &mdash; Java &middot; Spring Boot &middot; Real-Time Systems</div>
+
+    <address class="contact-row">
+      <a href="tel:+918539999709" class="contact-item" rel="noopener">+91 85399 99709</a>
+      <span class="contact-sep" aria-hidden="true">|</span>
+      <a href="mailto:vkumar.kumar31@gmail.com" class="contact-item">vkumar.kumar31@gmail.com</a>
+      <span class="contact-sep" aria-hidden="true">|</span>
+      <a href="https://vijaykumarcode.space" class="contact-item" rel="noopener">vijaykumarcode.space</a>
+      <span class="contact-sep" aria-hidden="true">|</span>
+      <a href="https://github.com/VijayKumarCode" class="contact-item" rel="noopener noreferrer">github.com/VijayKumarCode</a>
+      <span class="contact-sep" aria-hidden="true">|</span>
+      <a href="https://linkedin.com/in/vijaykumarcode" class="contact-item" rel="noopener noreferrer">linkedin.com/in/vijaykumarcode</a>
+    </address>
+
+    <div class="availability-badge">
+      <span class="availability-dot" aria-hidden="true"></span>
+      Open to remote backend roles
+    </div>
+  </header>
+
+  <main id="content" tabindex="-1">
+
+    <!-- ════════════════════════════════════════════════════════
+         PROFILE / SUMMARY
+    ════════════════════════════════════════════════════════ -->
+    <section class="section" aria-label="Professional summary">
+      <div class="section-label">Profile</div>
+      <p class="summary" itemprop="description">
+        Backend engineer specializing in <strong>Java 17</strong> and <strong>Spring Boot 3</strong>,
+        with production experience building real-time systems and automated deployment pipelines.
+        Shipped <strong>Nexus</strong> &mdash; a live multiplayer platform handling concurrent
+        WebSocket sessions, in-memory state management, and CI/CD to Oracle Cloud.
+        Strong in concurrency, production debugging, and clean architecture.
+        Seeking remote backend roles with ownership and architecture exposure.
+      </p>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         TECHNICAL SKILLS
+    ════════════════════════════════════════════════════════ -->
+    <section class="section" aria-label="Technical skills">
+      <div class="section-label">Technical Skills</div>
+      <div class="skills-grid">
+
+        <div class="skill-row">
+          <span class="skill-category">Languages</span>
+          <span class="skill-values">Java 17, SQL, JavaScript (ES2022)</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-category">Backend</span>
+          <span class="skill-values">Spring Boot 3, Spring Data JPA, Spring Security, WebSocket (STOMP/SockJS), REST APIs, JWT, bcrypt</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-category">Data</span>
+          <span class="skill-values">PostgreSQL, Hibernate ORM, JPQL, H2 (testing)</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-category">Infrastructure</span>
+          <span class="skill-values">Docker, GitHub Actions, Linux (Ubuntu), Oracle Cloud, Render, Vercel, systemd</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-category">Build / Test</span>
+          <span class="skill-values">Maven, JUnit 5, Mockito, Git</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-category">Foundations</span>
+          <span class="skill-values">DSA, Concurrency, System Design, OOP, Clean Architecture</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PROJECTS
+    ════════════════════════════════════════════════════════ -->
+    <section class="section" aria-label="Projects">
+      <div class="section-label">Projects</div>
+
+      <!-- Nexus -->
+      <article class="project" itemscope itemtype="https://schema.org/SoftwareApplication">
+        <div class="project-header">
+          <div class="project-name" itemprop="name">Nexus &mdash; Real-Time Multiplayer Game Platform</div>
+          <div class="project-links">
+            <span class="project-link live-badge" aria-label="Live deployment">Live</span>
+            <a href="https://nexusgame.space" class="project-link" rel="noopener" itemprop="url">nexusgame.space</a>
+            <a href="https://github.com/VijayKumarCode/nexus" class="project-link" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
+        <div class="project-stack">
+          Java 17 &middot; Spring Boot 3 &middot; WebSocket (STOMP/SockJS) &middot;
+          PostgreSQL &middot; Spring Security &middot; bcrypt &middot; GitHub Actions &middot; Oracle Cloud
+        </div>
+        <p class="project-desc" itemprop="description">
+          Production-deployed multiplayer game backend with real-time session management,
+          persistent game state, and a full authentication pipeline. Designed, built,
+          and shipped end-to-end as an independent engineering project.
+        </p>
+        <ul class="bullets">
+          <li>
+            <strong>Concurrent game state</strong> managed via <code>ConcurrentHashMap</code> with
+            atomic operations, handling simultaneous WebSocket sessions without data races
+          </li>
+          <li>
+            <strong>WebSocket session lifecycle</strong> implemented with STOMP over SockJS,
+            including connect/disconnect presence tracking and room-scoped message routing
+          </li>
+          <li>
+            <strong>Diagnosed and fixed</strong> a JPQL enum inner-class reference crash
+            (<code>User$UserStatus</code>) causing game move rejections every 10 seconds;
+            resolved by passing enum as a named parameter instead of inline reference
+          </li>
+          <li>
+            <strong>Resolved a Railway port-587 SMTP block</strong> by replacing
+            JavaMailSender with Resend HTTP API on port 443, restoring account
+            activation delivery from a 2-minute timeout to under 1 second
+          </li>
+          <li>
+            <strong>CI/CD pipeline</strong> via GitHub Actions: builds JAR, copies via SCP
+            to Oracle Cloud VM, and restarts the systemd service &mdash; zero-touch deploys
+          </li>
+          <li>
+            <strong>Authentication pipeline</strong>: bcrypt password hashing,
+            Spring Security with JWT tokens, email-based account activation
+            with expiring tokens stored in PostgreSQL
+          </li>
+        </ul>
+      </article>
+
+      <!-- TicTacToe -->
+      <article class="project">
+        <div class="project-header">
+          <div class="project-name">TicTacToe &mdash; Network Multiplayer Engine</div>
+          <div class="project-links">
+            <a href="https://github.com/VijayKumarCode/TicTacToe_java" class="project-link" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
+        <div class="project-stack">Java &middot; Raw Sockets &middot; Multithreading</div>
+        <ul class="bullets">
+          <li>
+            <strong>Built a TCP socket-based multiplayer server</strong> from scratch
+            using raw Java Sockets, handling concurrent sessions with
+            dedicated per-client threads and synchronized game state
+          </li>
+          <li>
+            Informed the session management and concurrency design of the
+            Nexus WebSocket platform through direct architectural iteration
+          </li>
+        </ul>
+      </article>
+
+      <!-- DSA -->
+      <article class="project">
+        <div class="project-header">
+          <div class="project-name">DSA in Java &mdash; Documented Algorithm Library</div>
+          <div class="project-links">
+            <a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms" class="project-link" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
+        <div class="project-stack">Java 17 &middot; Algorithms &middot; Data Structures</div>
+        <ul class="bullets">
+          <li>
+            Implemented Trees, Graphs, Linked Lists, and sorting algorithms
+            with documented time and space complexity analysis per solution
+          </li>
+        </ul>
+      </article>
+
+      <!-- Portfolio Website -->
+      <article class="project">
+        <div class="project-header">
+          <div class="project-name">Portfolio Website &mdash; Engineering Log</div>
+          <div class="project-links">
+            <span class="project-link live-badge" aria-label="Live deployment">Live</span>
+            <a href="https://vijaykumarcode.space" class="project-link" rel="noopener">vijaykumarcode.space</a>
+            <a href="https://github.com/VijayKumarCode/portfolio-website" class="project-link" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
+        <div class="project-stack">HTML &middot; CSS &middot; JavaScript &middot; Spring Boot &middot; Vercel &middot; Render</div>
+        <ul class="bullets">
+          <li>
+            Built and deployed a full portfolio with blog system, contact form,
+            and responsive design using vanilla HTML/CSS/JS &mdash; no frameworks
+          </li>
+          <li>
+            Backend contact API on Spring Boot with Brevo email integration,
+            deployed on Render with environment-driven configuration
+          </li>
+        </ul>
+      </article>
+
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         EDUCATION
+    ════════════════════════════════════════════════════════ -->
+    <section class="section" aria-label="Education">
+      <div class="section-label">Education</div>
+
+      <div class="education-list">
+        <div class="education-row">
+          <div class="edu-meta">
+            <span class="edu-degree">MCA &mdash; Master of Computer Applications</span>
+            <span class="edu-institution">AKGEC, Ghaziabad</span>
+          </div>
+          <span class="edu-location">Uttar Pradesh</span>
+        </div>
+
+        <div class="education-row">
+          <div class="edu-meta">
+            <span class="edu-degree">BCA &mdash; Bachelor of Computer Applications</span>
+            <span class="edu-institution">LNMCBM, Muzaffarpur</span>
+          </div>
+          <span class="edu-location">Bihar</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="screen-only" aria-hidden="true">
+    <p>Tip: Press <kbd>Ctrl</kbd>+<kbd>P</kbd> (or <kbd>Cmd</kbd>+<kbd>P</kbd> on Mac) to save this resume as a PDF.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
