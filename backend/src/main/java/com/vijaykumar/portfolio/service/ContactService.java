@@ -22,24 +22,7 @@ public class ContactService {
     private final ContactRepository repository;
     private final RestTemplate restTemplate;
 
-    /*
-     * BUG FIX: Added default values to all @Value fields.
-     *
-     * Without defaults, if the property is missing in the active
-     * profile (e.g. running locally without prod profile, or a
-     * missing Render env var), Spring throws:
-     *   PlaceholderResolutionException: Could not resolve placeholder
-     *
-     * With defaults:
-     * - Local dev: uses the dummy/fallback values; email send will
-     *   fail gracefully (logged, not rethrown), message still saved.
-     * - Production: Render env vars override the defaults correctly.
-     *
-     * app.mail-from is hardcoded to onboarding@resend.dev because
-     * the Resend free tier only allows ONE verified domain, which is
-     * already used by nexusgame.space. No code change is needed if
-     * the domain changes later — just update the property file.
-     */
+    
     @Value("${RESEND_API_KEY:re_dummy_local_key}")
     private String resendApiKey;
 
