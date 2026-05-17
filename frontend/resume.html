@@ -38,10 +38,8 @@
   /* ═══════════════════════════════════════════════════════════════
      UNIFIED DESIGN SYSTEM — Portfolio + Resume + Blog
      Source of Truth: portfolio-website/frontend/css/style.css
-     All tokens below map 1:1 to the portfolio design system.
      ═══════════════════════════════════════════════════════════════ */
   :root {
-    /* ── Backgrounds (exact portfolio match) ── */
     --bg-page:     #0c0f14;
     --bg-card:     #11151c;
     --bg-tertiary: #141920;
@@ -49,47 +47,39 @@
     --bg-input:    #0f131a;
     --bg-code:     rgba(167, 139, 250, 0.08);
 
-    /* ── Text (exact portfolio match) ── */
     --ink:         #e8ecf1;
     --ink-light:   #94a3b8;
     --ink-muted:   #64748b;
 
-    /* ── Borders (exact portfolio match) ── */
     --rule:        rgba(148, 163, 184, 0.12);
     --rule-light:  rgba(148, 163, 184, 0.25);
 
-    /* ── Accents (exact portfolio match) ── */
     --accent:       #a78bfa;
     --accent-light: #c4b5fd;
     --accent-dark:  #7c3aed;
     --accent-teal:  #22d3ee;
 
-    /* ── Status ── */
     --success:      #22c55e;
     --success-bg:   rgba(34, 197, 94, 0.12);
     --success-border:rgba(34, 197, 94, 0.25);
 
-    /* ── Gradients (exact portfolio match) ── */
     --gradient-accent: linear-gradient(135deg, #a78bfa 0%, #22d3ee 100%);
     --gradient-hero:   linear-gradient(135deg, #0c0f14 0%, #11151c 50%, #141920 100%);
     --gradient-border: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.3), transparent);
 
-    /* ── Typography (exact portfolio match) ── */
     --font-sans:  'DM Sans', system-ui, -apple-system, sans-serif;
     --font-mono:  'IBM Plex Mono', 'Fira Code', monospace;
 
-    /* ── Spacing (rem-based, 4px grid — portfolio match) ── */
-    --space-1:  0.25rem;   /* 4px  */
-    --space-2:  0.5rem;    /* 8px  */
-    --space-3:  0.75rem;   /* 12px */
-    --space-4:  1rem;      /* 16px */
-    --space-6:  1.5rem;    /* 24px */
-    --space-8:  2rem;      /* 32px */
-    --space-10: 2.5rem;    /* 40px */
-    --space-12: 3rem;      /* 48px */
-    --space-16: 4rem;      /* 64px */
+    --space-1:  0.25rem;   
+    --space-2:  0.5rem;    
+    --space-3:  0.75rem;   
+    --space-4:  1rem;      
+    --space-6:  1.5rem;    
+    --space-8:  2rem;      
+    --space-10: 2.5rem;    
+    --space-12: 3rem;      
+    --space-16: 4rem;      
 
-    /* ── Border Radius (exact portfolio match) ── */
     --radius-sm:  6px;
     --radius-md:  10px;
     --radius-lg:  14px;
@@ -97,26 +87,22 @@
     --radius-2xl: 24px;
     --radius-full: 9999px;
 
-    /* ── Shadows (exact portfolio match) ── */
     --shadow-sm:   0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md:   0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.5);
     --shadow-xl:   0 16px 48px rgba(0, 0, 0, 0.6);
     --shadow-glow: 0 0 20px rgba(167, 139, 250, 0.15);
 
-    /* ── Transitions (exact portfolio match) ── */
     --transition-fast:   150ms ease;
     --transition-base:   250ms ease;
     --transition-slow:   400ms ease;
 
-    /* ── Layout ── */
     --page-w: 860px;
     --leading-tight:  1.2;
     --leading-normal: 1.65;
     --leading-relaxed:1.75;
   }
 
-  /* Light mode — respects user preference */
   @media (prefers-color-scheme: light) {
     :root {
       --bg-page:     #f8f8f6;
@@ -145,7 +131,6 @@
     }
   }
 
-  /* Print — forces light, high-contrast, ATS-optimized mode */
   @media print {
     :root {
       --bg-page:     #ffffff !important;
@@ -174,7 +159,6 @@
     }
   }
 
-  /* ── RESET & BASE (portfolio-aligned) ── */
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   html {
@@ -212,7 +196,6 @@
     border-radius: var(--radius-sm);
   }
 
-  /* ── PAGE CONTAINER ── */
   .page {
     background: var(--bg-card);
     width: var(--page-w);
@@ -240,6 +223,16 @@
     margin-bottom: var(--space-8);
     padding-bottom: var(--space-6);
     border-bottom: 1.5px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .header-content {
+    flex: 1;
+    min-width: 280px;
   }
 
   .name {
@@ -284,12 +277,7 @@
   }
 
   .contact-item:hover { color: var(--accent); }
-
-  .contact-sep {
-    color: var(--rule-light);
-    font-size: 0.85rem;
-    user-select: none;
-  }
+  .contact-sep { color: var(--rule-light); font-size: 0.85rem; user-select: none; }
 
   .availability-badge {
     display: inline-flex;
@@ -314,14 +302,40 @@
     animation: pulse 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* ── DOWNLOAD CV BUTTON ── */
+  .cv-btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
 
-  @media print {
-    .availability-dot { animation: none; opacity: 1; }
+  .cv-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    color: var(--bg-page);
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid transparent;
   }
+
+  .cv-download-btn:hover {
+    background: var(--accent);
+    color: #ffffff;
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+  }
+
+  .cv-download-btn svg { width: 14px; height: 14px; stroke: currentColor; }
 
   /* ── SECTIONS ── */
   .section { margin-bottom: var(--space-8); }
@@ -356,10 +370,7 @@
     max-width: 72ch;
   }
 
-  .summary strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
+  .summary strong { color: var(--ink); font-weight: 600; }
 
   /* ── SKILLS ── */
   .skills-grid {
@@ -368,11 +379,7 @@
     gap: var(--space-2) var(--space-8);
   }
 
-  .skill-row {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-3);
-  }
+  .skill-row { display: flex; align-items: baseline; gap: var(--space-3); }
 
   .skill-category {
     font-family: var(--font-mono);
@@ -385,11 +392,7 @@
     text-transform: uppercase;
   }
 
-  .skill-values {
-    font-size: 0.92rem;
-    color: var(--ink-light);
-    line-height: 1.5;
-  }
+  .skill-values { font-size: 0.92rem; color: var(--ink-light); line-height: 1.5; }
 
   /* ── PROJECTS ── */
   .project {
@@ -398,11 +401,7 @@
     border-bottom: 1px solid var(--rule);
   }
 
-  .project:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
+  .project:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
   .project-header {
     display: flex;
@@ -503,10 +502,7 @@
     border-radius: 1px;
   }
 
-  .bullets li strong {
-    color: var(--ink);
-    font-weight: 600;
-  }
+  .bullets li strong { color: var(--ink); font-weight: 600; }
 
   code {
     font-family: var(--font-mono);
@@ -534,17 +530,9 @@
     gap: var(--space-1) var(--space-4);
   }
 
-  .edu-degree {
-    font-size: 0.96rem;
-    font-weight: 600;
-    color: var(--ink);
-  }
-
-  .edu-institution {
-    font-size: 0.9rem;
-    color: var(--ink-light);
-  }
-
+  .edu-degree { font-size: 0.96rem; font-weight: 600; color: var(--ink); }
+  .edu-institution { font-size: 0.9rem; color: var(--ink-light); }
+  
   .edu-meta {
     display: flex;
     align-items: baseline;
@@ -586,10 +574,6 @@
     border: 1px solid var(--rule);
     font-size: 0.8em;
     box-shadow: var(--shadow-sm);
-  }
-
-  @media print {
-    .screen-only { display: none !important; }
   }
 
   /* ── PRINT STYLES ── */
@@ -637,6 +621,9 @@
       background: var(--bg-code) !important;
       border-color: var(--rule) !important;
     }
+    .cv-btn-container { display: none !important; }
+    .screen-only { display: none !important; }
+    .availability-dot { animation: none; opacity: 1; }
   }
 
   /* ── RESPONSIVE ── */
@@ -648,6 +635,8 @@
       border-radius: var(--radius-md);
     }
     .name { font-size: 1.9rem; }
+    .resume-header { flex-direction: column; }
+    .cv-btn-container { align-items: flex-start; margin-top: var(--space-2); }
     .skills-grid { grid-template-columns: 1fr; }
     .project-header { flex-direction: column; }
     .contact-row { gap: var(--space-1) var(--space-4); }
@@ -664,42 +653,48 @@
   }
 </style>
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
 <div class="page">
 
-  <!-- ════════════════════════════════════════════════════════
-       HEADER
-  ════════════════════════════════════════════════════════ -->
   <header class="resume-header">
-    <h1 class="name" itemprop="name">Vijay Kumar</h1>
-    <div class="title-line">Backend Engineer &mdash; Java &middot; Spring Boot &middot; Real-Time Systems</div>
+    <div class="header-content">
+      <h1 class="name" itemprop="name">Vijay Kumar</h1>
+      <div class="title-line">Backend Engineer &mdash; Java &middot; Spring Boot &middot; Real-Time Systems</div>
 
-    <address class="contact-row">
-      <a href="tel:+918539999709" class="contact-item" rel="noopener">+91 85399 99709</a>
-      <span class="contact-sep" aria-hidden="true">|</span>
-      <a href="mailto:vkumar.kumar31@gmail.com" class="contact-item">vkumar.kumar31@gmail.com</a>
-      <span class="contact-sep" aria-hidden="true">|</span>
-      <a href="https://vijaykumarcode.space" class="contact-item" rel="noopener">vijaykumarcode.space</a>
-      <span class="contact-sep" aria-hidden="true">|</span>
-      <a href="https://github.com/VijayKumarCode" class="contact-item" rel="noopener noreferrer">github.com/VijayKumarCode</a>
-      <span class="contact-sep" aria-hidden="true">|</span>
-      <a href="https://linkedin.com/in/vijaykumarcode" class="contact-item" rel="noopener noreferrer">linkedin.com/in/vijaykumarcode</a>
-    </address>
+      <address class="contact-row">
+        <a href="tel:+918539999709" class="contact-item" rel="noopener">+91 85399 99709</a>
+        <span class="contact-sep" aria-hidden="true">|</span>
+        <a href="mailto:vkumar.kumar31@gmail.com" class="contact-item">vkumar.kumar31@gmail.com</a>
+        <span class="contact-sep" aria-hidden="true">|</span>
+        <a href="https://vijaykumarcode.space" class="contact-item" rel="noopener">vijaykumarcode.space</a>
+        <span class="contact-sep" aria-hidden="true">|</span>
+        <a href="https://github.com/VijayKumarCode" class="contact-item" rel="noopener noreferrer">github.com/VijayKumarCode</a>
+        <span class="contact-sep" aria-hidden="true">|</span>
+        <a href="https://linkedin.com/in/vijaykumarcode" class="contact-item" rel="noopener noreferrer">linkedin.com/in/vijaykumarcode</a>
+      </address>
 
-    <div class="availability-badge">
-      <span class="availability-dot" aria-hidden="true"></span>
-      Open to remote backend roles
+      <div class="availability-badge">
+        <span class="availability-dot" aria-hidden="true"></span>
+        Open to remote backend roles
+      </div>
+    </div>
+    
+    <div class="cv-btn-container">
+      <a href="./assets/resume.pdf" class="cv-download-btn" aria-label="Download CV as PDF">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download CV (.pdf)
+      </a>
     </div>
   </header>
 
   <main id="content" tabindex="-1">
 
-    <!-- ════════════════════════════════════════════════════════
-         PROFILE / SUMMARY
-    ════════════════════════════════════════════════════════ -->
     <section class="section" aria-label="Professional summary">
       <div class="section-label">Profile</div>
       <p class="summary" itemprop="description">
@@ -712,9 +707,6 @@
       </p>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════
-         TECHNICAL SKILLS
-    ════════════════════════════════════════════════════════ -->
     <section class="section" aria-label="Technical skills">
       <div class="section-label">Technical Skills</div>
       <div class="skills-grid">
@@ -752,13 +744,9 @@
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════
-         PROJECTS
-    ════════════════════════════════════════════════════════ -->
     <section class="section" aria-label="Projects">
       <div class="section-label">Projects</div>
 
-      <!-- Nexus -->
       <article class="project" itemscope itemtype="https://schema.org/SoftwareApplication">
         <div class="project-header">
           <div class="project-name" itemprop="name">Nexus &mdash; Real-Time Multiplayer Game Platform</div>
@@ -808,7 +796,6 @@
         </ul>
       </article>
 
-      <!-- TicTacToe -->
       <article class="project">
         <div class="project-header">
           <div class="project-name">TicTacToe &mdash; Network Multiplayer Engine</div>
@@ -830,7 +817,6 @@
         </ul>
       </article>
 
-      <!-- DSA -->
       <article class="project">
         <div class="project-header">
           <div class="project-name">DSA in Java &mdash; Documented Algorithm Library</div>
@@ -847,7 +833,6 @@
         </ul>
       </article>
 
-      <!-- Portfolio Website -->
       <article class="project">
         <div class="project-header">
           <div class="project-name">Portfolio Website &mdash; Engineering Log</div>
@@ -872,9 +857,6 @@
 
     </section>
 
-    <!-- ════════════════════════════════════════════════════════
-         EDUCATION
-    ════════════════════════════════════════════════════════ -->
     <section class="section" aria-label="Education">
       <div class="section-label">Education</div>
 
