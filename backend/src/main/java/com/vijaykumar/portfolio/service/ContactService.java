@@ -1,107 +1,86 @@
 package com.vijaykumar.portfolio.service;
 
-import com.vijaykumar.portfolio.entity.ContactMessage;
 import com.vijaykumar.portfolio.dto.ContactRequest;
+import com.vijaykumar.portfolio.entity.ContactMessage;
 import com.vijaykumar.portfolio.repository.ContactRepository;
+import com.vijaykumar.portfolio.service.email.EmailOrchestrator;
+import com.vijaykumar.portfolio.util.HtmlEscaper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+/**
+ * ContactService — handles contact form persistence and email notification.
+ *
+ * Architecture:
+ *   1. Save message to PostgreSQL (transactional, never skipped).
+ *   2. Send email notification via EmailOrchestrator (Brevo → MailerSend fallback).
+ *   3. Email failure is logged but NEVER blocks the HTTP response —
+ *      the user sees success even if providers are down.
+ *
+ * No SMTP. No JavaMailSender. No port 587.
+ */
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ContactService {
 
     private final ContactRepository repository;
-    private final RestTemplate restTemplate;
+    private final EmailOrchestrator emailOrchestrator;
 
-    
-    @Value("${RESEND_API_KEY:re_dummy_local_key}")
-    private String resendApiKey;
-
-    @Value("${app.notify-email:vkumar.kumar31@gmail.com}")
+    @Value("${email.notify:vkumar.kumar31@gmail.com}")
     private String notifyEmail;
 
-    @Value("${app.mail-from:onboarding@resend.dev}")
-    private String mailFrom;
+    @Value("${email.sender:no-reply@vijaykumarcode.space}")
+    private String senderEmail;
 
-    /* ── Public API ──────────────────────────────────── */
-
+    /**
+     * Save contact message and trigger async email notification.
+     */
+    @Transactional
     public void saveMessage(ContactRequest request) {
-        // Step 1: Always save to DB first — never skip or reorder
+        // Step 1: Persist — never skip, never reorder
         ContactMessage entity = new ContactMessage(
-                request.name(),
-                request.email(),
-                request.message()
+            request.name(),
+            request.email(),
+            request.message()
         );
         repository.save(entity);
-        log.info("Contact message saved — from={}", request.email());
+        log.info("Contact message saved — from={}, id={}", request.email(), entity.getId());
 
-        // Step 2: Send email notification — failure never blocks the response
+        // Step 2: Notify — failure is isolated, never blocks response
         try {
             sendNotification(request);
         } catch (Exception e) {
-            log.error("Email notification failed (message is saved in DB): {}", e.getMessage());
+            log.error("Email notification failed (message is safely saved in DB): {}", e.getMessage());
         }
     }
 
-    /* ── Private helpers ─────────────────────────────── */
+    /* ── Private: email composition ─────────────────────── */
 
     private void sendNotification(ContactRequest req) {
         String subject = "Portfolio contact from " + req.name();
 
         String text = String.format(
-                "New message via vijaykumarcode.space\n\n" +
-                "From:    %s\nEmail:   %s\n\nMessage:\n%s",
-                req.name(), req.email(), req.message()
+            "New message via vijaykumarcode.space\n\n" +
+            "From: %s\nEmail: %s\n\nMessage:\n%s",
+            req.name(), req.email(), req.message()
         );
 
         String html = String.format(
-                "<h3>New contact via vijaykumarcode.space</h3>" +
-                "<p><strong>Name:</strong> %s</p>" +
-                "<p><strong>Reply to:</strong> <a href='mailto:%s'>%s</a></p>" +
-                "<p><strong>Message:</strong></p>" +
-                "<blockquote>%s</blockquote>",
-                escHtml(req.name()),
-                escHtml(req.email()), escHtml(req.email()),
-                escHtml(req.message()).replace("\n", "<br>")
+            "<h3>New contact via vijaykumarcode.space</h3>" +
+            "<p><strong>Name:</strong> %s</p>" +
+            "<p><strong>Reply to:</strong> <a href=\"mailto:%s\">%s</a></p>" +
+            "<p><strong>Message:</strong></p>" +
+            "<blockquote>%s</blockquote>",
+            HtmlEscaper.escape(req.name()),
+            HtmlEscaper.escape(req.email()),
+            HtmlEscaper.escape(req.email()),
+            HtmlEscaper.escape(req.message()).replace("\n", "<br>")
         );
 
-        // Map<String,Object> — Jackson serialises this safely.
-        // Never build JSON strings manually (escaping bugs).
-        Map<String, Object> body = new HashMap<>();
-        body.put("from",    mailFrom);
-        body.put("to",      List.of(notifyEmail));
-        body.put("subject", subject);
-        body.put("text",    text);
-        body.put("html",    html);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        if (resendApiKey != null) {
-            headers.setBearerAuth(resendApiKey);
-        }
-
-        ResponseEntity<String> resp = restTemplate.postForEntity(
-                "https://api.resend.com/emails",
-                new HttpEntity<>(body, headers),
-                String.class
-        );
-        log.info("Email notification sent — status={}", resp.getStatusCode());
-    }
-
-    private String escHtml(String s) {
-        if (s == null) return "";
-        return s.replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;");
+        emailOrchestrator.send(notifyEmail, subject, text, html);
     }
 }

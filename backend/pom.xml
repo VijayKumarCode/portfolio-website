@@ -45,10 +45,8 @@
       <scope>runtime</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-mail</artifactId>
-    </dependency>
+    <!-- REMOVED: spring-boot-starter-mail (SMTP dependency eliminated) -->
+    <!-- Email delivery is now handled via REST APIs (Brevo / MailerSend) -->
 
     <dependency>
       <groupId>org.projectlombok</groupId>

@@ -8,7 +8,7 @@
      global config. Removed @CrossOrigin from controller.
    - Added: environment variable support so origins can change
      without a code deploy.
-═══════════════════════════════════════════════════════════ */
+  ═══════════════════════════════════════════════════════════ */
 package com.vijaykumar.portfolio.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -31,19 +31,19 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins(
-                            "http://127.0.0.1:5500",
-                            "http://localhost:5500",
-                            "http://localhost:3000",
-                            "https://vijaykumarcode.vercel.app",   // legacy
-                            "https://vijaykumarcode.space",        // BUG FIX: custom domain
-                            "https://www.vijaykumarcode.space",    // www variant
-                            allowedOrigin                          // env override
-                        )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true)
-                        .maxAge(3600);  // cache preflight for 1 hour
+                    .allowedOrigins(
+                        "http://127.0.0.1:5500",
+                        "http://localhost:5500",
+                        "http://localhost:3000",
+                        "https://vijaykumarcode.vercel.app", // legacy
+                        "https://vijaykumarcode.space",      // BUG FIX: custom domain
+                        "https://www.vijaykumarcode.space",  // www variant
+                        allowedOrigin                        // env override
+                    )
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .allowedHeaders("*")
+                    .allowCredentials(true)
+                    .maxAge(3600); // cache preflight for 1 hour
             }
         };
     }
