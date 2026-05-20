@@ -7,8 +7,8 @@ const isLocal = window.location.hostname === 'localhost' ||
                 window.location.hostname === '127.0.0.1';
 
 export const API_BASE_URL = isLocal
-  ? 'http://localhost:8080/api'
-  : 'https://portfolio-backend-v17c.onrender.com/api';
+  ? 'http://localhost:8080/api/v1'      // add /v1
+  : 'https://portfolio-backend-v17c.onrender.com/api/v1';  // add /v1
 
 export const API_TIMEOUT = 15000; // 15s — Render cold starts can be slow
 
