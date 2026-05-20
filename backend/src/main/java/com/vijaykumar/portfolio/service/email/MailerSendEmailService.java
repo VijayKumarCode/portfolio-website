@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * MailerSend REST API email provider — FALLBACK.
@@ -60,7 +61,7 @@ public class MailerSendEmailService implements EmailProvider {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(apiToken);
+        headers.setBearerAuth(Objects.requireNonNull(apiToken));
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
