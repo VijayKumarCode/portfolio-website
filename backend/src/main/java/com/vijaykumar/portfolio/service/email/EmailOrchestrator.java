@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,15 +29,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class EmailOrchestrator {
 
-    private static final int PRIMARY_MAX_ATTEMPTS = 3;   // Brevo: initial + 2 retries
-    private static final int FALLBACK_MAX_ATTEMPTS = 2;  // MailerSend: initial + 1 retry
-    private static final long RETRY_DELAY_MS = 1000;     // 1s between retries
-    private static final long DEDUP_TTL_SECONDS = 300;   // 5 minutes
+    private static final int PRIMARY_MAX_ATTEMPTS = 3;
+    private static final int FALLBACK_MAX_ATTEMPTS = 2;
+    private static final long RETRY_DELAY_MS = 1000;
+    private static final long DEDUP_TTL_SECONDS = 300;
 
     private final EmailProvider primaryProvider;
     private final EmailProvider fallbackProvider;
 
-    /** Deduplication cache: content hash -> expiry timestamp */
     private final ConcurrentHashMap<String, Instant> sentCache = new ConcurrentHashMap<>();
 
     public EmailOrchestrator(BrevoEmailService primaryProvider,
@@ -47,15 +45,6 @@ public class EmailOrchestrator {
         this.fallbackProvider = fallbackProvider;
     }
 
-    /**
-     * Send an email with automatic provider fallback and deduplication.
-     *
-     * @param to      recipient
-     * @param subject subject line
-     * @param text    plain text body
-     * @param html    HTML body (nullable)
-     * @throws EmailDeliveryException if both providers fail
-     */
     public void send(String to, String subject, String text, String html) {
         String dedupKey = computeDedupKey(to, subject, text);
 
@@ -64,7 +53,6 @@ public class EmailOrchestrator {
             return;
         }
 
-        // ── Attempt PRIMARY (Brevo) ─────────────────────────────
         boolean primarySuccess = tryProvider(primaryProvider, to, subject, text, html, PRIMARY_MAX_ATTEMPTS);
         if (primarySuccess) {
             markSent(dedupKey);
@@ -74,14 +62,12 @@ public class EmailOrchestrator {
         log.warn("Primary provider {} exhausted — attempting fallback {}",
             primaryProvider.name(), fallbackProvider.name());
 
-        // ── Attempt FALLBACK (MailerSend) ───────────────────────
         boolean fallbackSuccess = tryProvider(fallbackProvider, to, subject, text, html, FALLBACK_MAX_ATTEMPTS);
         if (fallbackSuccess) {
             markSent(dedupKey);
             return;
         }
 
-        // ── Both failed ─────────────────────────────────────────
         String msg = String.format(
             "All email providers failed — primary=%s, fallback=%s, recipient=%s",
             primaryProvider.name(), fallbackProvider.name(), to);
@@ -89,9 +75,6 @@ public class EmailOrchestrator {
         throw new EmailDeliveryException(msg);
     }
 
-    /**
-     * Attempt to send via a provider with retries and exponential backoff.
-     */
     private boolean tryProvider(EmailProvider provider, String to, String subject,
                                  String text, String html, int maxAttempts) {
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -104,7 +87,7 @@ public class EmailOrchestrator {
             }
 
             if (attempt < maxAttempts) {
-                long delay = RETRY_DELAY_MS * (1L << (attempt - 1)); // 1s, 2s, 4s...
+                long delay = RETRY_DELAY_MS * (1L << (attempt - 1));
                 try {
                     Thread.sleep(delay);
                 } catch (InterruptedException ie) {
@@ -117,7 +100,6 @@ public class EmailOrchestrator {
     }
 
     private String computeDedupKey(String to, String subject, String text) {
-        // Simple hash of content — sufficient for contact form dedup
         return String.valueOf((to + "|" + subject + "|" + text).hashCode());
     }
 
@@ -135,4 +117,3 @@ public class EmailOrchestrator {
         sentCache.put(key, Instant.now().plus(Duration.ofSeconds(DEDUP_TTL_SECONDS)));
     }
 }
-

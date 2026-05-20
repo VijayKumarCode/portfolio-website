@@ -21,7 +21,7 @@ public final class HtmlEscaper {
                 case '<'  -> sb.append("&lt;");
                 case '>'  -> sb.append("&gt;");
                 case '"'  -> sb.append("&quot;");
-                case \'\' -> sb.append("&#x27;");
+                case '\'' -> sb.append("&#x27;");
                 case '/'  -> sb.append("&#x2F;");
                 default   -> sb.append(c);
             }

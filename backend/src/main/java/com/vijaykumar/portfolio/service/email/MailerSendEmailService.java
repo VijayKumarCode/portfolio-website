@@ -32,7 +32,7 @@ public class MailerSendEmailService implements EmailProvider {
     public MailerSendEmailService(
             RestTemplate restTemplate,
             @Value("${email.mailersend.api-token:}") String apiToken,
-            @Value("${email.sender:no-reply@vijaykumarcode.space}") String senderEmail) {
+            @Value("${email.sender:noreply@vijaykumarcode.space}") String senderEmail) {
         this.restTemplate = restTemplate;
         this.apiToken = apiToken;
         this.senderEmail = senderEmail;
@@ -60,7 +60,7 @@ public class MailerSendEmailService implements EmailProvider {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(apiToken);  // MailerSend uses Bearer token
+        headers.setBearerAuth(apiToken);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 

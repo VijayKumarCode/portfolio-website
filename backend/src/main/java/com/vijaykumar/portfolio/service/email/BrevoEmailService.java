@@ -32,7 +32,7 @@ public class BrevoEmailService implements EmailProvider {
     public BrevoEmailService(
             RestTemplate restTemplate,
             @Value("${email.brevo.api-key:}") String apiKey,
-            @Value("${email.sender:no-reply@vijaykumarcode.space}") String senderEmail) {
+            @Value("${email.sender:noreply@vijaykumarcode.space}") String senderEmail) {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
         this.senderEmail = senderEmail;
@@ -60,7 +60,7 @@ public class BrevoEmailService implements EmailProvider {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("api-key", apiKey);  // Brevo uses api-key header, NOT Bearer
+        headers.set("api-key", apiKey);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
