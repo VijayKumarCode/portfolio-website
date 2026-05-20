@@ -23,7 +23,7 @@ public class ContactMessage {
     private String message;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Instant createdAt;
 
     public ContactMessage() {}
