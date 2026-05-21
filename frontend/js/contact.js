@@ -2,9 +2,16 @@
  * Contact Form Module
  * Handles validation, submission, and user feedback
  */
-
+// contact.js
 import { CONTACT_ENDPOINT } from '../src/config/config.js';
-import { sanitizeInput } from '../src/utils/helpers.js';
+
+// Inline sanitize function
+function sanitizeInput(input) {
+    if (!input) return '';
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML;
+}
 
 const ContactForm = {
   form: null,
@@ -21,8 +28,8 @@ const ContactForm = {
     this.fields = {
       name: document.getElementById('name'),
       email: document.getElementById('email'),
-      subject: document.getElementById('subject'),
       message: document.getElementById('message')
+      // REMOVED: subject — not in HTML
     };
 
     this.bindEvents();
@@ -31,7 +38,6 @@ const ContactForm = {
   bindEvents() {
     this.form.addEventListener('submit', (e) => this.handleSubmit(e));
 
-    // Real-time validation
     Object.entries(this.fields).forEach(([key, field]) => {
       if (!field) return;
       field.addEventListener('blur', () => this.validateField(key, field));
@@ -63,11 +69,7 @@ const ContactForm = {
     const errorEl = field.parentElement?.querySelector('.field-error');
     if (errorEl) errorEl.textContent = message;
     field.setAttribute('aria-invalid', message ? 'true' : 'false');
-    if (message) {
-      field.style.borderColor = '#ef4444';
-    } else {
-      field.style.borderColor = '';
-    }
+    field.style.borderColor = message ? '#ef4444' : '';
   },
 
   clearFieldError(field) {
@@ -77,7 +79,6 @@ const ContactForm = {
   async handleSubmit(e) {
     e.preventDefault();
 
-    // Validate all fields
     let isValid = true;
     Object.entries(this.fields).forEach(([key, field]) => {
       if (!this.validateField(key, field)) isValid = false;
@@ -85,15 +86,13 @@ const ContactForm = {
 
     if (!isValid) return;
 
-    // Gather data
+    // REMOVED: subject from data
     const data = {
       name: sanitizeInput(this.fields.name.value.trim()),
       email: sanitizeInput(this.fields.email.value.trim()),
-      subject: sanitizeInput(this.fields.subject.value.trim()),
       message: sanitizeInput(this.fields.message.value.trim())
     };
 
-    // Show loading state
     this.setLoading(true);
     this.showStatus('', '');
 
@@ -152,12 +151,11 @@ const ContactForm = {
   showStatus(message, type) {
     if (!this.statusEl) return;
     this.statusEl.textContent = message;
-    this.statusEl.className = type; // 'success' or 'error'
+    this.statusEl.className = type;
     this.statusEl.style.display = message ? 'block' : 'none';
   }
 };
 
-// Initialize
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => ContactForm.init());
 } else {
