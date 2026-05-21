@@ -17,7 +17,6 @@ export const CONTACT_ENDPOINT = `${API_BASE_URL}/contact`;
 // Blog posts always served from static JSON (fast, SEO-friendly, no cold starts)
 export const BLOG_ENDPOINT = '/data/posts.json';
 export const BLOG_FALLBACK = '/data/posts.json';
-
 export const REQUEST_HEADERS = {
   'Content-Type': 'application/json',
   'Accept': 'application/json'

@@ -90,11 +90,9 @@ function getSlugFromUrl() {
 }
 
 function convertNewlinesToHtml(content) {
-  if (!content) return '';
-  // Replace double newlines with paragraph breaks
-  return content
-    .replace(/\\n\\n/g, '</p><p>')
-    .replace(/\\n/g, '<br>');
+  // posts.json already contains rendered HTML — no conversion needed
+  // Attempting to convert newlines would double-escape already-rendered HTML
+  return content || '';
 }
 
 function estimateReadingTime(content) {
