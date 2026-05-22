@@ -1,26 +1,10 @@
 # ── Stage 1: Build ──────────────────────────────────────────
-FROM eclipse-temurin:25-jdk-alpine AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /build
 
 # Copy Maven wrapper and pom first (layer caching — only re-downloads
 # dependencies when pom.xml changes, not on every source change)
-COPY .mvn/ .mvn/
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline -q
-
-# Copy source and build
-COPY src ./src
-RUN ./mvnw clean package -DskipTests -q
-
-# ── Stage 2: Runtime ─────────────────────────────────────────
-# eclipse-temurin:17-jre-alpine is ~80MB — much smaller than JDK
-FROM eclipse-temurin:25-jre-alpine
-# ── Stage 1: Build ─────────────────────────────────────────
-FROM eclipse-temurin:25-jdk-alpine AS builder
-WORKDIR /build
-
-# Copy Maven wrapper and POM first for layer caching
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
 
@@ -35,7 +19,8 @@ COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
 # ── Stage 2: Runtime ───────────────────────────────────────
-FROM eclipse-temurin:25-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
+
 WORKDIR /app
 
 # Security: Run as a non-root user
