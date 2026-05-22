@@ -5,8 +5,8 @@ import com.vijaykumar.portfolio.entity.ContactMessage;
 import com.vijaykumar.portfolio.repository.ContactRepository;
 import com.vijaykumar.portfolio.service.email.EmailOrchestrator;
 import com.vijaykumar.portfolio.util.HtmlEscaper;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +22,18 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * No SMTP. No JavaMailSender. No port 587.
  */
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class ContactService {
+
+    private static final Logger log = LoggerFactory.getLogger(ContactService.class);
 
     private final ContactRepository repository;
     private final EmailOrchestrator emailOrchestrator;
+
+    public ContactService(ContactRepository repository, EmailOrchestrator emailOrchestrator) {
+        this.repository = repository;
+        this.emailOrchestrator = emailOrchestrator;
+    }
 
     @Value("${email.notify:vkumar.kumar31@gmail.com}")
     private String notifyEmail;

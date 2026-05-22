@@ -1,6 +1,7 @@
 package com.vijaykumar.portfolio.service.email;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,10 @@ import java.util.Objects;
  * Authentication: Authorization: Bearer <token>
  * Docs: https://developers.mailersend.com/api/v1/email.html
  */
-@Slf4j
 @Service
 public class MailerSendEmailService implements EmailProvider {
+
+    private static final Logger log = LoggerFactory.getLogger(MailerSendEmailService.class);
 
     private static final String MAILERSEND_URL = "https://api.mailersend.com/v1/email";
 

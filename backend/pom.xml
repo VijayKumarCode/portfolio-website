@@ -19,7 +19,7 @@
   <description>Backend API for Vijay Kumar Portfolio</description>
 
   <properties>
-    <java.version>17</java.version>
+    <java.version>25</java.version>
   </properties>
 
   <dependencies>
@@ -49,12 +49,6 @@
     <!-- Email delivery is now handled via REST APIs (Brevo / MailerSend) -->
 
     <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
@@ -74,6 +68,14 @@
               <artifactId>lombok</artifactId>
             </exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.14.1</version>
+        <configuration>
+          <release>${java.version}</release>
         </configuration>
       </plugin>
     </plugins>

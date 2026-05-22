@@ -17,7 +17,8 @@ import com.vijaykumar.portfolio.exception.RateLimitExceededException;
 import com.vijaykumar.portfolio.service.ContactService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +31,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /* BUG FIX: @CrossOrigin removed — CORS is handled centrally by CorsConfig.
    Having both causes the stricter annotation-level rule to override the
    global config, blocking your custom domain. */
-@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class ContactController {
+
+    private static final Logger log = LoggerFactory.getLogger(ContactController.class);
 
     private final ContactService contactService;
 

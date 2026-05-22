@@ -1,6 +1,7 @@
 package com.vijaykumar.portfolio.service.email;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,10 @@ import java.util.Map;
  * Authentication: api-key header (NOT Bearer).
  * Docs: https://developers.brevo.com/reference/sendtransacemail
  */
-@Slf4j
 @Service
 public class BrevoEmailService implements EmailProvider {
+
+    private static final Logger log = LoggerFactory.getLogger(BrevoEmailService.class);
 
     private static final String BREVO_URL = "https://api.brevo.com/v3/smtp/email";
 

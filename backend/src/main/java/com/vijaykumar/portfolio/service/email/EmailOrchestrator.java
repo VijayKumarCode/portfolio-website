@@ -1,7 +1,8 @@
 package com.vijaykumar.portfolio.service.email;
 
 import com.vijaykumar.portfolio.exception.EmailDeliveryException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -25,9 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
  *   - Uses ConcurrentHashMap for dedup cache.
  *   - All state is local — safe for Render free-tier single instance.
  */
-@Slf4j
 @Service
 public class EmailOrchestrator {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailOrchestrator.class);
 
     private static final int PRIMARY_MAX_ATTEMPTS = 3;
     private static final int FALLBACK_MAX_ATTEMPTS = 2;
