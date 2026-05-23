@@ -20,6 +20,11 @@ import java.util.Objects;
  * Endpoint: POST https://api.mailersend.com/v1/email
  * Authentication: Authorization: Bearer <token>
  * Docs: https://developers.mailersend.com/api/v1/email.html
+ *
+ * PRODUCTION FIXES:
+ * - Added detailed error logging for observability
+ * - Logs provider initialization status
+ * - Logs response body on failures
  */
 @Service
 public class MailerSendEmailService implements EmailProvider {
@@ -39,6 +44,13 @@ public class MailerSendEmailService implements EmailProvider {
         this.restTemplate = restTemplate;
         this.apiToken = apiToken;
         this.senderEmail = senderEmail;
+        
+        if (apiToken == null || apiToken.isBlank()) {
+            log.warn("MailerSend API token is NOT configured — provider will be skipped");
+        } else {
+            log.info("MailerSend provider initialized — token length: {}, sender: {}", 
+                apiToken.length(), senderEmail);
+        }
     }
 
     @Override
@@ -68,6 +80,7 @@ public class MailerSendEmailService implements EmailProvider {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
+            log.debug("MailerSend: Sending email to={}, subject={}, sender={}", to, subject, senderEmail);
             ResponseEntity<String> response = restTemplate.postForEntity(MAILERSEND_URL, request, String.class);
             boolean success = response.getStatusCode().is2xxSuccessful();
             if (success) {
@@ -77,7 +90,8 @@ public class MailerSendEmailService implements EmailProvider {
             }
             return success;
         } catch (RestClientResponseException ex) {
-            log.error("MailerSend API error — status={}, body={}", ex.getStatusCode(), ex.getResponseBodyAsString());
+            log.error("MailerSend API error — status={} {}, body={}", 
+                ex.getStatusCode(), ex.getStatusText(), ex.getResponseBodyAsString());
             throw ex;
         }
     }

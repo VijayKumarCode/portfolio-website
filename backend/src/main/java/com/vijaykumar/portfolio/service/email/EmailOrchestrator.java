@@ -25,6 +25,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * Thread safety:
  *   - Uses ConcurrentHashMap for dedup cache.
  *   - All state is local — safe for Render free-tier single instance.
+ *
+ * PRODUCTION FIXES:
+ * - Changed provider attempt logging from DEBUG to INFO level
+ * - All provider attempts now logged at INFO for visibility
+ * - Better dedup logging to prevent duplicate send incidents
+ * - Exponential backoff still uses Thread.sleep (TODO: convert to async in v2.1)
  */
 @Service
 public class EmailOrchestrator {
@@ -45,15 +51,25 @@ public class EmailOrchestrator {
                              MailerSendEmailService fallbackProvider) {
         this.primaryProvider = primaryProvider;
         this.fallbackProvider = fallbackProvider;
+        log.info("EmailOrchestrator initialized: primary={}, fallback={}", 
+            primaryProvider.name(), fallbackProvider.name());
     }
 
+    /**
+     * Send email with automatic fallback and deduplication.
+     * Throws EmailDeliveryException if all providers fail.
+     *
+     * @throws EmailDeliveryException if both primary and fallback exhausted
+     */
     public void send(String to, String subject, String text, String html) {
         String dedupKey = computeDedupKey(to, subject, text);
 
         if (isDuplicate(dedupKey)) {
-            log.info("Duplicate email suppressed — dedupKey={}", dedupKey);
+            log.info("Duplicate email suppressed — dedupKey={}, to={}", dedupKey, to);
             return;
         }
+
+        log.info("EmailOrchestrator: Starting send attempt — to={}, subject={}", to, subject);
 
         boolean primarySuccess = tryProvider(primaryProvider, to, subject, text, html, PRIMARY_MAX_ATTEMPTS);
         if (primarySuccess) {
@@ -61,8 +77,8 @@ public class EmailOrchestrator {
             return;
         }
 
-        log.warn("Primary provider {} exhausted — attempting fallback {}",
-            primaryProvider.name(), fallbackProvider.name());
+        log.warn("Primary provider {} exhausted after {} attempts — attempting fallback {}",
+            primaryProvider.name(), PRIMARY_MAX_ATTEMPTS, fallbackProvider.name());
 
         boolean fallbackSuccess = tryProvider(fallbackProvider, to, subject, text, html, FALLBACK_MAX_ATTEMPTS);
         if (fallbackSuccess) {
@@ -71,33 +87,57 @@ public class EmailOrchestrator {
         }
 
         String msg = String.format(
-            "All email providers failed — primary=%s, fallback=%s, recipient=%s",
-            primaryProvider.name(), fallbackProvider.name(), to);
+            "All email providers failed — primary=%s (attempts=%d), fallback=%s (attempts=%d), recipient=%s",
+            primaryProvider.name(), PRIMARY_MAX_ATTEMPTS, fallbackProvider.name(), FALLBACK_MAX_ATTEMPTS, to);
         log.error(msg);
         throw new EmailDeliveryException(msg);
     }
 
+    /**
+     * Try provider with retry logic and exponential backoff.
+     * 
+     * @param provider Email provider to attempt
+     * @param to Recipient email
+     * @param subject Email subject
+     * @param text Plain text body
+     * @param html HTML body
+     * @param maxAttempts Maximum attempts before giving up
+     * @return true if provider accepted the email (2xx response)
+     */
     private boolean tryProvider(EmailProvider provider, String to, String subject,
                                  String text, String html, int maxAttempts) {
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
-                log.debug("{} attempt {}/{} — to={}", provider.name(), attempt, maxAttempts, to);
+                // Production fix: Log at INFO level for observability
+                log.info("{}: Attempt {}/{} — recipient={}, subject={}", 
+                    provider.name(), attempt, maxAttempts, to, subject);
+                
                 boolean ok = provider.send(to, subject, text, html);
-                if (ok) return true;
+                if (ok) {
+                    log.info("{}: Success on attempt {}/{}", provider.name(), attempt, maxAttempts);
+                    return true;
+                }
+                
+                log.warn("{}: Non-success response on attempt {}/{}", provider.name(), attempt, maxAttempts);
             } catch (Exception ex) {
-                log.warn("{} attempt {}/{} failed — {}", provider.name(), attempt, maxAttempts, ex.getMessage());
+                log.warn("{}: Attempt {}/{} failed — {}: {}", 
+                    provider.name(), attempt, maxAttempts, ex.getClass().getSimpleName(), ex.getMessage());
             }
 
+            // Exponential backoff before retry: 1s, 2s, 4s, etc.
             if (attempt < maxAttempts) {
                 long delay = RETRY_DELAY_MS * (1L << (attempt - 1));
+                log.debug("{}: Waiting {}ms before next attempt", provider.name(), delay);
                 try {
                     Thread.sleep(delay);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
+                    log.error("{}: Interrupted during backoff", provider.name());
                     return false;
                 }
             }
         }
+        log.error("{}: All {} attempts exhausted", provider.name(), maxAttempts);
         return false;
     }
 

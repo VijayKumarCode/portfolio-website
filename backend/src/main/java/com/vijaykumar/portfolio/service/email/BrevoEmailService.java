@@ -19,6 +19,11 @@ import java.util.Map;
  *
  * Authentication: api-key header (NOT Bearer).
  * Docs: https://developers.brevo.com/reference/sendtransacemail
+ *
+ * PRODUCTION FIXES:
+ * - Added detailed error logging to diagnose authentication failures
+ * - Logs API key presence check (never logs actual key)
+ * - Logs full response body on failure for debugging
  */
 @Service
 public class BrevoEmailService implements EmailProvider {
@@ -38,6 +43,13 @@ public class BrevoEmailService implements EmailProvider {
         this.restTemplate = restTemplate;
         this.apiKey = apiKey;
         this.senderEmail = senderEmail;
+        
+        if (apiKey == null || apiKey.isBlank()) {
+            log.warn("Brevo API key is NOT configured — provider will be skipped");
+        } else {
+            log.info("Brevo provider initialized — apiKey length: {}, sender: {}", 
+                apiKey.length(), senderEmail);
+        }
     }
 
     @Override
@@ -67,6 +79,7 @@ public class BrevoEmailService implements EmailProvider {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
 
         try {
+            log.debug("Brevo: Sending email to={}, subject={}, sender={}", to, subject, senderEmail);
             ResponseEntity<String> response = restTemplate.postForEntity(BREVO_URL, request, String.class);
             boolean success = response.getStatusCode().is2xxSuccessful();
             if (success) {
@@ -76,7 +89,19 @@ public class BrevoEmailService implements EmailProvider {
             }
             return success;
         } catch (RestClientResponseException ex) {
-            log.error("Brevo API error — status={}, body={}", ex.getStatusCode(), ex.getResponseBodyAsString());
+            // Production fix: Log full response for 401 diagnosis
+            log.error("Brevo API error — status={} {}, body={}", 
+                ex.getStatusCode(), ex.getStatusText(), ex.getResponseBodyAsString());
+            
+            // Log context for debugging authentication failures
+            if (ex.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                log.error("Brevo 401 UNAUTHORIZED — possible causes:");
+                log.error("  1. API key invalid or expired");
+                log.error("  2. Sender email '{}' not verified in Brevo dashboard", senderEmail);
+                log.error("  3. API key has hidden characters (newline/space)");
+                log.error("  4. Wrong API key environment variable");
+            }
+            
             throw ex;
         }
     }

@@ -11,16 +11,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * ContactService — handles contact form persistence and email notification.
  *
  * Architecture:
  *   1. Save message to PostgreSQL (transactional, never skipped).
- *   2. Send email notification via EmailOrchestrator (Brevo → MailerSend fallback).
+ *   2. Send email notification via EmailOrchestrator ASYNC (Brevo → MailerSend fallback).
  *   3. Email failure is logged but NEVER blocks the HTTP response —
  *      the user sees success even if providers are down.
+ *   4. Response returns immediately after DB save.
  *
  * No SMTP. No JavaMailSender. No port 587.
+ *
+ * PRODUCTION FIX:
+ * - Email sending moved to async fire-and-forget (CompletableFuture)
+ * - HTTP response returns immediately after DB save
+ * - Email delivery is best-effort; failures logged separately
+ * - Prevents timeout if email providers are slow
  */
 @Service
 public class ContactService {
@@ -30,19 +39,23 @@ public class ContactService {
     private final ContactRepository repository;
     private final EmailOrchestrator emailOrchestrator;
 
-    public ContactService(ContactRepository repository, EmailOrchestrator emailOrchestrator) {
-        this.repository = repository;
-        this.emailOrchestrator = emailOrchestrator;
-    }
-
     @Value("${email.notify:vkumar.kumar31@gmail.com}")
     private String notifyEmail;
 
     @Value("${email.sender:no-reply@vijaykumarcode.space}")
     private String senderEmail;
 
+    public ContactService(ContactRepository repository, EmailOrchestrator emailOrchestrator) {
+        this.repository = repository;
+        this.emailOrchestrator = emailOrchestrator;
+    }
+
     /**
-     * Save contact message and trigger async email notification.
+     * Save contact message and trigger ASYNC email notification.
+     *
+     * PRODUCTION FIX: Email sending is now fire-and-forget (async).
+     * The HTTP response is not delayed by email provider latency.
+     * Email delivery failures are logged but do not affect the user's response.
      */
     @Transactional
     public void saveMessage(ContactRequest request) {
@@ -53,14 +66,19 @@ public class ContactService {
             request.message()
         );
         repository.save(entity);
-        log.info("Contact message saved — from={}, id={}", request.email(), entity.getId());
+        log.info("Contact message saved to DB — from={}, messageId={}", request.email(), entity.getId());
 
-        // Step 2: Notify — failure is isolated, never blocks response
-        try {
-            sendNotification(request);
-        } catch (Exception e) {
-            log.error("Email notification failed (message is safely saved in DB): {}", e.getMessage());
-        }
+        // Step 2: Notify ASYNC — failure is isolated, never blocks response
+        // Use CompletableFuture.runAsync to send email in background
+        CompletableFuture.runAsync(() -> {
+            try {
+                sendNotification(request);
+            } catch (Exception e) {
+                log.error("Email notification failed (message is safely saved in DB) — {}: {}", 
+                    e.getClass().getSimpleName(), e.getMessage());
+            }
+        });
+        // Response returns immediately, email sent in background
     }
 
     /* ── Private: email composition ─────────────────────── */
