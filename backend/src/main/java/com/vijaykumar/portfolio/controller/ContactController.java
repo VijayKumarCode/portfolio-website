@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  * - 500 Internal Server Error: Unexpected server error
  */
 @RestController
-@RequestMapping("/api/contact")
+@RequestMapping("/api/v1/contact")
 public class ContactController {
 
     private static final Logger log = LoggerFactory.getLogger(ContactController.class);
