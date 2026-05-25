@@ -143,6 +143,18 @@
     font-size: var(--text-2xl); 
   }
 
+  /* Theme toggle scaling for tablet */
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    padding: var(--space-2);
+  }
+
+  .theme-icon {
+    width: 18px;
+    height: 18px;
+  }
+
   section {
      padding: var(--space-16) var(--space-4); 
     }
@@ -220,6 +232,17 @@
   }
   #hamburger-nav { 
     display: flex; 
+  }
+
+  /* Theme toggle scaling for mobile */
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .theme-icon {
+    width: 16px;
+    height: 16px;
   }
 
   .hero-photo-frame { 

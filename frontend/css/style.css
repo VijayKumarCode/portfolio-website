@@ -93,6 +93,27 @@
   --z-tooltip:  400;
 }
 
+/* ─── Light Mode Theme Override ─── */
+[data-theme="light"] {
+  --color-bg-primary:     #ffffff;
+  --color-bg-secondary:   #f8fafc;
+  --color-bg-tertiary:    #f1f5f9;
+  --color-bg-elevated:    #e2e8f0;
+  --color-bg-input:       #ffffff;
+
+  --color-text-primary:   #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted:     #64748b;
+  --color-text-inverse:   #ffffff;
+
+  --color-accent:         #7c3aed;
+  --color-accent-light:   #a78bfa;
+  --color-accent-dark:    #5b21b6;
+
+  --color-border:         rgba(15, 23, 42, 0.12);
+  --color-border-hover:   rgba(15, 23, 42, 0.25);
+}
+
 /* ─── Reset & Base ─── */
 *, *::before, *::after {
   margin: 0;
@@ -420,6 +441,65 @@ section {
   height: 40px;
   border-radius: var(--radius-md);
   object-fit: cover;
+}
+
+/* ─── Theme Toggle Button ─── */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  padding: var(--space-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border-hover);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-sun,
+.icon-moon {
+  transition: opacity var(--transition-fast);
+}
+
+/* Dark mode (default) */
+.icon-sun {
+  opacity: 0;
+}
+
+.icon-moon {
+  opacity: 1;
+}
+
+/* Light mode */
+[data-theme="light"] .icon-sun {
+  opacity: 1;
+}
+
+[data-theme="light"] .icon-moon {
+  opacity: 0;
 }
 
 .nav-links {
