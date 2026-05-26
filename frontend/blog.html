@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/blog.css">
   <link rel="stylesheet" href="/css/mediaqueries.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta http-equiv="Cache-Control" content="public, max-age=3600">
+  <meta http-equiv="Pragma" content="public">
   <script src="/js/theme.js"></script>
 </head>
 <body>
@@ -102,17 +106,25 @@
   </main>
 
   <footer class="footer">
-  <div class="footer__inner">
-    <span class="footer__copy">© 2026 Vijay Kumar. Built with Spring Boot on the backend, precision on the frontend.</span>
-    <nav class="footer__links" aria-label="Footer links">
+    <div class="footer__inner">
+      <span class="footer__copy">© 2026 Vijay Kumar. Built with Spring Boot on the backend, precision on the frontend.</span>
+      <nav class="footer__links" aria-label="Footer links">
         <a href="/" class="footer__link">Portfolio</a>
         <a href="/blog" class="footer__link">Engineering Log</a>
         <a href="/resume" class="footer__link">Resume</a>
         <a href="https://github.com/VijayKumarCode" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a>
-    </nav>
-  </div>
-</footer>
+      </nav>
+    </div>
+  </footer>
 
   <script type="module" src="/js/blog.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(() => console.log('[SW] Registered'))
+        .catch(err => console.warn('[SW] Failed:', err));
+    }
+  </script>
 </body>
 </html>
