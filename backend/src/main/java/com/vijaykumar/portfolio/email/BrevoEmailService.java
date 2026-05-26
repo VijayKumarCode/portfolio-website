@@ -73,15 +73,11 @@ public class BrevoEmailService {
             log.warn("Brevo returned non-2xx status: {} — response: {}", response.getStatusCode(), errorBody);
             return new EmailSendResult(false, errorBody != null ? errorBody : "Non-2xx status");
             
-        } catch (HttpStatusCodeException e) {
-            String errorBody = e.getResponseBodyAsString();
-            log.error("Brevo HTTP error ({}): {}", e.getStatusCode(), errorBody);
-            return new EmailSendResult(false, errorBody);
-            
         } catch (Exception e) {
-            log.error("Brevo email send failed: {}", e.getMessage());
+        // CustomResponseErrorHandler handles 4xx/5xx transparently into the 2xx status check block above
+            log.error("Brevo email send execution failed: {}", e.getMessage());
             return new EmailSendResult(false, e.getMessage());
-        }
+        } 
     }
 
     /**
