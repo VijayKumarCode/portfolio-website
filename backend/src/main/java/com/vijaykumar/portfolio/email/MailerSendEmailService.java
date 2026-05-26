@@ -73,15 +73,10 @@ public class MailerSendEmailService {
             log.warn("MailerSend returned non-2xx status: {} — response: {}", response.getStatusCode(), errorBody);
             return new EmailSendResult(false, false, errorBody != null ? errorBody : "Non-2xx status");
             
-        } catch (HttpStatusCodeException e) {
-            String errorBody = e.getResponseBodyAsString();
-            log.error("MailerSend HTTP error ({}): {}", e.getStatusCode(), errorBody);
-            return new EmailSendResult(false, false, errorBody);
-            
-        } catch (Exception e) {
-            log.error("MailerSend email send failed: {}", e.getMessage());
+        }  catch (Exception e) {
+            log.error("MailerSend email send execution failed: {}", e.getMessage());
             return new EmailSendResult(false, false, e.getMessage());
-        }
+        } 
     }
 
     /**
