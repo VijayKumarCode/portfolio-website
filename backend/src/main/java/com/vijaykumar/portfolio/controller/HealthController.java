@@ -38,6 +38,14 @@ public class HealthController {
      * Liveness probe — indicates the application is up and running.
      * Maps directly to GET /api/v1/health to resolve platform deployment checks.
      */
+    @GetMapping("/")
+    public ResponseEntity<Map<String, Object>> rootGreeting() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "ONLINE");
+        response.put("message", "Vijay Kumar Portfolio API Gateway Core Operating Normally.");
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> liveness() {
         Map<String, Object> response = new HashMap<>();

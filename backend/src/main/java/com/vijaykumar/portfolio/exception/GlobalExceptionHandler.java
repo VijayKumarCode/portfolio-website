@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +70,19 @@ public class GlobalExceptionHandler {
      * Catch-all for unexpected exceptions.
      * Prevents stack traces from being exposed to clients.
      */
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNoResourceFoundException(NoResourceFoundException ex) {
+        log.info("Route or static resource not found: {}", ex.getResourcePath());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("error", "The requested resource or endpoint could not be found.");
+        response.put("path", ex.getResourcePath());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
         log.error("Unexpected error: {}", ex.getMessage(), ex);
