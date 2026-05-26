@@ -16,21 +16,18 @@ import java.util.Map;
 
 /**
  * Health Controller — Production Health Check Endpoints
- * 
- * Render uses these to determine if the instance is healthy.
+ * * Render uses these to determine if the instance is healthy.
  * Also useful for external monitoring (UptimeRobot, etc.).
- * 
- * ENDPOINTS:
- * - GET /health → Basic liveness (always returns 200 if app is running)
- * - GET /health/ready → Readiness probe (checks DB connectivity)
- * - GET /health/db → Database connectivity check
+ * * ENDPOINTS (REALIGNED FOR RENDER ROUTING):
+ * - GET /api/v1/health → Basic liveness (Resolves Render's NoResourceFoundException)
+ * - GET /api/v1/health/ready → Readiness probe (Checks database connectivity)
+ * - GET /api/v1/health/db → Dedicated database connectivity status
  */
 @RestController
-@RequestMapping("/health")
+@RequestMapping("/api/v1/health")
 public class HealthController {
 
     private static final Logger log = LoggerFactory.getLogger(HealthController.class);
-
     private final DataSource dataSource;
 
     public HealthController(@Autowired(required = false) DataSource dataSource) {
@@ -38,9 +35,8 @@ public class HealthController {
     }
 
     /**
-     * Liveness probe — indicates the application is running.
-     * Render uses this to determine if the container should be restarted.
-     * Should be lightweight (no DB calls).
+     * Liveness probe — indicates the application is up and running.
+     * Maps directly to GET /api/v1/health to resolve platform deployment checks.
      */
     @GetMapping
     public ResponseEntity<Map<String, Object>> liveness() {
@@ -52,15 +48,13 @@ public class HealthController {
     }
 
     /**
-     * Readiness probe — indicates the application is ready to serve traffic.
-     * Checks database connectivity.
-     * Render uses this to determine if the instance should receive requests.
+     * Readiness probe — indicates the application is ready to accept production traffic.
+     * Maps to GET /api/v1/health/ready
      */
     @GetMapping("/ready")
     public ResponseEntity<Map<String, Object>> readiness() {
         Map<String, Object> response = new HashMap<>();
         
-        // Check database
         boolean dbHealthy = checkDatabaseHealth();
         
         response.put("status", dbHealthy ? "UP" : "DEGRADED");
@@ -70,13 +64,13 @@ public class HealthController {
         if (dbHealthy) {
             return ResponseEntity.ok(response);
         } else {
-            // Return 503 to indicate the app isn't ready
             return ResponseEntity.status(503).body(response);
         }
     }
 
     /**
-     * Database health check — attempts to get a connection from the pool.
+     * Database health check — explicitly verifies active connection pool status.
+     * Maps to GET /api/v1/health/db
      */
     @GetMapping("/db")
     public ResponseEntity<Map<String, Object>> databaseHealth() {
@@ -94,26 +88,23 @@ public class HealthController {
     }
 
     /**
-     * Attempts to validate the database connection.
-     * Uses a short timeout to avoid hanging the health check.
+     * Validates database infrastructure connectivity with an isolated timeout barrier.
      */
     private boolean checkDatabaseHealth() {
         if (dataSource == null) {
-            log.warn("Health check: DataSource not available");
+            log.warn("Health check diagnostic: DataSource dependency injection missing or unavailable");
             return false;
         }
         
         try (Connection connection = dataSource.getConnection()) {
-            // Execute a simple validation query
-            boolean valid = connection.isValid(5);  // 5 second timeout
+            boolean valid = connection.isValid(5); // 5-second validation boundary
             if (!valid) {
-                log.warn("Health check: Database connection validation failed");
+                log.warn("Health check diagnostic: Database connection validation pool timeout failed");
             }
             return valid;
         } catch (SQLException e) {
-            log.warn("Health check: Database connection failed: {}", e.getMessage());
+            log.warn("Health check diagnostic: Critical database link fault: {}", e.getMessage());
             return false;
         }
     }
 }
-

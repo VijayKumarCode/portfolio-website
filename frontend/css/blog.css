@@ -700,6 +700,13 @@
   margin-bottom: var(--space-4);
 }
 
+.post__meta-separator {
+  width: 1px;
+  height: 1em;
+  background-color: currentColor;
+  opacity: 0.3;
+}
+
 .post__category {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
