@@ -6,14 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * Web Configuration — CORS and general web settings
- * 
- * CORS is configured for the Vercel frontend domain.
- * In production, only https://www.vijaykumarcode.space is allowed.
- * 
- * FIX: Properly scoped CORS — no wildcard '*' in production.
- */
 @Configuration
 public class WebConfig {
 
@@ -25,7 +17,6 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                // Split comma-separated origins
                 String[] origins = allowedOrigins.split(",");
                 
                 registry.addMapping("/api/**")
@@ -33,14 +24,12 @@ public class WebConfig {
                         .allowedMethods("GET", "POST", "OPTIONS")
                         .allowedHeaders("Content-Type", "Authorization", "X-Requested-With")
                         .allowCredentials(true)
-                        .maxAge(3600); // Cache preflight for 1 hour
+                        .maxAge(3600);
                 
-                // Health endpoint — allow broader access for monitoring
-                registry.addMapping("/health/**")
+                registry.addMapping("/api/v1/health/**")
                         .allowedOrigins("*")
                         .allowedMethods("GET");
             }
         };
     }
 }
-
