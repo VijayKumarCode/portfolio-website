@@ -303,19 +303,17 @@
         <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
         <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
       </div>
-      <div id="blog-container" class="blog-grid" style="display:none;"></div>
-      <div id="blog-fallback" style="display:none;" aria-live="polite">
-        <div id="blog-empty" class="blog-empty-state" role="status">
-          <p class="blog-empty-icon" aria-hidden="true">📝</p>
-          <h3>No Posts Yet</h3>
-          <p>Engineering logs are in progress. Check back soon.</p>
-        </div>
-        <div id="blog-error" class="blog-error-state" role="alert">
-          <p class="blog-error-icon" aria-hidden="true">⚡</p>
-          <h3>Failed to Load Posts</h3>
-          <p>The engineering log is temporarily unavailable.</p>
-          <button id="blog-retry-btn" class="btn btn-ghost btn-sm" type="button">Retry</button>
-        </div>
+      <div id="blog-container" class="blog-grid hidden"></div>
+      <div id="blog-empty" class="blog-empty-state hidden" role="status">
+        <p class="blog-empty-icon" aria-hidden="true">📝</p>
+        <h3>No Posts Yet</h3>
+        <p>Engineering logs are in progress. Check back soon.</p>
+      </div>
+      <div id="blog-error" class="blog-error-state hidden" role="alert">
+        <p class="blog-error-icon" aria-hidden="true">⚡</p>
+        <h3>Failed to Load Posts</h3>
+        <p>The engineering log is temporarily unavailable.</p>
+        <button id="blog-retry-btn" class="btn btn-ghost btn-sm" type="button">Retry</button>
       </div>
       <div class="blog-footer-link">
         <a href="/blog" class="btn btn-ghost btn-blog-all">View all entries <span class="btn-arrow" aria-hidden="true">→</span></a>

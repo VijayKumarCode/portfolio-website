@@ -15,24 +15,29 @@ const BlogManager = (() => {
   // ─── DOM Helpers ──────────────────────────────────────────────────────────
 
   /**
-   * Shows an element by removing the 'hidden' class.
+   * Shows an element by removing 'hidden' class and clearing inline styles.
    * @param {HTMLElement|null} el
    */
   function show(el) {
-    if (el) el.classList.remove('hidden');
+    if (el) {
+      el.classList.remove('hidden');
+      el.style.display = '';
+    }
   }
 
   /**
-   * Hides an element by adding the 'hidden' class.
+   * Hides an element by adding 'hidden' class and setting display: none.
    * @param {HTMLElement|null} el
    */
   function hide(el) {
-    if (el) el.classList.add('hidden');
+    if (el) {
+      el.classList.add('hidden');
+      el.style.display = 'none';
+    }
   }
 
   /**
    * Resets all blog states to hidden before showing the correct one.
-   * CRITICAL: This is the fix for the dual-state visibility bug.
    * @param {Object} els - Object containing all state elements
    */
   function resetAllStates(els) {
@@ -99,8 +104,7 @@ const BlogManager = (() => {
 
   /**
    * Fetches posts from the data file.
-   * Always uses root-relative path to avoid resolution ambiguity
-   * regardless of which page (/ or /blog) is loading this module.
+   * Always uses root-relative path to avoid resolution ambiguity.
    * @returns {Promise<Array>}
    */
   async function fetchPosts() {
@@ -112,7 +116,6 @@ const BlogManager = (() => {
       throw new Error(`Failed to fetch posts: HTTP ${response.status}`);
     }
     const data = await response.json();
-    // Support both { posts: [...] } and [...] shapes
     return Array.isArray(data) ? data : (data.posts ?? []);
   }
 
@@ -133,36 +136,27 @@ const BlogManager = (() => {
 
   /**
    * Initialises the homepage Engineering Log preview.
-   * Selector contract (must match index.html):
-   *   #home-blog-grid    — card grid
-   *   #home-blog-empty   — "no posts yet" message
-   *   #home-blog-error   — "failed to load" message + retry button
-   *   #home-blog-loading — loading skeleton (optional)
-   *   #home-blog-retry   — retry button inside error state
+   * Resolved selectors to match index.html elements.
    */
   async function initHomePreview() {
     const els = {
-      grid:    document.getElementById('home-blog-grid'),
-      empty:   document.getElementById('home-blog-empty'),
-      error:   document.getElementById('home-blog-error'),
-      loading: document.getElementById('home-blog-loading'),
-      retry:   document.getElementById('home-blog-retry'),
+      grid:    document.getElementById('blog-container'),
+      empty:   document.getElementById('blog-empty'),
+      error:   document.getElementById('blog-error'),
+      loading: document.getElementById('blog-container-skeleton'),
+      retry:   document.getElementById('blog-retry-btn'),
     };
 
-    // Guard: if the section isn't on this page, exit silently
     if (!els.grid && !els.empty) return;
 
-    // 1. Reset ALL states — this is the fix for the dual-visibility bug
     resetAllStates(els);
     show(els.loading);
 
     try {
       allPosts = await fetchPosts();
-
-      // Sort by date descending
       allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      resetAllStates(els); // reset again after async gap
+      resetAllStates(els);
 
       if (allPosts.length === 0) {
         show(els.empty);
@@ -174,10 +168,9 @@ const BlogManager = (() => {
 
     } catch (err) {
       console.error('[BlogManager] initHomePreview failed:', err);
-      resetAllStates(els); // ensure only error shows
+      resetAllStates(els);
       show(els.error);
 
-      // Wire retry button
       if (els.retry) {
         els.retry.addEventListener('click', () => initHomePreview(), { once: true });
       }
@@ -186,23 +179,15 @@ const BlogManager = (() => {
 
   /**
    * Initialises the full blog listing page.
-   * Selector contract (must match blog.html):
-   *   #blog-grid      — card grid
-   *   #blog-empty     — "no entries" message
-   *   #blog-error     — "failed to load" message + retry button
-   *   #blog-loading   — loading skeleton
-   *   #blog-retry     — retry button
-   *   #load-more-btn  — "load more" button
-   *   .filter-btn     — category filter buttons (data-category attr)
-   *   #blog-search    — search input (optional)
+   * Resolves selector contracts to match blog.html elements.
    */
   async function initBlogPage() {
     const els = {
-      grid:     document.getElementById('blog-grid'),
+      grid:     document.getElementById('blog-container'),
       empty:    document.getElementById('blog-empty'),
       error:    document.getElementById('blog-error'),
-      loading:  document.getElementById('blog-loading'),
-      retry:    document.getElementById('blog-retry'),
+      loading:  document.getElementById('blog-container-skeleton'),
+      retry:    document.getElementById('blog-retry-btn'),
       loadMore: document.getElementById('load-more-btn'),
       search:   document.getElementById('blog-search'),
     };
@@ -215,7 +200,7 @@ const BlogManager = (() => {
     let searchTerm = '';
 
     resetAllStates(els);
-    hide(els.loadMore); // ALWAYS hide load-more before we know if there are posts
+    hide(els.loadMore);
     show(els.loading);
 
     try {
@@ -230,10 +215,8 @@ const BlogManager = (() => {
         return;
       }
 
-      // Initial render
       applyFilters();
 
-      // Category filter buttons
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -244,7 +227,6 @@ const BlogManager = (() => {
         });
       });
 
-      // Search input
       if (els.search) {
         els.search.addEventListener('input', () => {
           searchTerm = els.search.value.trim().toLowerCase();
@@ -253,7 +235,6 @@ const BlogManager = (() => {
         });
       }
 
-      // Load more
       if (els.loadMore) {
         els.loadMore.addEventListener('click', () => {
           visibleCount += PAGE_SIZE;
@@ -302,7 +283,6 @@ const BlogManager = (() => {
       hide(els.empty);
       show(els.grid);
 
-      // Load more visibility
       if (filtered.length > visibleCount) {
         show(els.loadMore);
       } else {
@@ -311,7 +291,6 @@ const BlogManager = (() => {
     }
   }
 
-  // ─── Expose ───────────────────────────────────────────────────────────────
   return { initHomePreview, initBlogPage };
 
 })();
