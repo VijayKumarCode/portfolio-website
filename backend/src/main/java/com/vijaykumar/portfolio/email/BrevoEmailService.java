@@ -6,20 +6,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class BrevoEmailService {
+public class BrevoEmailService implements EmailProvider {
 
     private static final Logger log = LoggerFactory.getLogger(BrevoEmailService.class);
     private final RestTemplate restTemplate;
 
     @Value("${brevo.api.key}")
     private String apiKey;
+
+    @Value("${brevo.api.url}")
+    private String apiUrl;
 
     @Value("${app.notify-email}")
     private String notifyEmail;
@@ -34,10 +36,13 @@ public class BrevoEmailService {
         this.restTemplate = restTemplate;
     }
 
+    @Override
+    public String getProviderName() {
+        return "Brevo";
+    }
+
+    @Override
     public EmailSendResult sendContactNotification(ContactFormDto dto) {
-        String endpoint = "https://api.brevo.com/v3/smtp/email";
-        
-        // Clean API key: remove quotes, all whitespace (including newlines), and trim
         String cleanApiKey = sanitizeApiKey(apiKey);
         
         if (cleanApiKey.isEmpty()) {
@@ -45,7 +50,7 @@ public class BrevoEmailService {
             return new EmailSendResult(false, "API key not configured");
         }
         
-        String sanitizedMessage = dto.message();  // Plain text - no HTML escaping needed
+        String sanitizedMessage = dto.message();
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("sender", Map.of("name", fromName, "email", fromEmail));
@@ -61,8 +66,8 @@ public class BrevoEmailService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
         try {
-            log.info("Sending email via Brevo API");
-            ResponseEntity<String> response = restTemplate.postForEntity(endpoint, request, String.class);
+            log.info("Sending email via Brevo API: {}", apiUrl);
+            ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
             
             if (response.getStatusCode().is2xxSuccessful()) {
                 log.info("Brevo email sent successfully");
@@ -74,25 +79,15 @@ public class BrevoEmailService {
             return new EmailSendResult(false, errorBody != null ? errorBody : "Non-2xx status");
             
         } catch (Exception e) {
-        // CustomResponseErrorHandler handles 4xx/5xx transparently into the 2xx status check block above
             log.error("Brevo email send execution failed: {}", e.getMessage());
             return new EmailSendResult(false, e.getMessage());
         } 
     }
 
-    /**
-     * Sanitizes API key by removing quotes, all whitespace (including newlines),
-     * and trimming. This prevents issues with environment variable corruption
-     * in Render where newlines may be embedded.
-     */
     private String sanitizeApiKey(String apiKey) {
         if (apiKey == null || apiKey.isEmpty()) {
             return "";
         }
-        
-        return apiKey
-            .replace("\"", "")          // Remove quotes
-            .replaceAll("\\s+", "")     // Remove ALL whitespace (space, tab, newline, etc.)
-            .trim();
+        return apiKey.replace("\"", "").replaceAll("\\s+", "").trim();
     }
 }

@@ -6,20 +6,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class MailerSendEmailService {
+public class MailerSendEmailService implements EmailProvider {
 
     private static final Logger log = LoggerFactory.getLogger(MailerSendEmailService.class);
     private final RestTemplate restTemplate;
 
     @Value("${mailersend.api.key}")
     private String apiKey;
+
+    @Value("${mailersend.api.url}")
+    private String apiUrl;
 
     @Value("${app.notify-email}")
     private String notifyEmail;
@@ -34,18 +36,21 @@ public class MailerSendEmailService {
         this.restTemplate = restTemplate;
     }
 
+    @Override
+    public String getProviderName() {
+        return "MailerSend";
+    }
+
+    @Override
     public EmailSendResult sendContactNotification(ContactFormDto dto) {
-        String endpoint = "https://api.mailersend.com/v1/email";
-        
-        // Clean API key: remove quotes, all whitespace (including newlines), and trim
         String cleanApiKey = sanitizeApiKey(apiKey);
         
         if (cleanApiKey.isEmpty()) {
             log.error("MailerSend API key is empty or missing - cannot send email");
-            return new EmailSendResult(false, "API key not configured");
+            return new EmailSendResult(false, false, "API key not configured");
         }
         
-        String sanitizedMessage = dto.message();  // Plain text - no HTML escaping needed
+        String sanitizedMessage = dto.message();
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("from", Map.of("email", fromEmail, "name", fromName));
@@ -61,8 +66,8 @@ public class MailerSendEmailService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
         try {
-            log.info("Sending email via MailerSend fallback");
-            ResponseEntity<String> response = restTemplate.postForEntity(endpoint, request, String.class);
+            log.info("Sending email via MailerSend API: {}", apiUrl);
+            ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
             
             if (response.getStatusCode().is2xxSuccessful()) {
                 log.info("MailerSend email sent successfully");
@@ -79,19 +84,10 @@ public class MailerSendEmailService {
         } 
     }
 
-    /**
-     * Sanitizes API key by removing quotes, all whitespace (including newlines),
-     * and trimming. This prevents issues with environment variable corruption
-     * in Render where newlines may be embedded.
-     */
     private String sanitizeApiKey(String apiKey) {
         if (apiKey == null || apiKey.isEmpty()) {
             return "";
         }
-        
-        return apiKey
-            .replace("\"", "")          // Remove quotes
-            .replaceAll("\\s+", "")     // Remove ALL whitespace (space, tab, newline, etc.)
-            .trim();
+        return apiKey.replace("\"", "").replaceAll("\\s+", "").trim();
     }
 }
