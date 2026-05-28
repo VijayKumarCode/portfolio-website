@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
@@ -16,15 +15,10 @@ import java.util.Map;
 
 /**
  * Health Controller — Production Health Check Endpoints
- * * Render uses these to determine if the instance is healthy.
- * Also useful for external monitoring (UptimeRobot, etc.).
- * * ENDPOINTS (REALIGNED FOR RENDER ROUTING):
- * - GET /api/v1/health → Basic liveness (Resolves Render's NoResourceFoundException)
- * - GET /api/v1/health/ready → Readiness probe (Checks database connectivity)
- * - GET /api/v1/health/db → Dedicated database connectivity status
+ * * Configured to resolve both explicit api health checks and automated 
+ * load-balancer container layer pings from Render infrastructure.
  */
 @RestController
-@RequestMapping("/api/v1/health")
 public class HealthController {
 
     private static final Logger log = LoggerFactory.getLogger(HealthController.class);
@@ -35,18 +29,23 @@ public class HealthController {
     }
 
     /**
-     * Liveness probe — indicates the application is up and running.
-     * Maps directly to GET /api/v1/health to resolve platform deployment checks.
+     * Intercepts absolute root domain pings from deployment platforms.
+     * Maps to: GET /
+     * Resolves the remaining background 404 routing trace logs.
      */
     @GetMapping("/")
-    public ResponseEntity<Map<String, Object>> rootGreeting() {
+    public ResponseEntity<Map<String, Object>> platformRootCheck() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "ONLINE");
         response.put("message", "Vijay Kumar Portfolio API Gateway Core Operating Normally.");
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    /**
+     * Liveness probe — indicates the application process is running.
+     * Maps to: GET /api/v1/health
+     */
+    @GetMapping({"/api/v1/health", "/api/v1/health/"})
     public ResponseEntity<Map<String, Object>> liveness() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "UP");
@@ -56,10 +55,10 @@ public class HealthController {
     }
 
     /**
-     * Readiness probe — indicates the application is ready to accept production traffic.
-     * Maps to GET /api/v1/health/ready
+     * Readiness probe — indicates the application is ready to accept user data requests.
+     * Maps to: GET /api/v1/health/ready
      */
-    @GetMapping("/ready")
+    @GetMapping("/api/v1/health/ready")
     public ResponseEntity<Map<String, Object>> readiness() {
         Map<String, Object> response = new HashMap<>();
         
@@ -77,10 +76,10 @@ public class HealthController {
     }
 
     /**
-     * Database health check — explicitly verifies active connection pool status.
-     * Maps to GET /api/v1/health/db
+     * Database status probe — explicitly verifies connection pool availability.
+     * Maps to: GET /api/v1/health/db
      */
-    @GetMapping("/db")
+    @GetMapping("/api/v1/health/db")
     public ResponseEntity<Map<String, Object>> databaseHealth() {
         Map<String, Object> response = new HashMap<>();
         
@@ -96,7 +95,7 @@ public class HealthController {
     }
 
     /**
-     * Validates database infrastructure connectivity with an isolated timeout barrier.
+     * Validates database infrastructure connectivity with a safe timeout fence.
      */
     private boolean checkDatabaseHealth() {
         if (dataSource == null) {
