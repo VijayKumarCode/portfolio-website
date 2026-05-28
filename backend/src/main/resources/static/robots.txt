@@ -1,7 +1,5 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://www.vijaykumarcode.space/sitemap.xml
-
-# Block access to API endpoints
 Disallow: /api/
+
+User-agent: *
+Allow: /
