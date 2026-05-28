@@ -15,8 +15,7 @@ import java.util.Map;
 
 /**
  * Health Controller — Production Health Check Endpoints
- * * Configured to resolve both explicit api health checks and automated 
- * load-balancer container layer pings from Render infrastructure.
+ * * Handles base domain sweeps and specific subpath monitoring signals natively.
  */
 @RestController
 public class HealthController {
@@ -29,9 +28,8 @@ public class HealthController {
     }
 
     /**
-     * Intercepts absolute root domain pings from deployment platforms.
+     * Intercepts plain proxy pings hitting your base app link.
      * Maps to: GET /
-     * Resolves the remaining background 404 routing trace logs.
      */
     @GetMapping("/")
     public ResponseEntity<Map<String, Object>> platformRootCheck() {
@@ -42,8 +40,7 @@ public class HealthController {
     }
 
     /**
-     * Liveness probe — indicates the application process is running.
-     * Maps to: GET /api/v1/health
+     * Liveness probe — maps directly to GET /api/v1/health
      */
     @GetMapping({"/api/v1/health", "/api/v1/health/"})
     public ResponseEntity<Map<String, Object>> liveness() {
@@ -55,13 +52,11 @@ public class HealthController {
     }
 
     /**
-     * Readiness probe — indicates the application is ready to accept user data requests.
-     * Maps to: GET /api/v1/health/ready
+     * Readiness probe — maps to GET /api/v1/health/ready
      */
     @GetMapping("/api/v1/health/ready")
     public ResponseEntity<Map<String, Object>> readiness() {
         Map<String, Object> response = new HashMap<>();
-        
         boolean dbHealthy = checkDatabaseHealth();
         
         response.put("status", dbHealthy ? "UP" : "DEGRADED");
@@ -76,14 +71,13 @@ public class HealthController {
     }
 
     /**
-     * Database status probe — explicitly verifies connection pool availability.
-     * Maps to: GET /api/v1/health/db
+     * Database status probe — maps to GET /api/v1/health/db
      */
     @GetMapping("/api/v1/health/db")
     public ResponseEntity<Map<String, Object>> databaseHealth() {
         Map<String, Object> response = new HashMap<>();
-        
         boolean healthy = checkDatabaseHealth();
+        
         response.put("database", healthy ? "UP" : "DOWN");
         response.put("pool", dataSource != null ? dataSource.getClass().getSimpleName() : "unknown");
         
@@ -94,21 +88,13 @@ public class HealthController {
         }
     }
 
-    /**
-     * Validates database infrastructure connectivity with a safe timeout fence.
-     */
     private boolean checkDatabaseHealth() {
         if (dataSource == null) {
-            log.warn("Health check diagnostic: DataSource dependency injection missing or unavailable");
+            log.warn("Health check diagnostic: DataSource injection missing or unavailable");
             return false;
         }
-        
         try (Connection connection = dataSource.getConnection()) {
-            boolean valid = connection.isValid(5); // 5-second validation boundary
-            if (!valid) {
-                log.warn("Health check diagnostic: Database connection validation pool timeout failed");
-            }
-            return valid;
+            return connection.isValid(5);
         } catch (SQLException e) {
             log.warn("Health check diagnostic: Critical database link fault: {}", e.getMessage());
             return false;
