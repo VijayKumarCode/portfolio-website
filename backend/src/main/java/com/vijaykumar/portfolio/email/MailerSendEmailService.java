@@ -141,11 +141,16 @@ public class MailerSendEmailService implements EmailProvider {
 
     private String sanitizeApiKey(String key) {
         if (key == null || key.isEmpty()) return "";
-        return key.replace("\"", "").replaceAll("\\s+", "").trim();
+        String cleaned = key.replace("\"", "").replaceAll("\\s+", "").trim();
+        if (!cleaned.isEmpty()) {
+            log.debug("MailerSend key loaded (prefix): {}...", 
+            cleaned.substring(0, Math.min(6, cleaned.length())));
+        }
+        return cleaned;
     }
 
     private static String esc(String s) {
         if (s == null) return "";
-        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+            return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+        }
     }
-}

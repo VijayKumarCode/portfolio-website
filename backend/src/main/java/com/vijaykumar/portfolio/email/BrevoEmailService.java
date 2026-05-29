@@ -143,9 +143,13 @@ public class BrevoEmailService implements EmailProvider {
             """.formatted(esc(dto.name()), esc(dto.email()), esc(dto.subject()), esc(dto.message()));
     }
 
-    private String sanitizeApiKey(String key) {
-        if (key == null || key.isEmpty()) return "";
-        return key.replace("\"", "").replaceAll("\\s+", "").trim();
+   private String sanitizeApiKey(String key) {
+    if (key == null || key.isEmpty()) return "";
+    String cleaned = key.replace("\"", "").replaceAll("\\s+", "").trim();
+       if (!cleaned.isEmpty()) {
+          log.debug("Brevo key loaded (prefix): {}...", cleaned.substring(0, Math.min(6, cleaned.length())));
+        }
+     return cleaned;
     }
 
     private static String esc(String s) {
