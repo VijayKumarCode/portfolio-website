@@ -1,4 +1,4 @@
-import { formatDate, stripHtml } from '../src/utils/helpers.js';
+import { formatDate, stripHtml, escHtml } from '../src/utils/helpers.js';
 
 const BlogListing = {
   posts: [],
@@ -82,15 +82,17 @@ const BlogListing = {
 
     if (this.filterContainer) {
       this.filterContainer.innerHTML = `
-        <button class="filter-tag active" data-tag="all">All</button>
-        ${[...tags].map(t => `<button class="filter-tag" data-tag="${this.escHtml(t)}">${this.escHtml(t)}</button>`).join('')}
+        <button class="filter-tag active" data-tag="all" aria-pressed="true">All</button>
+        ${[...tags].map(t => `<button class="filter-tag" data-tag="${escHtml(t)}" aria-pressed="false">${escHtml(t)}</button>`).join('')}
       `;
     }
   },
 
   updateFilterActiveState() {
     this.filterContainer?.querySelectorAll('.filter-tag').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tag === this.currentTag);
+      const isActive = btn.dataset.tag === this.currentTag;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
   },
 
@@ -141,13 +143,13 @@ const BlogListing = {
       card.innerHTML = `
         <div class="blog-card-meta">
           <time datetime="${post.date || ''}">${formatDate(post.date)}</time>
-          ${tags.map(t => `<span class="blog-card-tag">${this.escHtml(t)}</span>`).join('')}
+          ${tags.map(t => `<span class="blog-card-tag">${escHtml(t)}</span>`).join('')}
         </div>
         <h3 class="blog-card-title">
-          <a href="/blog/${post.slug}" rel="bookmark">${this.escHtml(post.title)}</a>
+          <a href="/blog/${post.slug}" rel="bookmark">${escHtml(post.title)}</a>
         </h3>
-        <p class="blog-card-excerpt">${this.escHtml(excerpt)}</p>
-        <a class="blog-card-link" href="/blog/${post.slug}" aria-label="Read ${this.escHtml(post.title)}">
+        <p class="blog-card-excerpt">${escHtml(excerpt)}</p>
+        <a class="blog-card-link" href="/blog/${post.slug}" aria-label="Read ${escHtml(post.title)}">
           Read more <span aria-hidden="true">→</span>
         </a>
       `;
@@ -184,12 +186,6 @@ const BlogListing = {
     this.container.style.display = 'none';
   },
 
-  escHtml(str) {
-    if (!str) return '';
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
 };
 
 document.addEventListener('DOMContentLoaded', () => BlogListing.init());

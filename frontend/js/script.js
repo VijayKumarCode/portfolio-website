@@ -122,13 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- HEADER SHRINK ON SCROLL ---
-  if (header) {
+  // --- HEADER & BACK-TO-TOP SCROLL EVENT LISTENER ---
+  if (header || backToTopBtn) {
     window.addEventListener('scroll', () => {
-      header.style.borderBottomColor =
-        window.scrollY > 20
-          ? 'rgba(255,255,255,0.1)'
-          : 'rgba(255,255,255,0.06)';
+      const scrollY = window.scrollY;
+      if (header) {
+        header.classList.toggle('scrolled', scrollY > 20);
+      }
+      if (backToTopBtn) {
+        backToTopBtn.classList.toggle('visible', scrollY > 500);
+      }
     }, { passive: true });
   }
 
@@ -158,22 +161,22 @@ document.addEventListener('DOMContentLoaded', () => {
     anchor.addEventListener('click', (e) => {
       const targetId = anchor.getAttribute('href');
       if (targetId === '#') return;
-      const target = document.querySelector(targetId);
-      if (target) {
-        e.preventDefault();
-        const headerH = header ? header.offsetHeight : 72;
-        const targetPos = target.offsetTop - headerH - 12;
-        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      try {
+        const target = document.querySelector(targetId);
+        if (target) {
+          e.preventDefault();
+          const headerH = header ? header.offsetHeight : 72;
+          const targetPos = target.offsetTop - headerH - 12;
+          window.scrollTo({ top: targetPos, behavior: 'smooth' });
+        }
+      } catch (err) {
+        // Safe fallback for non-selector hash routes (e.g. #/about)
       }
     });
   });
 
-  // --- BACK-TO-TOP BUTTON ---
+  // --- BACK-TO-TOP BUTTON CLICK ---
   if (backToTopBtn) {
-    window.addEventListener('scroll', () => {
-      backToTopBtn.classList.toggle('visible', window.scrollY > 500);
-    }, { passive: true });
-
     backToTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/js/theme.js"></script>
 <meta name="description" content="Vijay Kumar — Java Backend Engineer. Production experience with Spring Boot 3, WebSocket, PostgreSQL, and real-time distributed systems.">
 <meta name="author" content="Vijay Kumar">
 <meta property="og:title" content="Vijay Kumar — Java Backend Engineer">
@@ -65,7 +66,7 @@
   }
 
   @media (prefers-color-scheme: light) {
-    :root {
+    :root:not([data-theme="dark"]) {
       --bg-page: #f8f8f6; --bg-card: #ffffff; --bg-elevated: #f3f4f6;
       --bg-code: rgba(124, 58, 237, 0.06);
       --ink: #1a1a1a; --ink-light: #3d3d3d; --ink-muted: #6b7280;
@@ -73,6 +74,15 @@
       --accent: #7c3aed; --accent-light: #8b5cf6; --accent-dark: #6d28d9; --accent-teal: #0d9488;
       --success: #16a34a; --success-bg: #dcfce7; --success-border: rgba(22, 163, 74, 0.30);
     }
+  }
+
+  :root[data-theme="light"] {
+    --bg-page: #f8f8f6; --bg-card: #ffffff; --bg-elevated: #f3f4f6;
+    --bg-code: rgba(124, 58, 237, 0.06);
+    --ink: #1a1a1a; --ink-light: #3d3d3d; --ink-muted: #6b7280;
+    --rule: rgba(148, 163, 184, 0.25); --rule-light: rgba(148, 163, 184, 0.15);
+    --accent: #7c3aed; --accent-light: #8b5cf6; --accent-dark: #6d28d9; --accent-teal: #0d9488;
+    --success: #16a34a; --success-bg: #dcfce7; --success-border: rgba(22, 163, 74, 0.30);
   }
 
   @media print {
@@ -550,9 +560,64 @@
     .project-links { flex-wrap: wrap; }
     .title-line { font-size: 0.65rem; }
   }
+
+  /* Theme Toggle Button Styling inside resume */
+  .theme-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 9999px;
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+    color: var(--ink);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .theme-toggle:hover {
+    background-color: var(--bg-elevated);
+    border-color: var(--rule-light);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .theme-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-sun, .icon-moon {
+    transition: opacity 150ms ease;
+  }
+
+  /* Default (Dark mode) */
+  .icon-sun {
+    opacity: 0;
+  }
+  .icon-moon {
+    opacity: 1;
+  }
+
+  /* Light mode override */
+  :root[data-theme="light"] .icon-sun {
+    opacity: 1;
+  }
+  :root[data-theme="light"] .icon-moon {
+    opacity: 0;
+  }
 </style>
 <base target="_blank">
-<script src="js/theme.js"></script>
 </head>
 <body>
 

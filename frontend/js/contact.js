@@ -69,7 +69,6 @@ const ContactForm = {
     const errorEl = field.parentElement?.querySelector('.field-error');
     if (errorEl) errorEl.textContent = message;
     field.setAttribute('aria-invalid', message ? 'true' : 'false');
-    field.style.borderColor = message ? '#ef4444' : '';
   },
 
   clearFieldError(field) {

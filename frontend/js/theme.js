@@ -61,20 +61,22 @@
   applyTheme(initialTheme);
   
   /**
-   * Step 4: Handle theme toggle button (when DOM is ready)
+   * Step 4: Handle theme toggle buttons (when DOM is ready)
    */
   function setupToggleButton() {
-    const toggleButton = document.getElementById('theme-toggle');
-    if (!toggleButton) {
-      // No toggle button found — dark mode only
+    const toggleButtons = document.querySelectorAll('.theme-toggle');
+    if (toggleButtons.length === 0) {
+      // No toggle buttons found
       return;
     }
     
     // Click handler: toggle between dark and light
-    toggleButton.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute(THEME_ATTR);
-      const next = current === 'dark' ? 'light' : 'dark';
-      applyTheme(next);
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute(THEME_ATTR);
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+      });
     });
   }
   

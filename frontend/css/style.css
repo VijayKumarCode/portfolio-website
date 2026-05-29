@@ -11,6 +11,7 @@
   --color-bg-tertiary:  #141920;
   --color-bg-elevated:  #1c2330;
   --color-bg-input:     #0f131a;
+  --color-header-bg:    rgba(12, 15, 20, 0.85);
 
   --color-text-primary:   #e8ecf1;
   --color-text-secondary: #94a3b8;
@@ -100,6 +101,7 @@
   --color-bg-tertiary:    #f1f5f9;
   --color-bg-elevated:    #e2e8f0;
   --color-bg-input:       #ffffff;
+  --color-header-bg:      rgba(255, 255, 255, 0.85);
 
   --color-text-primary:   #0f172a;
   --color-text-secondary: #475569;
@@ -399,11 +401,16 @@ section {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: var(--z-sticky);
-  background: rgba(12, 15, 20, 0.85);
+  background: var(--color-header-bg);
   backdrop-filter: blur(20px) saturate(1.5);
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
   border-bottom: 1px solid var(--color-border);
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#site-header.scrolled {
+  border-bottom-color: var(--color-border-hover);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Desktop-first: hamburger visible, smartphone hidden */
@@ -1427,6 +1434,16 @@ section {
   outline: none;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+}
+
+.form-group input[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+
+.form-group input[aria-invalid="true"]:focus,
+.form-group textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px var(--color-error-border);
 }
 
 .form-group input::placeholder,

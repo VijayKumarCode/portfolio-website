@@ -1,6 +1,6 @@
 'use strict';
 
-import { formatDate, escHtml } from '../src/utils/helpers.js';
+import { formatDate, escHtml, stripHtml, readingTime } from '../src/utils/helpers.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const slug = getSlugFromUrl();
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Render post
     if (categoryEl) categoryEl.textContent = post.category || 'Engineering';
     if (dateEl)     dateEl.textContent = formatDate(post.date);
-    if (readTimeEl) readTimeEl.textContent = post.readTime || estimateReadingTime(post.content || '');
+    if (readTimeEl) readTimeEl.textContent = post.readTime || readingTime(post.content || '');
     if (titleEl)    titleEl.textContent = post.title || 'Untitled';
     if (bodyEl)     bodyEl.innerHTML = htmlContent;
 
@@ -95,13 +95,6 @@ function convertNewlinesToHtml(content) {
   return content || '';
 }
 
-function estimateReadingTime(content) {
-  const text = content.replace(/<[^>]*>/g, '').replace(/\\n/g, ' ');
-  const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
-  const minutes = Math.max(1, Math.ceil(words / 200));
-  return `${minutes} min read`;
-}
-
 function updateMetaDescription(post) {
   const desc = stripHtml(post.content || '').slice(0, 160);
   let meta = document.querySelector('meta[name="description"]');
@@ -111,13 +104,4 @@ function updateMetaDescription(post) {
     document.head.appendChild(meta);
   }
   meta.setAttribute('content', desc);
-}
-
-function stripHtml(html) {
-  if (!html) return '';
-  try {
-    return new DOMParser().parseFromString(html, 'text/html').body.textContent || '';
-  } catch {
-    return html.replace(/<[^>]*>/g, '');
-  }
 }
