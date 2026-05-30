@@ -620,16 +620,16 @@
 </head>
 <body>
   
-  <header id="site-header" class="site-header" style="position: sticky; top: 0; background: rgba(12, 15, 20, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--rule); width: 100%;">
-  <div style="max-width: var(--page-w, 860px); margin: 0 auto; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-sans);">
-    <a href="/" style="display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.85rem; transition: color 150ms ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink)'">
+ <header id="site-header" class="site-header" style="position: sticky; top: 0; background: rgba(12, 15, 20, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--rule); width: 100%;">
+  <div style="width: calc(860px - 80px); max-width: 100%; margin: 0 auto; padding: 0.8rem 0; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-sans);">
+    <a href="/" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.85rem; transition: color 150ms ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink)'">
       ← Back to Portfolio
     </a>
     <nav aria-label="Resume navigation links">
       <a href="/blog" style="color: var(--ink-light); text-decoration: none; font-size: 0.82rem; font-family: var(--font-mono); transition: color 150ms ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-light)'">Engineering Log</a>
       </nav>
     </div>
-    </header>
+  </header>
 
 <div class="page">
   <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme" style="position: fixed; top: 16px; right: 16px; z-index: 1000;">
