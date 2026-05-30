@@ -30,7 +30,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
   <link rel="alternate icon" type="image/x-icon" href="/assets/icons/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
-  
+
   <link rel="manifest" href="/manifest.json">
   
   <meta http-equiv="Cache-Control" content="public, max-age=3600">
@@ -247,26 +247,30 @@
       </div>
       <article class="project-card project-featured" aria-label="Nexus Multiplayer Arena">
         <span class="project-badge" aria-label="Live deployment">Live</span>
-        <div class="project-img-wrap">
-          <img src="/assets/nexus.png" alt="Nexus Multiplayer Arena project screenshot showing real-time game interface" loading="lazy" decoding="async" width="600" height="340">
-          <div class="project-img-fallback" aria-hidden="true">⚔️</div>
-        </div>
+  
         <div class="project-info">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-3);">
+            <h3 class="project-title" style="margin: 0;">Nexus Multiplayer Arena</h3>
+            <img src="/assets/icons/favicon.svg" alt="Nexus Engine Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; border-radius: 10px; border: 1px solid rgba(47, 129, 247, 0.2);">
+            </div>
+
           <div class="project-stack">Java 17 · Spring Boot 3 · WebSocket (STOMP/SockJS) · PostgreSQL</div>
-          <h3 class="project-title">Nexus Multiplayer Arena</h3>
           <p class="project-desc">Real-time multiplayer game platform with STOMP WebSocket sessions, bcrypt authentication, email activation via Resend HTTP API, and automated CI/CD via GitHub Actions to Oracle Cloud.</p>
+    
           <ul class="project-claims" aria-label="Technical highlights">
             <li>Concurrent game state managed in ConcurrentHashMap — no race conditions under load</li>
             <li>Diagnosed Railway port-587 SMTP block; replaced with Resend HTTP API for reliable email delivery</li>
             <li>Fixed JPQL enum inner-class crash causing move rejections every 10 seconds</li>
             <li>WebSocket session lifecycle with connect/disconnect presence tracking</li>
-          </ul>
-          <div class="btn-container project-ctas">
+            </ul>
+    
+        <div class="btn-container project-ctas">
             <a href="https://nexusgame.space" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Live Demo ↗</a>
             <a href="https://github.com/VijayKumarCode/nexus" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">GitHub</a>
           </div>
         </div>
       </article>
+      
       <div class="projects-grid">
         <article class="project-card">
           <div class="project-img-wrap">

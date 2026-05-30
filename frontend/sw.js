@@ -11,7 +11,7 @@
  * - Intercepts any text/html responses for asset requests and caches them for debugging
  */
 
-const CACHE_VERSION = 'v1-portfolio-2026';
+const CACHE_VERSION = 'v2-portfolio-2026'; 
 const ASSET_CACHE = `${CACHE_VERSION}-assets`;
 const DOCUMENT_CACHE = `${CACHE_VERSION}-docs`;
 
@@ -81,51 +81,57 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Skip service worker requests
+  // Skip service worker scripts
   if (url.pathname.includes('sw.js')) {
     return;
   }
 
-  // Handle asset requests with aggressive caching and validation
+  // ─── CRITICAL CORRECTION LAYER: NETWORK-FIRST STRATEGY FOR DATA JSONS ───
+  if (url.pathname.endsWith('.json') || url.pathname.includes('/data/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const responseToCache = response.clone();
+            caches.open(ASSET_CACHE).then((cache) => {
+              cache.put(request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match(request)) // Fall back to cache ONLY if completely offline
+    );
+    return;
+  }
+
+ // Handle asset requests (CSS, JS, Images, Fonts) with cache-first and validation
   if (isAssetRequest(url.pathname)) {
     event.respondWith(
       caches.match(request).then((response) => {
-        // Cache hit — return immediately
         if (response) {
           return response;
         }
 
-        // Cache miss — fetch from network
         return fetch(request)
           .then((response) => {
-            // Validate response before caching
             if (response.ok) {
               const contentType = response.headers.get('content-type') || '';
               const isValidAsset = isValidAssetResponse(url.pathname, contentType);
 
               if (isValidAsset) {
-                // Clone response for caching
                 const responseToCache = response.clone();
                 caches.open(ASSET_CACHE).then((cache) => {
                   cache.put(request, responseToCache);
                 });
               } else {
-                // Log suspicious response (e.g., text/html for .css)
-                console.warn(
-                  `[SW] Asset mime-type mismatch: ${url.pathname} returned ${contentType}`,
-                  'This indicates a server misconfiguration.'
-                );
+                console.warn(`[SW] Asset mime-type mismatch: ${url.pathname} returned ${contentType}`);
               }
             }
             return response;
           })
           .catch((err) => {
             console.error(`[SW] Fetch failed for ${url.pathname}:`, err);
-            // Return a minimal response to prevent page breaking
-            return new Response('', {
-              status: 503,
-              statusText: 'Service Unavailable'
-            });
+            return new Response('', { status: 503, statusText: 'Service Unavailable' });
           });
       })
     );
@@ -146,12 +152,8 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          // Fall back to cache on network failure
           return caches.match(request).then((response) => {
-            return response || new Response(
-              'Offline — cached page unavailable',
-              { status: 503, statusText: 'Service Unavailable' }
-            );
+            return response || new Response('Offline — cached page unavailable', { status: 503, statusText: 'Service Unavailable' });
           });
         })
     );
