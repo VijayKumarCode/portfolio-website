@@ -30,25 +30,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- MOBILE NAVIGATION (with backdrop & focus trap) ---
   let lastFocusedElement = null;
 
-  function openMenu() {
+ function openMenu() {
     hamburgerBtn.setAttribute('aria-expanded', 'true');
     hamburgerBtn.classList.add('active');
     mobileMenu.classList.add('open'); // using .open class for mobile menu visibility
-    if (mobileBackdrop) mobileBackdrop.classList.add('open');
+    if (mobileBackdrop) mobileBackdrop.classList.add('active');
     document.body.style.overflow = 'hidden';
     lastFocusedElement = document.activeElement;
     const firstLink = mobileMenu.querySelector('a');
     if (firstLink) firstLink.focus();
   }
 
+
   function closeMenu() {
     hamburgerBtn.setAttribute('aria-expanded', 'false');
     hamburgerBtn.classList.remove('active');
     mobileMenu.classList.remove('open');
-    if (mobileBackdrop) mobileBackdrop.classList.remove('open');
+    if (mobileBackdrop) mobileBackdrop.classList.remove('active');
     document.body.style.overflow = '';
     if (lastFocusedElement) lastFocusedElement.focus();
   }
+
 
   if (hamburgerBtn && mobileMenu) {
     hamburgerBtn.addEventListener('click', () => {

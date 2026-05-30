@@ -63,23 +63,23 @@ const BlogManager = (() => {
     });
 
     return `
-      <article class="blog-card" data-category="${escHtml(post.category)}">
-        <div class="blog-card__meta">
-          <span class="blog-card__category">${escHtml(post.category)}</span>
-          <span class="blog-card__date">${formattedDate}</span>
-          <span class="blog-card__read-time">${escHtml(post.readTime)}</span>
+      <article class="blog-article-card" data-category="${escHtml(post.category)}">
+        <div class="blog-card-meta">
+          <time datetime="${post.date}">${formattedDate}</time>
+          <span class="blog-card-tag">${escHtml(post.category)}</span>
+          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted)">${escHtml(post.readTime || '')}</span>
         </div>
-        <h3 class="blog-card__title">
-          <a href="/blog/${escHtml(post.slug)}" class="blog-card__link">
+        <h3 class="blog-card-title">
+          <a href="/blog/${escHtml(post.slug)}">
             ${escHtml(post.title)}
           </a>
         </h3>
-        <p class="blog-card__excerpt">${escHtml(post.excerpt)}</p>
-        <div class="blog-card__tags">
-          ${post.tags.map(tag => `<span class="blog-card__tag">${escHtml(tag)}</span>`).join('')}
+        <p class="blog-card-excerpt">${escHtml(post.excerpt)}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:var(--space-2)">
+          ${post.tags.map(tag => `<span class="blog-card-tag">${escHtml(tag)}</span>`).join('')}
         </div>
-        <a href="/blog/${escHtml(post.slug)}" class="blog-card__read-link" aria-label="Read ${escHtml(post.title)}">
-          Read entry →
+        <a href="/blog/${escHtml(post.slug)}" class="blog-card-link" aria-label="Read ${escHtml(post.title)}">
+          Read entry <span aria-hidden="true">→</span>
         </a>
       </article>
     `.trim();
