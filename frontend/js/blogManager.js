@@ -76,7 +76,7 @@ const BlogManager = (() => {
         </h3>
         <p class="blog-card-excerpt">${escHtml(post.excerpt)}</p>
         <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:var(--space-2)">
-          ${post.tags.map(tag => `<span class="blog-card-tag">${escHtml(tag)}</span>`).join('')}
+          ${(post.tags || []).map(tag => `<span class="blog-card-tag">${escHtml(tag)}</span>`).join('')}
         </div>
         <a href="/blog/${escHtml(post.slug)}" class="blog-card-link" aria-label="Read ${escHtml(post.title)}">
           Read entry <span aria-hidden="true">→</span>

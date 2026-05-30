@@ -177,6 +177,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // --- LOGO CONTAINER SMOOTH VIEWPORT RESET EVENT REPAIR ---
+  document.querySelectorAll('.logo-container').forEach(logo => {
+    logo.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
   // --- BACK-TO-TOP BUTTON CLICK ---
   if (backToTopBtn) {
     backToTopBtn.addEventListener('click', () => {
