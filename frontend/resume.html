@@ -491,51 +491,99 @@
     font-size: 0.75em;
   }
 
-  /* ── PRINT STYLES ── */
+ /* ── PRINT STYLES ── */
   @media print {
-    @page { margin: 0; size: A4; }
+    /* 1. COMPLETELY REMOVE SCREEN INTERFACES FROM WINDOW GRAPHICS */
+    .hide-on-print, #site-header, .theme-toggle, .cv-btn-container, .screen-only { 
+      display: none !important; 
+    }
+
+    @page { 
+      margin: 0; 
+      size: A4; 
+    }
+    
     body {
       background: #ffffff !important;
-      padding: 0;
+      padding: 0 !important;
+      margin: 0 !important;
     }
+
+    /* 2. ENFORCE CLEAN RESUME SHEET BOUNDS FOR PRINT CONTEXTS */
     .page {
       box-shadow: none !important;
       border-radius: 0 !important;
       border: none !important;
-      padding: 52px 36px 36px !important;
+      padding: 40px 45px !important; /* Perfect standard printable padding margins */
       width: 100% !important;
       max-width: 100% !important;
+      margin: 0 !important;
     }
+
     .page::before {
       border-radius: 0 !important;
-      height: 3px !important;
+      height: 4px !important;
       background: linear-gradient(90deg, #7c3aed, #0d9488) !important;
     }
+
+    /* 3. CRITICAL: FORCE PRINT HEADER CONTROLS TO CENTER ACCURATELY */
+    .resume-header {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;  /* Center align everything horizontally */
+      text-align: center !important;   /* Center wrap internal raw child elements */
+      margin-bottom: 16px !important;
+      padding-bottom: 12px !important;
+      width: 100% !important;
+    }
+
+    .header-content {
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+    }
+
+    /* Keep contact detail addresses grouped neatly in the center */
+    .contact-row {
+      justify-content: center !important;
+      margin-top: 4px !important;
+      margin-bottom: 4px !important;
+    }
+
+    /* 4. CLEANUP TYPOGRAPHY ELEMENTS FOR HIGHER CONTRAST PRINT ENGINE PROCESSING */
     a {
       text-decoration: none !important;
-      color: var(--ink) !important;
+      color: #1a1a1a !important;
     }
+
     .project-link, .availability-badge {
-      border: 1px solid var(--rule) !important;
+      border: 1px solid #d1d5db !important;
       background: transparent !important;
+      color: #1a1a1a !important;
     }
+
     .project-link.live-badge {
-      background: var(--success-bg) !important;
-      color: var(--success) !important;
-      border-color: var(--success-border) !important;
+      background: rgba(34, 197, 94, 0.08) !important;
+      color: #16a34a !important;
+      border-color: rgba(34, 197, 94, 0.25) !important;
     }
-    .contact-item:hover,
-    .project-link:hover {
-      color: var(--ink) !important;
+
+    .contact-item:hover, .project-link:hover {
+      color: #1a1a1a !important;
       background: transparent !important;
     }
+
     code {
-      background: var(--bg-code) !important;
-      border-color: var(--rule) !important;
+      background: #f3f4f6 !important;
+      border-color: #d1d5db !important;
+      color: #000000 !important;
     }
-    .cv-btn-container { display: none !important; }
-    .screen-only { display: none !important; }
-    .availability-dot { animation: none; opacity: 1; }
+
+    .availability-dot { 
+      animation: none !important; 
+      opacity: 1 !important; 
+    }
   }
 
   /* ── RESPONSIVE ── */
@@ -620,71 +668,66 @@
 </head>
 <body>
   
- <header id="site-header" class="site-header" style="position: sticky; top: 0; background: rgba(12, 15, 20, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--rule); width: 100%;">
-  <div style="width: calc(860px - 80px); max-width: 100%; margin: 0 auto; padding: 0.6rem 0; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-sans);">
-    
-    <a href="/" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.82rem; font-family: var(--font-mono); padding: 5px 12px; border: 1px solid var(--rule-light); border-radius: 4px; background: var(--bg-card); transition: all 150ms ease;" onmouseover="this.style.color='var(--accent)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--ink)'; this.style.borderColor='var(--rule-light)'">
-      <span>←</span> BACK
-    </a>
-
-    <div style="display: flex; align-items: center; gap: 16px;">
-      <nav aria-label="Resume navigation links">
-        <a href="/blog" style="color: var(--ink-light); text-decoration: none; font-size: 0.82rem; font-family: var(--font-mono); transition: color 150ms ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-light)'">Engineering Log</a>
-      </nav>
-
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme" style="background: var(--bg-card); border: 1px solid var(--rule-light); border-radius: 4px; width: 30px; height: 30px; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink); transition: all 150ms ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.backgroundColor='var(--bg-elevated)'" onmouseout="this.style.borderColor='var(--rule-light)'; this.style.backgroundColor='var(--bg-card)'">
-        <svg class="theme-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="pointer-events: none;">
-          <circle class="icon-sun" cx="12" cy="12" r="5"/>
-          <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
-    </div>
-
-  </div>
-</header>
-
-<div class="page">
-  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme" style="position: fixed; top: 16px; right: 16px; z-index: 1000;">
-    <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-      <circle class="icon-sun" cx="12" cy="12" r="5"/>
-      <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  </button>
-
-  <header class="resume-header">
-    <div class="header-content">
-      <h1 class="name" itemprop="name">Vijay Kumar</h1>
-      <div class="title-line">Backend Engineer &mdash; Java &middot; Spring Boot &middot; Real-Time Systems</div>
-
-      <address class="contact-row">
-        <a href="tel:+918539999709" class="contact-item">+91 85399 99709</a>
-        <span class="contact-sep" aria-hidden="true">|</span>
-        <a href="mailto:vkumar.kumar31@gmail.com" class="contact-item">vkumar.kumar31@gmail.com</a>
-        <span class="contact-sep" aria-hidden="true">|</span>
-        <a href="https://vijaykumarcode.space" class="contact-item" target="_blank" rel="noopener noreferrer">vijaykumarcode.space</a>
-        <span class="contact-sep" aria-hidden="true">|</span>
-        <a href="https://github.com/VijayKumarCode" class="contact-item" target="_blank" rel="noopener noreferrer">github.com/VijayKumarCode</a>
-        <span class="contact-sep" aria-hidden="true">|</span>
-        <a href="https://linkedin.com/in/vijaykumarcode" class="contact-item" target="_blank" rel="noopener noreferrer">linkedin.com/in/vijaykumarcode</a>
-      </address>
-
-      <div class="availability-badge">
-        <span class="availability-dot" aria-hidden="true"></span>
-        Open to remote backend roles
-      </div>
-    </div>
-
-    <div class="cv-btn-container">
-      <a href="./assets/Vijay Kumar — Java Backend Engineer.pdf" class="cv-download-btn" aria-label="Download CV as PDF" download>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        Download CV
+  <header id="site-header" class="site-header hide-on-print" style="position: sticky; top: 0; background: rgba(12, 15, 20, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--rule); width: 100%;">
+    <div style="width: calc(860px - 80px); max-width: 100%; margin: 0 auto; padding: 0.6rem 0; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-sans);">
+      
+      <a href="/" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.82rem; font-family: var(--font-mono); padding: 5px 12px; border: 1px solid var(--rule-light); border-radius: 4px; background: var(--bg-card); transition: all 150ms ease;" onmouseover="this.style.color='var(--accent)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--ink)'; this.style.borderColor='var(--rule-light)'">
+        <span>←</span> BACK
       </a>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <nav aria-label="Resume navigation links">
+          <a href="/blog" style="color: var(--ink-light); text-decoration: none; font-size: 0.82rem; font-family: var(--font-mono); transition: color 150ms ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-light)'">Engineering Log</a>
+        </nav>
+
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme" style="background: var(--bg-card); border: 1px solid var(--rule-light); border-radius: 4px; width: 30px; height: 30px; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink); transition: all 150ms ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.backgroundColor='var(--bg-elevated)'" onmouseout="this.style.borderColor='var(--rule-light)'; this.style.backgroundColor='var(--bg-card)'">
+          <svg class="theme-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="pointer-events: none;">
+            <circle class="icon-sun" cx="12" cy="12" r="5"/>
+            <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+
     </div>
   </header>
+
+  <div class="page">
+    <header class="resume-header">
+      <div class="header-content">
+        <h1 class="name" itemprop="name">Vijay Kumar</h1>
+        <div class="title-line">Backend Engineer &mdash; Java &middot; Spring Boot &middot; Real-Time Systems</div>
+
+        <address class="contact-row">
+          <a href="tel:+918539999709" class="contact-item">+91 85399 99709</a>
+          <span class="contact-sep" aria-hidden="true">|</span>
+          <a href="mailto:vkumar.kumar31@gmail.com" class="contact-item">vkumar.kumar31@gmail.com</a>
+          <span class="contact-sep" aria-hidden="true">|</span>
+          <a href="https://vijaykumarcode.space" class="contact-item" target="_blank" rel="noopener noreferrer">vijaykumarcode.space</a>
+          <span class="contact-sep" aria-hidden="true">|</span>
+          <a href="https://github.com/VijayKumarCode" class="contact-item" target="_blank" rel="noopener noreferrer">github.com/VijayKumarCode</a>
+          <span class="contact-sep" aria-hidden="true">|</span>
+          <a href="https://linkedin.com/in/vijaykumarcode" class="contact-item" target="_blank" rel="noopener noreferrer">linkedin.com/in/vijaykumarcode</a>
+        </address>
+
+        <div class="availability-badge">
+          <span class="availability-dot" aria-hidden="true"></span>
+          Open to remote backend roles
+        </div>
+      </div>
+
+      <div class="cv-btn-container hide-on-print">
+        <a href="./assets/Vijay Kumar — Java Backend Engineer.pdf" class="cv-download-btn" aria-label="Download CV as PDF" download>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download CV
+        </a>
+      </div>
+    </header>
+
+    <main id="content" tabindex="-1">
 
   <main id="content" tabindex="-1">
 
