@@ -48,7 +48,7 @@
     --bg-code:     rgba(167, 139, 250, 0.08);
     --ink:         #e8ecf1;
     --ink-light:   #94a3b8;
-    --ink-muted:   #64748b;
+    --ink-muted:   #75869a; /* was #64748b — now 4.91:1 on #11151c */
     --rule:        rgba(148, 163, 184, 0.12);
     --rule-light:  rgba(148, 163, 184, 0.25);
     --accent:       #a78bfa;
@@ -100,6 +100,8 @@
 
   html {
     font-size: 13.5px;
+    margin: 0;
+    padding: 0;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     color-scheme: dark light;
@@ -116,13 +118,132 @@
     background: var(--bg-page);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     padding: 24px 16px;
     overflow-x: hidden;
   }
 
   ::selection { background: rgba(167, 139, 250, 0.3); color: var(--ink); }
   *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+  /* ── SITE HEADER ── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    border-bottom: 1px solid var(--rule);
+    background: rgba(12, 15, 20, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .site-header-inner {
+    width: var(--page-w);
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0.6rem 40px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .nav-left { justify-self: start; }
+  .nav-center { justify-self: center; }
+  .nav-right { justify-self: end; }
+
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    padding: 5px 12px;
+    border: 1px solid var(--rule-light);
+    border-radius: 4px;
+    background: var(--bg-card);
+    transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+  }
+
+  .nav-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .nav-icon {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    flex-shrink: 0;
+  }
+
+  /* Light mode header background */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .site-header {
+      background: rgba(248, 248, 246, 0.85);
+    }
+  }
+  :root[data-theme="light"] .site-header {
+    background: rgba(248, 248, 246, 0.85);
+  }
+
+  /* ── THEME TOGGLE ── */
+  .theme-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--rule-light);
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+
+  .theme-toggle:hover {
+    background-color: var(--bg-elevated);
+    border-color: var(--accent);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .theme-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--ink);
+    display: block;
+    pointer-events: none;
+  }
+
+  .icon-sun, .icon-moon {
+    transition: opacity 150ms ease;
+  }
+
+  /* Default (Dark mode) */
+  .icon-sun { opacity: 0; }
+  .icon-moon { opacity: 1; }
+
+  /* Light mode override */
+  :root[data-theme="light"] .icon-sun { opacity: 1; }
+  :root[data-theme="light"] .icon-moon { opacity: 0; }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .icon-sun { opacity: 1; }
+    :root:not([data-theme="dark"]) .icon-moon { opacity: 0; }
+  }
 
   .page {
     background: var(--bg-card);
@@ -491,22 +612,47 @@
     font-size: 0.75em;
   }
 
+  /* ── REDUCED MOTION ── */
+  @media (prefers-reduced-motion: reduce) {
+    .availability-dot { animation: none; }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
  /* ── PRINT STYLES ── */
   @media print {
     /* 1. COMPLETELY REMOVE SCREEN INTERFACES FROM WINDOW GRAPHICS */
-    .hide-on-print, #site-header, .theme-toggle, .cv-btn-container, .screen-only { 
-      display: none !important; 
+    .hide-on-print,
+    #site-header,
+    .theme-toggle,
+    .cv-btn-container,
+    .screen-only,
+    .nav-btn,
+    .site-header {
+      display: none !important;
     }
 
-    @page { 
-      margin: 0; 
-      size: A4; 
+    @page {
+      margin: 0;
+      size: A4;
     }
-    
+
+    html {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     body {
+      display: block !important;
       background: #ffffff !important;
       padding: 0 !important;
       margin: 0 !important;
+      min-height: auto !important;
     }
 
     /* 2. ENFORCE CLEAN RESUME SHEET BOUNDS FOR PRINT CONTEXTS */
@@ -514,10 +660,11 @@
       box-shadow: none !important;
       border-radius: 0 !important;
       border: none !important;
-      padding: 40px 45px !important; /* Perfect standard printable padding margins */
+      padding: 40px 45px !important;
       width: 100% !important;
       max-width: 100% !important;
-      margin: 0 !important;
+      margin: 0 auto !important;
+      position: relative !important;
     }
 
     .page::before {
@@ -530,8 +677,8 @@
     .resume-header {
       display: flex !important;
       flex-direction: column !important;
-      align-items: center !important;  /* Center align everything horizontally */
-      text-align: center !important;   /* Center wrap internal raw child elements */
+      align-items: center !important;
+      text-align: center !important;
       margin-bottom: 16px !important;
       padding-bottom: 12px !important;
       width: 100% !important;
@@ -544,14 +691,12 @@
       align-items: center !important;
     }
 
-    /* Keep contact detail addresses grouped neatly in the center */
     .contact-row {
       justify-content: center !important;
       margin-top: 4px !important;
       margin-bottom: 4px !important;
     }
 
-    /* 4. CLEANUP TYPOGRAPHY ELEMENTS FOR HIGHER CONTRAST PRINT ENGINE PROCESSING */
     a {
       text-decoration: none !important;
       color: #1a1a1a !important;
@@ -569,20 +714,15 @@
       border-color: rgba(34, 197, 94, 0.25) !important;
     }
 
-    .contact-item:hover, .project-link:hover {
-      color: #1a1a1a !important;
-      background: transparent !important;
-    }
-
     code {
       background: #f3f4f6 !important;
       border-color: #d1d5db !important;
       color: #000000 !important;
     }
 
-    .availability-dot { 
-      animation: none !important; 
-      opacity: 1 !important; 
+    .availability-dot {
+      animation: none !important;
+      opacity: 1 !important;
     }
   }
 
@@ -599,6 +739,9 @@
     .contact-row { gap: 2px 10px; }
     .education-row { flex-direction: column; gap: 2px; }
     .edu-location { text-align: left; min-width: auto; }
+    .site-header-inner { padding: 0.5rem 16px; gap: 12px; }
+    .nav-btn { padding: 4px 10px; font-size: 0.75rem; }
+    .nav-icon { width: 13px; height: 13px; }
   }
 
   @media screen and (max-width: 480px) {
@@ -607,87 +750,46 @@
     .name { font-size: 1.5rem; }
     .project-links { flex-wrap: wrap; }
     .title-line { font-size: 0.65rem; }
+    .site-header-inner { padding: 0.5rem 12px; gap: 8px; }
+    .nav-btn { padding: 3px 8px; font-size: 0.7rem; gap: 4px; }
+    .nav-icon { width: 12px; height: 12px; }
   }
 
-  /* Theme Toggle Button Styling inside resume */
-  .theme-toggle {
-    background: var(--bg-card);
-    border: 1px solid var(--rule);
-    border-radius: 9999px;
-    width: 38px;
-    height: 38px;
-    padding: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
-    color: var(--ink);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  .theme-toggle:hover {
-    background-color: var(--bg-elevated);
-    border-color: var(--rule-light);
-  }
-
-  .theme-toggle:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  .theme-icon {
-    width: 18px;
-    height: 18px;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .icon-sun, .icon-moon {
-    transition: opacity 150ms ease;
-  }
-
-  /* Default (Dark mode) */
-  .icon-sun {
-    opacity: 0;
-  }
-  .icon-moon {
-    opacity: 1;
-  }
-
-  /* Light mode override */
-  :root[data-theme="light"] .icon-sun {
-    opacity: 1;
-  }
-  :root[data-theme="light"] .icon-moon {
-    opacity: 0;
+  @media screen and (max-width: 375px) {
+    .site-header-inner { gap: 6px; }
+    .nav-btn { padding: 3px 6px; font-size: 0.65rem; gap: 3px; }
+    .nav-icon { width: 11px; height: 11px; }
   }
 </style>
 </head>
 <body>
-  
-  <header id="site-header" class="site-header hide-on-print" style="position: sticky; top: 0; background: rgba(12, 15, 20, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--rule); width: 100%;">
-    <div style="width: calc(860px - 80px); max-width: 100%; margin: 0 auto; padding: 0.6rem 0; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-sans);">
-      
-      <a href="/" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.82rem; font-family: var(--font-mono); padding: 5px 12px; border: 1px solid var(--rule-light); border-radius: 4px; background: var(--bg-card); transition: all 150ms ease;" onmouseover="this.style.color='var(--accent)'; this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--ink)'; this.style.borderColor='var(--rule-light)'">
-        <span>←</span> BACK
-      </a>
 
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <nav aria-label="Resume navigation links">
-          <a href="/blog" style="color: var(--ink-light); text-decoration: none; font-size: 0.82rem; font-family: var(--font-mono); transition: color 150ms ease;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-light)'">Engineering Log</a>
-        </nav>
+  <header id="site-header" class="site-header hide-on-print" role="banner">
+    <div class="site-header-inner">
+      <div class="nav-left">
+        <a href="index.html" class="nav-btn" aria-label="Go to home page">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span class="nav-label">Home</span>
+        </a>
+      </div>
 
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme" style="background: var(--bg-card); border: 1px solid var(--rule-light); border-radius: 4px; width: 30px; height: 30px; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--ink); transition: all 150ms ease;" onmouseover="this.style.borderColor='var(--accent)'; this.style.backgroundColor='var(--bg-elevated)'" onmouseout="this.style.borderColor='var(--rule-light)'; this.style.backgroundColor='var(--bg-card)'">
-          <svg class="theme-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="pointer-events: none;">
+      <div class="nav-center">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+          <svg class="theme-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
             <circle class="icon-sun" cx="12" cy="12" r="5"/>
             <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
           </svg>
         </button>
       </div>
 
+      <div class="nav-right">
+        <a href="blog.html" class="nav-btn" aria-label="Go to Engineering Log">
+          <span class="nav-label">Engineering Log</span>
+        </a>
+      </div>
     </div>
   </header>
 
@@ -729,199 +831,197 @@
 
     <main id="content" tabindex="-1">
 
-  <main id="content" tabindex="-1">
-
-    <section class="section" aria-label="Professional summary">
-      <div class="section-label">Profile</div>
-      <p class="summary" itemprop="description">
-        Backend engineer specializing in <strong>Java 17</strong> and <strong>Spring Boot 3</strong>,
-        with production experience building real-time systems and automated deployment pipelines.
-        Shipped <strong>Nexus</strong> &mdash; a live multiplayer platform handling concurrent
-        WebSocket sessions, in-memory state management, and CI/CD to Oracle Cloud.
-        Strong in concurrency, production debugging, and clean architecture.
-        Seeking remote backend roles with ownership and architecture exposure.
-      </p>
-    </section>
-
-    <section class="section" aria-label="Technical skills">
-      <div class="section-label">Technical Skills</div>
-      <div class="skills-grid">
-
-        <div class="skill-row">
-          <span class="skill-category">Languages</span>
-          <span class="skill-values">Java 17, SQL, JavaScript (ES2022)</span>
-        </div>
-
-        <div class="skill-row">
-          <span class="skill-category">Backend</span>
-          <span class="skill-values">Spring Boot 3, Spring Data JPA, Spring Security, WebSocket (STOMP/SockJS), REST APIs, JWT, bcrypt</span>
-        </div>
-
-        <div class="skill-row">
-          <span class="skill-category">Data</span>
-          <span class="skill-values">PostgreSQL, Hibernate ORM, JPQL, H2 (testing)</span>
-        </div>
-
-        <div class="skill-row">
-          <span class="skill-category">Infrastructure</span>
-          <span class="skill-values">Docker, GitHub Actions, Linux (Ubuntu), Oracle Cloud, Render, Vercel, systemd</span>
-        </div>
-
-        <div class="skill-row">
-          <span class="skill-category">Build / Test</span>
-          <span class="skill-values">Maven, JUnit 5, Mockito, Git</span>
-        </div>
-
-        <div class="skill-row">
-          <span class="skill-category">Foundations</span>
-          <span class="skill-values">DSA, Concurrency, System Design, OOP, Clean Architecture</span>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="section" aria-label="Projects">
-      <div class="section-label">Projects</div>
-
-      <article class="project" itemscope itemtype="https://schema.org/SoftwareApplication">
-        <div class="project-header">
-          <div class="project-name" itemprop="name">Nexus &mdash; Real-Time Multiplayer Game Platform</div>
-          <div class="project-links">
-            <span class="project-link live-badge" aria-label="Live deployment">Live</span>
-            <a href="https://nexusgame.space" class="project-link" target="_blank" rel="noopener noreferrer" itemprop="url">nexusgame.space</a>
-            <a href="https://github.com/VijayKumarCode/nexus" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </div>
-        </div>
-        <div class="project-stack">
-          Java 17 &middot; Spring Boot 3 &middot; WebSocket (STOMP/SockJS) &middot;
-          PostgreSQL &middot; Spring Security &middot; bcrypt &middot; GitHub Actions &middot; Oracle Cloud
-        </div>
-        <p class="project-desc" itemprop="description">
-          Production-deployed multiplayer game backend with real-time session management,
-          persistent game state, and a full authentication pipeline. Designed, built,
-          and shipped end-to-end as an independent engineering project.
+      <section class="section" aria-label="Professional summary">
+        <div class="section-label">Profile</div>
+        <p class="summary" itemprop="description">
+          Backend engineer specializing in <strong>Java 17</strong> and <strong>Spring Boot 3</strong>,
+          with production experience building real-time systems and automated deployment pipelines.
+          Shipped <strong>Nexus</strong> &mdash; a live multiplayer platform handling concurrent
+          WebSocket sessions, in-memory state management, and CI/CD to Oracle Cloud.
+          Strong in concurrency, production debugging, and clean architecture.
+          Seeking remote backend roles with ownership and architecture exposure.
         </p>
-        <ul class="bullets">
-          <li>
-            <strong>Concurrent game state</strong> managed via <code>ConcurrentHashMap</code> with
-            atomic operations, handling simultaneous WebSocket sessions without data races
-          </li>
-          <li>
-            <strong>WebSocket session lifecycle</strong> implemented with STOMP over SockJS,
-            including connect/disconnect presence tracking and room-scoped message routing
-          </li>
-          <li>
-            <strong>Diagnosed and fixed</strong> a JPQL enum inner-class reference crash
-            (<code>User$UserStatus</code>) causing game move rejections every 10 seconds;
-            resolved by passing enum as a named parameter instead of inline reference
-          </li>
-          <li>
-            <strong>Resolved a Railway port-587 SMTP block</strong> by replacing
-            JavaMailSender with Resend HTTP API on port 443, restoring account
-            activation delivery from a 2-minute timeout to under 1 second
-          </li>
-          <li>
-            <strong>CI/CD pipeline</strong> via GitHub Actions: builds JAR, copies via SCP
-            to Oracle Cloud VM, and restarts the systemd service &mdash; zero-touch deploys
-          </li>
-          <li>
-            <strong>Authentication pipeline</strong>: bcrypt password hashing,
-            Spring Security with JWT tokens, email-based account activation
-            with expiring tokens stored in PostgreSQL
-          </li>
-        </ul>
-      </article>
+      </section>
 
-      <article class="project">
-        <div class="project-header">
-          <div class="project-name">TicTacToe &mdash; Network Multiplayer Engine</div>
-          <div class="project-links">
-            <a href="https://github.com/VijayKumarCode/TicTacToe_java" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <section class="section" aria-label="Technical skills">
+        <div class="section-label">Technical Skills</div>
+        <div class="skills-grid">
+
+          <div class="skill-row">
+            <span class="skill-category">Languages</span>
+            <span class="skill-values">Java 17, SQL, JavaScript (ES2022)</span>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-category">Backend</span>
+            <span class="skill-values">Spring Boot 3, Spring Data JPA, Spring Security, WebSocket (STOMP/SockJS), REST APIs, JWT, bcrypt</span>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-category">Data</span>
+            <span class="skill-values">PostgreSQL, Hibernate ORM, JPQL, H2 (testing)</span>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-category">Infrastructure</span>
+            <span class="skill-values">Docker, GitHub Actions, Linux (Ubuntu), Oracle Cloud, Render, Vercel, systemd</span>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-category">Build / Test</span>
+            <span class="skill-values">Maven, JUnit 5, Mockito, Git</span>
+          </div>
+
+          <div class="skill-row">
+            <span class="skill-category">Foundations</span>
+            <span class="skill-values">DSA, Concurrency, System Design, OOP, Clean Architecture</span>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" aria-label="Projects">
+        <div class="section-label">Projects</div>
+
+        <article class="project" itemscope itemtype="https://schema.org/SoftwareApplication">
+          <div class="project-header">
+            <div class="project-name" itemprop="name">Nexus &mdash; Real-Time Multiplayer Game Platform</div>
+            <div class="project-links">
+              <span class="project-link live-badge" aria-label="Live deployment">Live</span>
+              <a href="https://nexusgame.space" class="project-link" target="_blank" rel="noopener noreferrer" itemprop="url">nexusgame.space</a>
+              <a href="https://github.com/VijayKumarCode/nexus" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+          <div class="project-stack">
+            Java 17 &middot; Spring Boot 3 &middot; WebSocket (STOMP/SockJS) &middot;
+            PostgreSQL &middot; Spring Security &middot; bcrypt &middot; GitHub Actions &middot; Oracle Cloud
+          </div>
+          <p class="project-desc" itemprop="description">
+            Production-deployed multiplayer game backend with real-time session management,
+            persistent game state, and a full authentication pipeline. Designed, built,
+            and shipped end-to-end as an independent engineering project.
+          </p>
+          <ul class="bullets">
+            <li>
+              <strong>Concurrent game state</strong> managed via <code>ConcurrentHashMap</code> with
+              atomic operations, handling simultaneous WebSocket sessions without data races
+            </li>
+            <li>
+              <strong>WebSocket session lifecycle</strong> implemented with STOMP over SockJS,
+              including connect/disconnect presence tracking and room-scoped message routing
+            </li>
+            <li>
+              <strong>Diagnosed and fixed</strong> a JPQL enum inner-class reference crash
+              (<code>User$UserStatus</code>) causing game move rejections every 10 seconds;
+              resolved by passing enum as a named parameter instead of inline reference
+            </li>
+            <li>
+              <strong>Resolved a Railway port-587 SMTP block</strong> by replacing
+              JavaMailSender with Resend HTTP API on port 443, restoring account
+              activation delivery from a 2-minute timeout to under 1 second
+            </li>
+            <li>
+              <strong>CI/CD pipeline</strong> via GitHub Actions: builds JAR, copies via SCP
+              to Oracle Cloud VM, and restarts the systemd service &mdash; zero-touch deploys
+            </li>
+            <li>
+              <strong>Authentication pipeline</strong>: bcrypt password hashing,
+              Spring Security with JWT tokens, email-based account activation
+              with expiring tokens stored in PostgreSQL
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-header">
+            <div class="project-name">TicTacToe &mdash; Network Multiplayer Engine</div>
+            <div class="project-links">
+              <a href="https://github.com/VijayKumarCode/TicTacToe_java" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+          <div class="project-stack">Java &middot; Raw Sockets &middot; Multithreading</div>
+          <ul class="bullets">
+            <li>
+              <strong>Built a TCP socket-based multiplayer server</strong> from scratch
+              using raw Java Sockets, handling concurrent sessions with
+              dedicated per-client threads and synchronized game state
+            </li>
+            <li>
+              Informed the session management and concurrency design of the
+              Nexus WebSocket platform through direct architectural iteration
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-header">
+            <div class="project-name">DSA in Java &mdash; Documented Algorithm Library</div>
+            <div class="project-links">
+              <a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+          <div class="project-stack">Java 17 &middot; Algorithms &middot; Data Structures</div>
+          <ul class="bullets">
+            <li>
+              Implemented Trees, Graphs, Linked Lists, and sorting algorithms
+              with documented time and space complexity analysis per solution
+            </li>
+          </ul>
+        </article>
+
+        <article class="project">
+          <div class="project-header">
+            <div class="project-name">Portfolio Website &mdash; Engineering Log</div>
+            <div class="project-links">
+              <span class="project-link live-badge" aria-label="Live deployment">Live</span>
+              <a href="https://vijaykumarcode.space" class="project-link" target="_blank" rel="noopener noreferrer">vijaykumarcode.space</a>
+              <a href="https://github.com/VijayKumarCode/portfolio-website" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+          <div class="project-stack">HTML &middot; CSS &middot; JavaScript &middot; Spring Boot &middot; Vercel &middot; Render</div>
+          <ul class="bullets">
+            <li>
+              Built and deployed a full portfolio with blog system, contact form,
+              and responsive design using vanilla HTML/CSS/JS &mdash; no frameworks
+            </li>
+            <li>
+              Backend contact API on Spring Boot with Brevo email integration,
+              deployed on Render with environment-driven configuration
+            </li>
+          </ul>
+        </article>
+
+      </section>
+
+      <section class="section" aria-label="Education">
+        <div class="section-label">Education</div>
+
+        <div class="education-list">
+          <div class="education-row">
+            <div class="edu-meta">
+              <span class="edu-degree">MCA &mdash; Master of Computer Applications</span>
+              <span class="edu-institution">AKGEC, Ghaziabad</span>
+            </div>
+            <span class="edu-location">Uttar Pradesh</span>
+          </div>
+
+          <div class="education-row">
+            <div class="edu-meta">
+              <span class="edu-degree">BCA &mdash; Bachelor of Computer Applications</span>
+              <span class="edu-institution">LNMCBM, Muzaffarpur</span>
+            </div>
+            <span class="edu-location">Bihar</span>
           </div>
         </div>
-        <div class="project-stack">Java &middot; Raw Sockets &middot; Multithreading</div>
-        <ul class="bullets">
-          <li>
-            <strong>Built a TCP socket-based multiplayer server</strong> from scratch
-            using raw Java Sockets, handling concurrent sessions with
-            dedicated per-client threads and synchronized game state
-          </li>
-          <li>
-            Informed the session management and concurrency design of the
-            Nexus WebSocket platform through direct architectural iteration
-          </li>
-        </ul>
-      </article>
+      </section>
 
-      <article class="project">
-        <div class="project-header">
-          <div class="project-name">DSA in Java &mdash; Documented Algorithm Library</div>
-          <div class="project-links">
-            <a href="https://github.com/VijayKumarCode/Java-Data-Structures-and-Algorithms" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </div>
-        </div>
-        <div class="project-stack">Java 17 &middot; Algorithms &middot; Data Structures</div>
-        <ul class="bullets">
-          <li>
-            Implemented Trees, Graphs, Linked Lists, and sorting algorithms
-            with documented time and space complexity analysis per solution
-          </li>
-        </ul>
-      </article>
-
-      <article class="project">
-        <div class="project-header">
-          <div class="project-name">Portfolio Website &mdash; Engineering Log</div>
-          <div class="project-links">
-            <span class="project-link live-badge" aria-label="Live deployment">Live</span>
-            <a href="https://vijaykumarcode.space" class="project-link" target="_blank" rel="noopener noreferrer">vijaykumarcode.space</a>
-            <a href="https://github.com/VijayKumarCode/portfolio-website" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </div>
-        </div>
-        <div class="project-stack">HTML &middot; CSS &middot; JavaScript &middot; Spring Boot &middot; Vercel &middot; Render</div>
-        <ul class="bullets">
-          <li>
-            Built and deployed a full portfolio with blog system, contact form,
-            and responsive design using vanilla HTML/CSS/JS &mdash; no frameworks
-          </li>
-          <li>
-            Backend contact API on Spring Boot with Brevo email integration,
-            deployed on Render with environment-driven configuration
-          </li>
-        </ul>
-      </article>
-
-    </section>
-
-    <section class="section" aria-label="Education">
-      <div class="section-label">Education</div>
-
-      <div class="education-list">
-        <div class="education-row">
-          <div class="edu-meta">
-            <span class="edu-degree">MCA &mdash; Master of Computer Applications</span>
-            <span class="edu-institution">AKGEC, Ghaziabad</span>
-          </div>
-          <span class="edu-location">Uttar Pradesh</span>
-        </div>
-
-        <div class="education-row">
-          <div class="edu-meta">
-            <span class="edu-degree">BCA &mdash; Bachelor of Computer Applications</span>
-            <span class="edu-institution">LNMCBM, Muzaffarpur</span>
-          </div>
-          <span class="edu-location">Bihar</span>
-        </div>
+      <div class="screen-only" aria-hidden="true">
+        <p>Tip: Press <kbd>Ctrl</kbd>+<kbd>P</kbd> (or <kbd>Cmd</kbd>+<kbd>P</kbd> on Mac) to save this resume as a PDF.</p>
       </div>
-    </section>
 
-  </main>
+    </main>
 
-  <div class="screen-only" aria-hidden="true">
-    <p>Tip: Press <kbd>Ctrl</kbd>+<kbd>P</kbd> (or <kbd>Cmd</kbd>+<kbd>P</kbd> on Mac) to save this resume as a PDF.</p>
   </div>
-
-</div>
 
 </body>
 </html>
