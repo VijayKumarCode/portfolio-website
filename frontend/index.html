@@ -333,32 +333,57 @@
       </div>
     </section>
 
-    <section id="blog" aria-labelledby="blog-heading">
-      <div class="section-header">
-        <p class="section__text__p1">Writing</p>
-        <h2 class="section-title" id="blog-heading">Engineering Log</h2>
-      </div>
-      <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
-        <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
-        <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
-        <div class="blog-article-card blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></div>
-      </div>
-      <div id="blog-container" class="blog-grid hidden"></div>
-      <div id="blog-empty" class="blog-empty-state hidden" role="status">
-        <p class="blog-empty-icon" aria-hidden="true">📝</p>
-        <h3>No Posts Yet</h3>
-        <p>Engineering logs are in progress. Check back soon.</p>
-      </div>
-      <div id="blog-error" class="blog-error-state hidden" role="alert">
-        <p class="blog-error-icon" aria-hidden="true">⚡</p>
-        <h3>Failed to Load Posts</h3>
-        <p>The engineering log is temporarily unavailable.</p>
-        <button id="blog-retry-btn" class="btn btn-ghost btn-sm" type="button">Retry</button>
-      </div>
-      <div class="blog-footer-link">
-        <a href="/blog" class="btn btn-ghost btn-blog-all">View all entries <span class="btn-arrow" aria-hidden="true">→</span></a>
-      </div>
-    </section>
+    <section class="engineering-log">
+    <div class="container">
+        <h2 class="section-title">Engineering Log</h2>
+        <div class="underline"></div>
+
+        <div class="log-entries">
+            <!-- Entry 1 -->
+            <article class="log-entry">
+                <div class="entry-meta">
+                    <span class="entry-date">Mar 25, 2026</span>
+                    <span class="entry-category">Spring Boot</span>
+                    <span class="entry-read-time">9 min read</span>
+                </div>
+                <h3 class="entry-title">
+                    <a href="#">Building Real-Time Multiplayer with Spring Boot WebSocket and STOMP</a>
+                </h3>
+                <a href="#" class="read-more-link">Read entry <span class="arrow">→</span></a>
+            </article>
+
+            <!-- Entry 2 -->
+            <article class="log-entry">
+                <div class="entry-meta">
+                    <span class="entry-date">Mar 18, 2026</span>
+                    <span class="entry-category">Spring Boot</span>
+                    <span class="entry-read-time">7 min read</span>
+                </div>
+                <h3 class="entry-title">
+                    <a href="#">The JPQL Bug That Crashed My Game Every 10 Seconds</a>
+                </h3>
+                <a href="#" class="read-more-link">Read entry <span class="arrow">→</span></a>
+            </article>
+
+            <!-- Entry 3 -->
+            <article class="log-entry">
+                <div class="entry-meta">
+                    <span class="entry-date">Mar 10, 2026</span>
+                    <span class="entry-category">Spring Boot</span>
+                    <span class="entry-read-time">6 min read</span>
+                </div>
+                <h3 class="entry-title">
+                    <a href="#">Why Your Spring Boot Emails Hang for 2 Minutes on Railway</a>
+                </h3>
+                <a href="#" class="read-more-link">Read entry <span class="arrow">→</span></a>
+            </article>
+        </div>
+
+        <div class="action-container">
+            <a href="#" class="btn-view-all">View all entries <span class="arrow">→</span></a>
+        </div>
+    </div>
+</section>
 
     <section id="contact" aria-labelledby="contact-heading">
       <div class="section-header">
