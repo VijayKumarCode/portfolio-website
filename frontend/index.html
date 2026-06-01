@@ -333,57 +333,65 @@
       </div>
     </section>
 
-    <section class="engineering-log">
-    <div class="container">
-        <h2 class="section-title">Engineering Log</h2>
-        <div class="underline"></div>
-
-        <div class="log-entries">
-            <!-- Entry 1 -->
-            <article class="log-entry">
-                <div class="entry-meta">
-                    <span class="entry-date">Mar 25, 2026</span>
-                    <span class="entry-category">Spring Boot</span>
-                    <span class="entry-read-time">9 min read</span>
-                </div>
-                <h3 class="entry-title">
-                    <a href="#">Building Real-Time Multiplayer with Spring Boot WebSocket and STOMP</a>
-                </h3>
-                <a href="#" class="read-more-link">Read entry <span class="arrow">→</span></a>
-            </article>
-
-            <!-- Entry 2 -->
-            <article class="log-entry">
-                <div class="entry-meta">
-                    <span class="entry-date">Mar 18, 2026</span>
-                    <span class="entry-category">Spring Boot</span>
-                    <span class="entry-read-time">7 min read</span>
-                </div>
-                <h3 class="entry-title">
-                    <a href="#">The JPQL Bug That Crashed My Game Every 10 Seconds</a>
-                </h3>
-                <a href="#" class="read-more-link">Read entry <span class="arrow">→</span></a>
-            </article>
-
-            <!-- Entry 3 -->
-            <article class="log-entry">
-                <div class="entry-meta">
-                    <span class="entry-date">Mar 10, 2026</span>
-                    <span class="entry-category">Spring Boot</span>
-                    <span class="entry-read-time">6 min read</span>
-                </div>
-                <h3 class="entry-title">
-                    <a href="#">Why Your Spring Boot Emails Hang for 2 Minutes on Railway</a>
-                </h3>
-                <a href="#" class="read-more-link">Read entry <span class="arrow">→</span></a>
-            </article>
+    <section id="blog" aria-labelledby="blog-heading">
+      <div class="container">
+        <div class="section-header" style="text-align: center;">
+          <p class="section__text__p1">Latest Insights</p>
+          <h2 class="section-title" id="blog-heading">Engineering Log</h2>
         </div>
 
-        <div class="action-container">
-            <a href="#" class="btn-view-all">View all entries <span class="arrow">→</span></a>
+        <div class="blog-grid" role="list">
+          <article class="blog-log-card" role="listitem">
+            <div class="blog-log-meta">
+              <span class="blog-log-date">Mar 25, 2026</span>
+              <span class="blog-log-category">Spring Boot</span>
+            </div>
+            <h3 class="blog-log-title">
+              <a href="/blog">Building Real-Time Multiplayer with Spring Boot WebSocket and STOMP</a>
+            </h3>
+            <p class="blog-log-excerpt">Architecting low-latency concurrent multiplayer state machines using WebSocket channels and STOMP sub-protocols safely.</p>
+            <div class="blog-log-footer">
+              <span class="blog-log-read">9 min read</span>
+              <a href="/blog" class="blog-log-link" aria-label="Read building real-time multiplayer entry">Read entry <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="blog-log-card" role="listitem">
+            <div class="blog-log-meta">
+              <span class="blog-log-date">Mar 18, 2026</span>
+              <span class="blog-log-category">Spring Boot</span>
+            </div>
+            <h3 class="blog-log-title">
+              <a href="/blog">The JPQL Bug That Crashed My Game Every 10 Seconds</a>
+            </h3>
+            <p class="blog-log-excerpt">Tracking down and eliminating hidden inner-class enum casting issues within custom JPA projection mappings.</p>
+            <div class="blog-log-footer">
+              <span class="blog-log-read">7 min read</span>
+              <a href="/blog" class="blog-log-link" aria-label="Read the JPQL bug entry">Read entry <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="blog-log-card" role="listitem">
+            <div class="blog-log-meta">
+              <span class="blog-log-date">Mar 10, 2026</span>
+              <span class="blog-log-category">Spring Boot</span>
+            </div>
+            <h3 class="blog-log-title">
+              <a href="/blog">Why Your Spring Boot Emails Hang for 2 Minutes on Railway</a>
+            </h3>
+            <p class="blog-log-excerpt">Debugging containerized network routing timeouts on port 587 and migrating smoothly over to high-throughput HTTP REST APIs.</p>
+            <div class="blog-log-footer">
+              <span class="blog-log-read">6 min read</span>
+              <a href="/blog" class="blog-log-link" aria-label="Read why your spring boot emails hang entry">Read entry <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
         </div>
-    </div>
-</section>
+
+        <div class="blog-actions">
+          <a href="/blog" class="btn btn-ghost">View all entries →</a>
+        </div>
+      </div>
+    </section>
 
     <section id="contact" aria-labelledby="contact-heading">
       <div class="section-header">

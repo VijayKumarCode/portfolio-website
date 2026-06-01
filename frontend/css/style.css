@@ -1260,8 +1260,8 @@ section {
   border: 1px solid var(--color-error-border);   
 }
 
-/* ─── Engineering Log Section (Home) ─── */
-.engineering-log {
+/* ─── HOME COMPONENT — Engineering Log Grid Layer ─── */
+#blog {
   padding: var(--space-16) var(--space-6);
   background-color: var(--color-bg-primary);
   width: 100%;
@@ -1269,88 +1269,132 @@ section {
   margin-inline: auto;
 }
 
-.engineering-log .container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0;
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-12);
 }
 
-.log-entries {
+/* Individual Log Item Card Architecture */
+.blog-log-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
-  margin-bottom: var(--space-10);
-  max-width: 800px; /* Perfect line width constraints for reading comfort */
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  position: relative;
 }
 
-.log-entry {
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: var(--space-6);
-  transition: transform var(--transition-fast);
+.blog-log-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-hover);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.4);
 }
 
-.log-entry:last-child {
-  border-bottom: none;
-}
-
-.entry-meta {
+/* Log Card Inner Structure */
+.blog-log-meta {
   display: flex;
-  gap: var(--space-4);
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
-  margin-bottom: var(--space-2);
   align-items: center;
-}
-
-.entry-category {
-  color: var(--color-accent);
-  font-family: var(--font-mono);
-  font-weight: 600;
-}
-
-.entry-title {
-  font-size: var(--text-xl);
-  font-weight: 700;
-  line-height: 1.3;
+  gap: var(--space-3);
   margin-bottom: var(--space-3);
 }
 
-.entry-title a {
-  color: var(--color-text-primary);
-  transition: color var(--transition-fast) ease;
+.blog-log-date {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
 }
 
-.entry-title a:hover {
+.blog-log-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  background: rgba(167, 139, 250, 0.08);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.blog-log-title {
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  margin-bottom: var(--space-3);
+  font-weight: 600;
+}
+
+.blog-log-title a {
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.blog-log-title a:hover {
   color: var(--color-accent-light);
 }
 
-.read-more-link {
+.blog-log-excerpt {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-6);
+  flex-grow: 1; /* Pushes content footer cleanly to the baseline */
+}
+
+.blog-log-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-4);
+  margin-top: auto;
+}
+
+.blog-log-read {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.blog-log-link {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  color: var(--color-text-secondary);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  transition: color var(--transition-fast) ease;
+  transition: color var(--transition-fast);
 }
 
-.read-more-link .arrow {
-  transition: transform var(--transition-fast) ease;
-}
-
-.read-more-link:hover {
+.blog-log-link:hover {
   color: var(--color-accent-light);
 }
 
-.read-more-link:hover .arrow {
+.blog-log-link .arrow {
+  transition: transform var(--transition-fast);
+}
+
+.blog-log-link:hover .arrow {
   transform: translateX(4px);
 }
 
-.action-container {
+/* Centered Layout Control for Global Section CTA Button */
+.blog-actions {
   display: flex;
-  justify-content: flex-start;
-  margin-top: var(--space-4);
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+/* Large Desktop Enforcement for 3 Across Max Constraint */
+@media screen and (min-width: 1025px) {
+  .blog-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* ─── Footer ─── */
