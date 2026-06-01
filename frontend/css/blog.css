@@ -866,3 +866,16 @@
     gap: var(--space-2);
   }
 }
+
+.blog-nav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4); /* Ensures system design token scaling */
+}
+
+/* Explicit layout validation for mobile navigation */
+.mobile-nav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

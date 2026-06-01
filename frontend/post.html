@@ -21,21 +21,21 @@
   <script src="/js/theme.js"></script>
 </head>
 <body>
-  <a href="#main-content" id="skip-link">Skip to content</a>
+  <a href="#main-content" id="skip-link" class="sr-only">Skip to content</a>
 
   <header id="site-header">
     <nav id="blog-nav" aria-label="Blog navigation">
       <a href="/" class="logo-container" aria-label="Vijay Kumar — Home">
         <img src="/assets/logo.png" alt="Vijay Kumar" class="logo-img" width="48" height="48">
       </a>
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
-        <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <circle class="icon-sun" cx="12" cy="12" r="5"/>
-          <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
       <div class="blog-nav-right">
-        <a href="/blog" class="nav-back">← Back to Engineering Log</a>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+          <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <circle class="icon-sun" cx="12" cy="12" r="5"/>
+            <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <a href="/blog" class="nav-back">← Back to Log</a>
       </div>
     </nav>
   </header>

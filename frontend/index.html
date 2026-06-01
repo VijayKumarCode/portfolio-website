@@ -86,57 +86,61 @@
 
   <header id="site-header" role="banner">
     <nav id="desktop-nav" aria-label="Desktop navigation">
-    <a href="#" class="logo-container" aria-label="Vijay Kumar — Home">
-      <img src="/assets/logo.png" alt="Vijay Kumar" class="logo-img" width="48" height="48">
-      </a>
-      <button id="theme-toggle-desktop" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
-        <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <circle class="icon-sun" cx="12" cy="12" r="5"/>
-          <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
-      <ul class="nav-links" role="list">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#blog">Log</a></li>
-        <li><a href="/resume">Resume</a></li>
-        <li><a href="#contact" class="nav-cta">Contact</a></li>
-      </ul>
-    </nav>
-    <nav id="hamburger-nav" aria-label="Mobile navigation">
       <a href="#" class="logo-container" aria-label="Vijay Kumar — Home">
-        <img src="/assets/logo.png" alt="Vijay Kumar" class="logo-img" width="40" height="40">
-        </a>
-      <button id="theme-toggle-mobile" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
-        <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <circle class="icon-sun" cx="12" cy="12" r="5"/>
-          <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
-      <div class="hamburger-menu">
-        <button class="hamburger-icon"
-                id="hamburger-toggle"
-                aria-label="Toggle navigation menu"
-                aria-expanded="false"
-                aria-controls="mobile-menu">
-          <span></span><span></span><span></span>
+        <img src="/assets/logo.png" alt="Vijay Kumar" class="logo-img" width="48" height="48">
+      </a>
+      <div class="nav-actions-wrap" style="display: flex; align-items: center; gap: var(--space-4);">
+        <button id="theme-toggle-desktop" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+          <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <circle class="icon-sun" cx="12" cy="12" r="5"/>
+            <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
         </button>
-        <ul class="menu-links" id="mobile-menu" role="list">
+        <ul class="nav-links" role="list">
           <li><a href="#about">About</a></li>
           <li><a href="#skills">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#blog">Log</a></li>
           <li><a href="/resume">Resume</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#contact" class="nav-cta">Contact</a></li>
         </ul>
+      </div>
+    </nav>
+    
+    <nav id="hamburger-nav" aria-label="Mobile navigation">
+      <a href="#" class="logo-container" aria-label="Vijay Kumar — Home">
+        <img src="/assets/logo.png" alt="Vijay Kumar" class="logo-img" width="40" height="40">
+      </a>
+      <div class="mobile-nav-right" style="display: flex; align-items: center; gap: var(--space-2);">
+        <button id="theme-toggle-mobile" class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+          <svg class="theme-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <circle class="icon-sun" cx="12" cy="12" r="5"/>
+            <path class="icon-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <div class="hamburger-menu">
+          <button class="hamburger-icon"
+                  id="hamburger-toggle"
+                  aria-label="Toggle navigation menu"
+                  aria-expanded="false"
+                  aria-controls="mobile-menu">
+            <span></span><span></span><span></span>
+          </button>
+          <ul class="menu-links" id="mobile-menu" role="list">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#blog">Log</a></li>
+            <li><a href="/resume">Resume</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
       </div>
       <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
     </nav>
   </header>
 
   <main id="main-content">
-
     <section id="profile">
       <div class="hero-content">
         <span class="hero-tag">
@@ -247,24 +251,20 @@
       </div>
       <article class="project-card project-featured" aria-label="Nexus Multiplayer Arena">
         <span class="project-badge" aria-label="Live deployment">Live</span>
-  
         <div class="project-info">
           <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-3);">
             <h3 class="project-title" style="margin: 0;">Nexus Multiplayer Arena</h3>
             <img src="/assets/icons/favicon.svg" alt="Nexus Engine Icon" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; border-radius: 10px; border: 1px solid rgba(47, 129, 247, 0.2);">
-            </div>
-
+          </div>
           <div class="project-stack">Java 17 · Spring Boot 3 · WebSocket (STOMP/SockJS) · PostgreSQL</div>
           <p class="project-desc">Real-time multiplayer game platform with STOMP WebSocket sessions, bcrypt authentication, email activation via Resend HTTP API, and automated CI/CD via GitHub Actions to Oracle Cloud.</p>
-    
           <ul class="project-claims" aria-label="Technical highlights">
             <li>Concurrent game state managed in ConcurrentHashMap — no race conditions under load</li>
             <li>Diagnosed Railway port-587 SMTP block; replaced with Resend HTTP API for reliable email delivery</li>
             <li>Fixed JPQL enum inner-class crash causing move rejections every 10 seconds</li>
             <li>WebSocket session lifecycle with connect/disconnect presence tracking</li>
-            </ul>
-    
-        <div class="btn-container project-ctas">
+          </ul>
+          <div class="btn-container project-ctas">
             <a href="https://nexusgame.space" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Live Demo ↗</a>
             <a href="https://github.com/VijayKumarCode/nexus" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">GitHub</a>
           </div>
@@ -391,15 +391,10 @@
   <script type="module" src="/js/home-blog.js"></script>
 
   <script>
-    // Register Service Worker for asset caching and validation
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js', { scope: '/' })
-        .then((registration) => {
-          console.log('[SW] Registered successfully');
-        })
-        .catch((err) => {
-          console.warn('[SW] Registration failed:', err);
-        });
+        .then(() => console.log('[SW] Registered successfully'))
+        .catch((err) => console.warn('[SW] Registration failed:', err));
     }
   </script>
 </body>
