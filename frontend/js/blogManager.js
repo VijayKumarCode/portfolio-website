@@ -51,6 +51,7 @@ const BlogManager = (() => {
 
   /**
    * Generates a blog card HTML string.
+   * Matches CSS classes: .blog-card, .blog-meta, .blog-category, .blog-read
    * @param {Object} post
    * @returns {string}
    */
@@ -62,24 +63,32 @@ const BlogManager = (() => {
       day: 'numeric',
     });
 
+    // Build tags HTML if present
+    const tagsHtml = (post.tags || []).length > 0
+      ? `<div class="blog-tags">
+           ${post.tags.map(tag => `<span class="blog-tag">${escHtml(tag)}</span>`).join('')}
+         </div>`
+      : '';
+
     return `
-      <article class="blog-article-card" data-category="${escHtml(post.category)}">
-        <div class="blog-card-meta">
+      <article class="blog-card" data-category="${escHtml(post.category)}">
+        <div class="blog-meta">
           <time datetime="${post.date}">${formattedDate}</time>
-          <span class="blog-card-tag">${escHtml(post.category)}</span>
-          <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted)">${escHtml(post.readTime || '')}</span>
+          <span class="sep">•</span>
+          <span class="blog-category">${escHtml(post.category)}</span>
+          <span class="sep">•</span>
+          <span>${escHtml(post.readTime || '')}</span>
         </div>
-        <h3 class="blog-card-title">
+        <h3>
           <a href="/blog/${escHtml(post.slug)}">
             ${escHtml(post.title)}
           </a>
         </h3>
-        <p class="blog-card-excerpt">${escHtml(post.excerpt)}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:var(--space-2)">
-          ${(post.tags || []).map(tag => `<span class="blog-card-tag">${escHtml(tag)}</span>`).join('')}
-        </div>
-        <a href="/blog/${escHtml(post.slug)}" class="blog-card-link" aria-label="Read ${escHtml(post.title)}">
-          Read entry <span aria-hidden="true">→</span>
+        <p class="blog-excerpt">${escHtml(post.excerpt)}</p>
+        ${tagsHtml}
+        <a href="/blog/${escHtml(post.slug)}" class="blog-read" aria-label="Read ${escHtml(post.title)}">
+          <span>Read entry</span>
+          <span class="arrow" aria-hidden="true">→</span>
         </a>
       </article>
     `.trim();

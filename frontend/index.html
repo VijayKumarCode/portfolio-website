@@ -333,65 +333,58 @@
       </div>
     </section>
 
-    <section id="blog" aria-labelledby="blog-heading">
-      <div class="container">
-        <div class="section-header" style="text-align: center;">
-          <p class="section__text__p1">Latest Insights</p>
-          <h2 class="section-title" id="blog-heading">Engineering Log</h2>
-        </div>
+   <section id="blog" aria-labelledby="blog-heading">
+    <p class="section__text__p1">Sharing My Journey</p>
+    <h2 class="title" id="blog-heading">Engineering Log</h2>
+    
+    <!-- Skeleton loader (shown while JS loads) -->
+    <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
+        <article class="blog-card blog-skeleton">
+            <div class="sk-meta"></div>
+            <div class="sk-title"></div>
+            <div class="sk-excerpt"></div>
+            <div class="sk-link"></div>
+        </article>
+        <article class="blog-card blog-skeleton">
+            <div class="sk-meta"></div>
+            <div class="sk-title"></div>
+            <div class="sk-excerpt"></div>
+            <div class="sk-link"></div>
+        </article>
+        <article class="blog-card blog-skeleton">
+            <div class="sk-meta"></div>
+            <div class="sk-title"></div>
+            <div class="sk-excerpt"></div>
+            <div class="sk-link"></div>
+        </article>
+    </div>
+    
+    <!-- Real content (injected by JS) -->
+    <div id="blog-container" class="blog-grid hidden"></div>
+    
+    <!-- Empty state -->
+    <div id="blog-empty" class="blog-state hidden" role="status">
+        <p class="state-icon" aria-hidden="true">📝</p>
+        <h3>No Posts Yet</h3>
+        <p>Engineering logs are in progress. Check back soon.</p>
+    </div>
+    
+    <!-- Error state -->
+    <div id="blog-error" class="blog-state hidden" role="alert">
+        <p class="state-icon" aria-hidden="true">⚡</p>
+        <h3>Failed to Load Posts</h3>
+        <p>The engineering log is temporarily unavailable.</p>
+        <button id="blog-retry-btn" class="btn btn-color-2 btn-sm" type="button">Retry</button>
+    </div>
+    
+    <div class="blog-footer">
+        <a href="/blog" class="btn btn-color-2">
+            View all entries
+            <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+    </div>
 
-        <div class="blog-grid" role="list">
-          <article class="blog-log-card" role="listitem">
-            <div class="blog-log-meta">
-              <span class="blog-log-date">Mar 25, 2026</span>
-              <span class="blog-log-category">Spring Boot</span>
-            </div>
-            <h3 class="blog-log-title">
-              <a href="/blog">Building Real-Time Multiplayer with Spring Boot WebSocket and STOMP</a>
-            </h3>
-            <p class="blog-log-excerpt">Architecting low-latency concurrent multiplayer state machines using WebSocket channels and STOMP sub-protocols safely.</p>
-            <div class="blog-log-footer">
-              <span class="blog-log-read">9 min read</span>
-              <a href="/blog" class="blog-log-link" aria-label="Read building real-time multiplayer entry">Read entry <span class="arrow" aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="blog-log-card" role="listitem">
-            <div class="blog-log-meta">
-              <span class="blog-log-date">Mar 18, 2026</span>
-              <span class="blog-log-category">Spring Boot</span>
-            </div>
-            <h3 class="blog-log-title">
-              <a href="/blog">The JPQL Bug That Crashed My Game Every 10 Seconds</a>
-            </h3>
-            <p class="blog-log-excerpt">Tracking down and eliminating hidden inner-class enum casting issues within custom JPA projection mappings.</p>
-            <div class="blog-log-footer">
-              <span class="blog-log-read">7 min read</span>
-              <a href="/blog" class="blog-log-link" aria-label="Read the JPQL bug entry">Read entry <span class="arrow" aria-hidden="true">→</span></a>
-            </div>
-          </article>
-
-          <article class="blog-log-card" role="listitem">
-            <div class="blog-log-meta">
-              <span class="blog-log-date">Mar 10, 2026</span>
-              <span class="blog-log-category">Spring Boot</span>
-            </div>
-            <h3 class="blog-log-title">
-              <a href="/blog">Why Your Spring Boot Emails Hang for 2 Minutes on Railway</a>
-            </h3>
-            <p class="blog-log-excerpt">Debugging containerized network routing timeouts on port 587 and migrating smoothly over to high-throughput HTTP REST APIs.</p>
-            <div class="blog-log-footer">
-              <span class="blog-log-read">6 min read</span>
-              <a href="/blog" class="blog-log-link" aria-label="Read why your spring boot emails hang entry">Read entry <span class="arrow" aria-hidden="true">→</span></a>
-            </div>
-          </article>
-        </div>
-
-        <div class="blog-actions">
-          <a href="/blog" class="btn btn-ghost">View all entries →</a>
-        </div>
-      </div>
-    </section>
+</section>
 
     <section id="contact" aria-labelledby="contact-heading">
       <div class="section-header">
