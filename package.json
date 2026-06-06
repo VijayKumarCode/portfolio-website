@@ -1,19 +1,16 @@
 {
-  "name": "portfolio-website",
-  "version": "1.0.0",
+  "name": "portfolio-frontend",
+  "version": "1.1.0",
   "private": true,
-  "description": "Vijay Kumar — Java Backend Engineer | Portfolio + Blog + Contact API",
-  "type": "module",
   "scripts": {
-    "dev": "npx serve frontend -l 3000",
-    "start": "npx serve frontend -l 3000",
-    "build": "echo 'Static frontend — no build step required'",
-    "deploy": "echo 'Deploy via Vercel CLI or GitHub integration'"
+    "dev": "serve frontend -l 3000",
+    "build": "echo 'Static site — no build step required'",
+    "start": "serve frontend -l 3000"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/VijayKumarCode/portfolio-website.git"
+  "devDependencies": {
+    "serve": "^14.2.6"
   },
-  "author": "Vijay Kumar <vkumar.kumar31@gmail.com>",
-  "license": "MIT"
+  "engines": {
+    "node": ">=18"
+  }
 }
