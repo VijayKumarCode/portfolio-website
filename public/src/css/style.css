@@ -209,6 +209,23 @@ a {
     border var(--transition-fast);
 }
 
+/* === GLOBAL LAYOUT & CONTAINERS === */
+.container,
+#profile,
+.about-grid,
+.skills-grid,
+#projects,
+.blog-grid,
+.contact-split {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+  box-sizing: border-box;
+}
+
 /* === HEADER & NAVIGATION === */
 #site-header {
   position: fixed;
@@ -491,10 +508,9 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
   min-height: 100vh;
-  padding: 100px var(--space-6) var(--space-12);
+  padding-top: 100px;
+  padding-bottom: var(--space-12);
   gap: var(--space-12);
 }
 .hero-content {
@@ -605,12 +621,14 @@ a {
 
 /* === SECTION STRUCTURE === */
 section {
-  padding: var(--space-20) var(--space-6);
+  padding: var(--space-20) 0;
   position: relative;
 }
 .section-header {
   text-align: center;
   margin-bottom: var(--space-12);
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
 }
 .section__text__p1 {
   font-family: var(--font-mono);
@@ -636,13 +654,11 @@ section {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
   gap: var(--space-12);
-  max-width: 1200px;
-  margin: 0 auto;
   align-items: center;
 }
 .about-pic-wrap {
   width: 100%;
-  max-height: 480px;
+  aspect-ratio: 1 / 1;
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -656,6 +672,7 @@ section {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
+  justify-content: center;
 }
 .about-cards {
   display: grid;
@@ -704,8 +721,6 @@ section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-6);
-  max-width: 1000px;
-  margin: 0 auto;
 }
 .skills-group {
   background: var(--color-bg-secondary);
@@ -762,10 +777,6 @@ section {
 }
 
 /* === PROJECTS SECTION === */
-#projects {
-  max-width: 1200px;
-  margin: 0 auto;
-}
 .project-card {
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
@@ -900,8 +911,7 @@ section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-6);
-  max-width: 1200px;
-  margin: 0 auto var(--space-8);
+  margin-bottom: var(--space-8);
 }
 .blog-card {
   background: var(--color-bg-elevated);
@@ -1019,7 +1029,7 @@ section {
 #contact {
   background: var(--color-bg-primary);
   overflow: hidden;
-  padding: var(--space-24) var(--space-6);
+  padding: var(--space-24) 0;
 }
 .contact-ambient {
   position: absolute;
@@ -1060,13 +1070,10 @@ section {
   left: 50%;
   animation: float-slow 18s infinite alternate;
 }
-
 .contact-split {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
-  gap: var(--space-12);
-  max-width: 1400px;
-  margin: 0 auto;
+  gap: var(--space-8);
   position: relative;
   z-index: var(--z-elevated);
 }
