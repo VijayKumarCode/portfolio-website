@@ -1,6 +1,6 @@
 'use strict';
 
-import { formatDate, escHtml, stripHtml, readingTime } from '../src/utils/helpers.js';
+import { formatDate, escHtml, stripHtml, readingTime } from './src/js/helpers.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const slug = getSlugFromUrl();
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-      const res = await fetch('/data/posts.json');
+      const res = await fetch('/src/data/posts.json');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 

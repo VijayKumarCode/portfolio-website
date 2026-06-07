@@ -4,7 +4,7 @@
 * Loads a limited preview of recent blog posts.
 */
 
-import BlogManager from './blogManager.js';
+import BlogManager from './src/js/blogManager.js';
 
 // Initialize the blog preview on page load
 document.addEventListener('DOMContentLoaded', () => {

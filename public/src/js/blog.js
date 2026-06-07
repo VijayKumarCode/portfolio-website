@@ -1,4 +1,4 @@
-import { formatDate, stripHtml, escHtml } from '../src/utils/helpers.js';
+import { formatDate, stripHtml, escHtml } from './src/js/helpers.js';
 
 const BlogListing = {
   posts: [],
@@ -49,7 +49,7 @@ const BlogListing = {
 
         async fetchPosts() {
           try {
-            const res = await fetch('/data/posts.json');
+            const res = await fetch('/src/data/posts.json');
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
 

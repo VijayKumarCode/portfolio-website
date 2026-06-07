@@ -1,5 +1,5 @@
 {
-  "cleanUrls": false,
+  "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
     {
@@ -17,6 +17,22 @@
     {
       "source": "/resume",
       "destination": "/resume.html"
+    },
+    {
+      "source": "/css/(.*)",
+      "destination": "/src/css/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/src/js/$1"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/src/assets/$1"
+    },
+    {
+      "source": "/data/(.*)",
+      "destination": "/src/data/$1"
     }
   ],
   "redirects": [
@@ -69,7 +85,7 @@
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/(src/)?assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -78,7 +94,7 @@
       ]
     },
     {
-      "source": "/css/(.*)",
+      "source": "/(src/)?css/(.*)",
       "headers": [
         {
           "key": "Content-Type",
@@ -91,7 +107,7 @@
       ]
     },
     {
-      "source": "/js/(.*)",
+      "source": "/(src/)?js/(.*)",
       "headers": [
         {
           "key": "Content-Type",
@@ -104,7 +120,7 @@
       ]
     },
     {
-      "source": "/data/(.*)",
+      "source": "/(src/)?data/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

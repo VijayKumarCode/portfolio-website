@@ -117,7 +117,7 @@ const BlogManager = (() => {
       * @returns {Promise<Array>}
       */
       async function fetchPosts() {
-        const response = await fetch('/data/posts.json', {
+        const response = await fetch('/src/data/posts.json', {
             cache: 'no-cache',
             headers: { Accept: 'application/json' },
           });
