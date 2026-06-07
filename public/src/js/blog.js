@@ -1,4 +1,4 @@
-import { formatDate, stripHtml, escHtml } from './src/js/helpers.js';
+import { formatDate, stripHtml, escHtml } from './helpers.js';
 
 const BlogListing = {
   posts: [],
@@ -164,7 +164,12 @@ const BlogListing = {
                   this.loadMoreBtn.style.display = start + this.pageSize < filtered.length ? '' : 'none';
                 }
 
-                if (this.skeleton) this.skeleton.style.display = 'none';
+                if (this.skeleton) {
+                  this.skeleton.setAttribute('aria-hidden', 'true');
+                  this.skeleton.classList.add('hidden');
+                  this.skeleton.style.display = 'none';
+                }
+                this.container.classList.remove('hidden');
                 this.container.style.display = 'grid';
               },
 
