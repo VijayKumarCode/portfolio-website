@@ -334,18 +334,18 @@ a {
   align-items: center;
   gap: var(--space-4);
   position: relative;
-  z-index: calc(var(--z-drawer) + 1);
+  z-index: 1001;
 }
 .hamburger-icon {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 24px;
-  height: 18px;
+  width: 28px;
+  height: 20px;
   background: none;
   border: none;
   padding: 0;
-  z-index: calc(var(--z-drawer) + 2);
+  z-index: 1002;
   cursor: pointer;
   position: relative;
 }
@@ -528,9 +528,12 @@ a {
   padding-top: 100px;
   padding-bottom: var(--space-12);
   gap: var(--space-12);
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  max-width: 1200px;
+  width: 100%;
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
 }
 .hero-content {
   flex: 1;
@@ -640,14 +643,17 @@ a {
 
 /* === SECTION STRUCTURE === */
 section {
-  padding: var(--space-20) 0;
+  padding: var(--space-20) var(--space-6);
   position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 1200px;
 }
 .section-header {
   text-align: center;
   margin-bottom: var(--space-12);
-  padding-left: var(--space-6);
-  padding-right: var(--space-6);
+  width: 100%;
 }
 .section__text__p1 {
   font-family: var(--font-mono);
@@ -1071,10 +1077,11 @@ section {
 #contact {
   background: var(--color-bg-primary);
   overflow: hidden;
-  padding: var(--space-24) 0;
+  padding: var(--space-24) var(--space-6);
   margin-left: auto;
   margin-right: auto;
   max-width: 1200px;
+  width: 100%;
 }
 .contact-ambient {
   position: absolute;
@@ -1121,8 +1128,8 @@ section {
   gap: var(--space-8);
   position: relative;
   z-index: var(--z-elevated);
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  align-items: stretch;
 }
 .contact-visual {
   display: flex;
@@ -1132,6 +1139,7 @@ section {
 .contact-visual-inner {
   max-width: 480px;
   width: 100%;
+  padding-right: var(--space-4);
 }
 .contact-eyebrow {
   font-family: var(--font-mono);
@@ -1244,7 +1252,7 @@ section {
 .contact-form-panel {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   width: 100%;
 }
 .contact-form-panel-inner {
