@@ -5,15 +5,19 @@
  * static asset requests like /css/style.css are always served from the correct origin,
  * preventing MIME type mismatches and cache poisoning.
  * 
- * Key Fix:
- * - Verifies that /css/*.css returns Content-Type: text/css
- * - Verifies that /js/*.js returns Content-Type: application/javascript
- * - Intercepts any text/html responses for asset requests and caches them for debugging
+ * Key Features:
+ * - Network-first for documents (HTML) to ensure fresh content
+ * - Cache-first for assets (CSS, JS, images) for performance
+ * - Validates MIME types to prevent cache poisoning
+ * - Implements cache versioning with automatic cleanup
+ * - Offline fallback for cached content
+ * - Special handling for JSON data (posts)
  */
 
-const CACHE_VERSION = 'v2-portfolio-2026'; 
+const CACHE_VERSION = 'v3-portfolio-2026'; 
 const ASSET_CACHE = `${CACHE_VERSION}-assets`;
 const DOCUMENT_CACHE = `${CACHE_VERSION}-docs`;
+const PREVIOUS_CACHES = ['v2-portfolio-2026-assets', 'v2-portfolio-2026-docs', 'v1-portfolio-2026-assets', 'v1-portfolio-2026-docs'];
 
 const ASSET_PATTERNS = [
   /\.css$/i,
@@ -55,17 +59,23 @@ self.addEventListener('install', (event) => {
 });
 
 /**
- * Activate: Clean up old caches
+ * Activate: Clean up old caches and claim clients
  */
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => !name.startsWith(CACHE_VERSION))
-          .map((name) => caches.delete(name))
+          .filter((name) => !name.startsWith(CACHE_VERSION) && !PREVIOUS_CACHES.includes(name))
+          .map((name) => {
+            console.log(`[SW] Deleting old cache: ${name}`);
+            return caches.delete(name);
+          })
       );
-    }).then(() => self.clients.claim())
+    }).then(() => {
+      console.log(`[SW] Activated with cache version: ${CACHE_VERSION}`);
+      return self.clients.claim();
+    })
   );
 });
 

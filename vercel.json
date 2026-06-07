@@ -42,11 +42,6 @@
       "permanent": true
     },
     {
-      "source": "/post.html",
-      "destination": "/blog",
-      "permanent": true
-    },
-    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true

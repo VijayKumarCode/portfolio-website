@@ -3,7 +3,7 @@
  * Multi-step Contact Form Handler with Validation, Progress Tracking, and Secure Submission.
  */
 
-import { CONTACT_ENDPOINT } from './src/js/config.js';
+import { CONTACT_ENDPOINT } from './config.js';
 
 // Inline sanitizer to prevent basic XSS
 function sanitizeInput(input) {
