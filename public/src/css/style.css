@@ -1129,7 +1129,7 @@ section {
   position: relative;
   z-index: var(--z-elevated);
   width: 100%;
-  align-items: stretch;
+  align-items: center;
 }
 .contact-visual {
   display: flex;
@@ -1182,6 +1182,7 @@ section {
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Ensures arrows stick perfectly to the right border */
   transition: all var(--transition-base);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -1242,6 +1243,11 @@ section {
     transform var(--transition-fast),
     color var(--transition-fast);
   margin-left: var(--space-2);
+  width: 24px;          /* Assigns a fixed width container for the arrows */
+  height: 24px;         /* Assigns a fixed height container */
+  display: inline-flex; /* Centers different shapes structurally */
+  align-items: center;
+  justify-content: center;
 }
 .channel-card:hover .channel-arrow {
   transform: translateX(3px);
