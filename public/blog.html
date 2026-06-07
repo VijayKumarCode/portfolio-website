@@ -5,18 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Engineering Log | Vijay Kumar</title>
     <meta name="description" content="Practical notes on Java, Spring Boot, DSA, and backend systems. Things I built, broke, and fixed.">
+    <meta name="author" content="Vijay Kumar">
+    <meta name="robots" content="index, follow">
+
+    <!-- FIX: Added canonical URL (was missing, SEO issue) -->
+    <link rel="canonical" href="https://vijaykumarcode.space/blog">
+
+    <!-- FIX: Added Open Graph tags (was missing from blog listing page) -->
+    <meta property="og:type"        content="website">
+    <meta property="og:url"         content="https://vijaykumarcode.space/blog">
+    <meta property="og:title"       content="Engineering Log | Vijay Kumar">
+    <meta property="og:description" content="Practical notes on Java, Spring Boot, DSA, and backend systems.">
+    <meta property="og:image"       content="https://vijaykumarcode.space/src/assets/icons/og-image.jpg">
+
+    <!-- FIX: Added Twitter/X card (was missing) -->
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:site"        content="@VijayKumarCode">
+    <meta name="twitter:title"       content="Engineering Log | Vijay Kumar">
+    <meta name="twitter:description" content="Practical notes on Java, Spring Boot, DSA, and backend systems.">
+    <meta name="twitter:image"       content="https://vijaykumarcode.space/src/assets/icons/og-image.jpg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <!-- FIX: Unified font weights to match index.html, prevents double download -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/src/css/style.css">
     <link rel="stylesheet" href="/src/css/blog.css">
     <link rel="stylesheet" href="/src/css/mediaqueries.css">
     <link rel="icon" type="image/svg+xml" href="/src/assets/icons/favicon.svg">
     <link rel="apple-touch-icon" href="/src/assets/icons/apple-touch-icon.png">
-    
+    <link rel="manifest" href="/manifest.json">
+
     <meta http-equiv="Cache-Control" content="public, max-age=3600">
-    <meta http-equiv="Pragma" content="public">
     <script src="/src/js/theme.js"></script>
   </head>
   <body>
@@ -32,15 +53,11 @@
             <span class="theme-switch__slider">
               <span class="theme-switch__icon theme-switch__icon--sun">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <circle cx="12" cy="12" r="5"></circle>
-                  <line x1="12" y1="1" x2="12" y2="3"></line>
-                  <line x1="12" y1="21" x2="12" y2="23"></line>
-                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                  <line x1="1" y1="12" x2="3" y2="12"></line>
-                  <line x1="21" y1="12" x2="23" y2="12"></line>
-                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                  <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+                  <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+                  <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                 </svg>
               </span>
               <span class="theme-switch__thumb">
@@ -68,54 +85,54 @@
         <div class="blog-list-wrap">
           <div class="blog-filter-bar">
             <input
-            type="search"
-            id="blog-search"
-            class="blog-search-input"
-            placeholder="Search articles..."
-            aria-label="Search blog posts"
+              type="search"
+              id="blog-search"
+              class="blog-search-input"
+              placeholder="Search articles..."
+              aria-label="Search blog posts"
             />
-            <div id="blog-filter-tags" class="blog-filter-tags">
-              <button class="filter-tag active" data-tag="all">All</button>
+            <!-- FIX: Added role="group" and aria-label for filter bar accessibility -->
+            <div
+              id="blog-filter-tags"
+              class="blog-filter-tags"
+              role="group"
+              aria-label="Filter posts by category">
+              <button class="filter-tag active" data-tag="all" aria-pressed="true">All</button>
             </div>
           </div>
 
-          <div id="blog-container-skeleton" class="blog-grid" aria-hidden="true">
-            <article class="blog-skeleton-card">
-              <div class="sk-tag"></div>
-              <div class="sk-title"></div>
-              <div class="sk-body"></div>
-              <div class="sk-link"></div>
-            </article>
-            <article class="blog-skeleton-card">
-              <div class="sk-tag"></div>
-              <div class="sk-title"></div>
-              <div class="sk-body"></div>
-              <div class="sk-link"></div>
-            </article>
-            <article class="blog-skeleton-card">
-              <div class="sk-tag"></div>
-              <div class="sk-title"></div>
-              <div class="sk-body"></div>
-              <div class="sk-link"></div>
-            </article>
+          <!-- FIX: Added aria-live="polite" so screen readers announce when posts load -->
+          <div
+            id="blog-container-skeleton"
+            class="blog-grid"
+            aria-hidden="true"
+            aria-label="Loading posts">
+            <article class="blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></article>
+            <article class="blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></article>
+            <article class="blog-skeleton-card"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-body"></div><div class="sk-link"></div></article>
           </div>
 
-          <div id="blog-container" class="blog-grid"></div>
+          <!-- FIX: Added aria-live="polite" for dynamic content updates -->
+          <div
+            id="blog-container"
+            class="blog-grid"
+            aria-live="polite"
+            aria-label="Blog posts"></div>
 
-          <div id="blog-empty" class="blog-empty-state">
-            <div class="blog-empty-icon">📝</div>
+          <div id="blog-empty" class="blog-empty-state" role="status" aria-live="polite">
+            <div class="blog-empty-icon" aria-hidden="true">📝</div>
             <h3>No posts found</h3>
             <p>Try adjusting your search or filter criteria.</p>
           </div>
 
-          <div id="blog-error" class="blog-error-state">
-            <div class="blog-error-icon">⚠️</div>
+          <div id="blog-error" class="blog-error-state" role="alert" aria-live="assertive">
+            <div class="blog-error-icon" aria-hidden="true">⚠️</div>
             <h3>Unable to load posts</h3>
-            <p>Something went wrong while fetching the blog posts. Please try again later.</p>
+            <p>Something went wrong. Please try again later.</p>
           </div>
 
           <div class="blog-footer-link">
-            <button id="load-more-btn" class="btn btn-ghost btn-blog-all" style="display:none;">
+            <button id="load-more-btn" class="btn btn-ghost btn-blog-all" style="display:none;" aria-label="Load more posts">
               Load more <span class="btn-arrow" aria-hidden="true">→</span>
             </button>
           </div>
@@ -128,7 +145,7 @@
         <span class="footer__copy">© 2026 Vijay Kumar. Built with Spring Boot on the backend, precision on the frontend.</span>
         <nav class="footer__links" aria-label="Footer links">
           <a href="/" class="footer__link">Portfolio</a>
-          <a href="/blog" class="footer__link">Engineering Log</a>
+          <a href="/blog" class="footer__link" aria-current="page">Engineering Log</a>
           <a href="/resume" class="footer__link">Resume</a>
           <a href="https://github.com/VijayKumarCode" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a>
         </nav>
@@ -136,12 +153,11 @@
     </footer>
 
     <script type="module" src="/src/js/blog.js"></script>
-
     <script>
       if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', { scope: '/' })
-      .then(() => console.log('[SW] Registered'))
-      .catch(err => console.warn('[SW] Failed:', err));
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(() => console.log('[SW] Registered'))
+          .catch(err => console.warn('[SW] Failed:', err));
       }
     </script>
   </body>

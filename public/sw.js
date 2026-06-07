@@ -1,202 +1,142 @@
 /**
  * SERVICE WORKER — Asset Path Resolution for Deep-Route SPA
- * 
- * This worker ensures that when the app is accessed via deep routes (e.g., /blog/hello-world),
- * static asset requests like /css/style.css are always served from the correct origin,
- * preventing MIME type mismatches and cache poisoning.
- * 
- * Key Features:
- * - Network-first for documents (HTML) to ensure fresh content
- * - Cache-first for assets (CSS, JS, images) for performance
- * - Validates MIME types to prevent cache poisoning
- * - Implements cache versioning with automatic cleanup
- * - Offline fallback for cached content
- * - Special handling for JSON data (posts)
+ *
+ * FIX APPLIED: Cache cleanup logic in 'activate' handler was inverted.
+ * Old code:
+ *   .filter(name => !name.startsWith(CACHE_VERSION) && !PREVIOUS_CACHES.includes(name))
+ * This kept PREVIOUS_CACHES alive forever (they're NOT the current version
+ * AND they ARE in PREVIOUS_CACHES → condition evaluates false → not deleted).
+ *
+ * Fixed code:
+ *   .filter(name => !name.startsWith(CACHE_VERSION))
+ * This correctly deletes everything that is NOT the current cache version.
  */
 
-const CACHE_VERSION = 'v3-portfolio-2026'; 
-const ASSET_CACHE = `${CACHE_VERSION}-assets`;
+const CACHE_VERSION = 'v4-portfolio-2026';
+const ASSET_CACHE   = `${CACHE_VERSION}-assets`;
 const DOCUMENT_CACHE = `${CACHE_VERSION}-docs`;
-const PREVIOUS_CACHES = ['v2-portfolio-2026-assets', 'v2-portfolio-2026-docs', 'v1-portfolio-2026-assets', 'v1-portfolio-2026-docs'];
 
 const ASSET_PATTERNS = [
   /\.css$/i,
   /\.js$/i,
   /\.(png|jpg|jpeg|gif|svg|webp)$/i,
   /\.(woff|woff2|ttf|eot)$/i,
-  /\.json$/i
 ];
 
-const DOCUMENT_PATTERNS = [
-  /\.html$/i,
-  /\.(index|blog|post|resume)$/i
-];
-
-/**
- * Determines if a URL is an asset request
- */
-function isAssetRequest(url) {
-  return ASSET_PATTERNS.some(pattern => pattern.test(url));
+function isAssetRequest(pathname) {
+  return ASSET_PATTERNS.some(p => p.test(pathname));
 }
 
-/**
- * Determines if a URL is a document request
- */
-function isDocumentRequest(url) {
-  return DOCUMENT_PATTERNS.some(pattern => pattern.test(url));
+function isDocumentRequest(pathname) {
+  return (
+    pathname === '/' ||
+    /\.(html)$/i.test(pathname) ||
+    /^\/(blog|resume|about)(\/[^.]*)?$/.test(pathname)
+  );
 }
 
-/**
- * Install: Set up caches
- */
+function isValidAssetResponse(pathname, contentType) {
+  if (pathname.endsWith('.css'))                    return contentType.includes('text/css');
+  if (pathname.endsWith('.js'))                     return contentType.includes('javascript');
+  if (/\.(png|jpg|jpeg|gif|svg|webp)$/i.test(pathname)) return contentType.includes('image');
+  if (/\.(woff|woff2|ttf|eot)$/i.test(pathname))   return contentType.includes('font') || contentType.includes('octet-stream');
+  return true;
+}
+
+/* ── Install ── */
 self.addEventListener('install', (event) => {
   event.waitUntil(
     Promise.all([
       caches.open(ASSET_CACHE),
-      caches.open(DOCUMENT_CACHE)
+      caches.open(DOCUMENT_CACHE),
     ]).then(() => self.skipWaiting())
   );
 });
 
-/**
- * Activate: Clean up old caches and claim clients
- */
+/* ── Activate: delete ALL caches that are not the current version ── */
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
         cacheNames
-          .filter((name) => !name.startsWith(CACHE_VERSION) && !PREVIOUS_CACHES.includes(name))
+          /* FIX: was !startsWith(CACHE_VERSION) && !PREVIOUS_CACHES.includes(name)
+             which kept old caches alive. Now we simply delete anything not current. */
+          .filter((name) => !name.startsWith(CACHE_VERSION))
           .map((name) => {
             console.log(`[SW] Deleting old cache: ${name}`);
             return caches.delete(name);
           })
-      );
-    }).then(() => {
-      console.log(`[SW] Activated with cache version: ${CACHE_VERSION}`);
+      )
+    ).then(() => {
+      console.log(`[SW] Active. Cache version: ${CACHE_VERSION}`);
       return self.clients.claim();
     })
   );
 });
 
-/**
- * Fetch: Intercept and validate asset responses
- */
+/* ── Fetch ── */
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Only intercept GET requests on same origin
-  if (request.method !== 'GET' || url.origin !== self.location.origin) {
-    return;
-  }
+  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  if (url.pathname.includes('sw.js')) return;
+  if (url.pathname.startsWith('/api/')) return; /* Never intercept API calls */
 
-  // Skip service worker scripts
-  if (url.pathname.includes('sw.js')) {
-    return;
-  }
-
-  // ─── CRITICAL CORRECTION LAYER: NETWORK-FIRST STRATEGY FOR DATA JSONS ───
+  /* JSON data: network-first, fall back to cache offline */
   if (url.pathname.endsWith('.json') || url.pathname.includes('/data/')) {
     event.respondWith(
       fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const responseToCache = response.clone();
-            caches.open(ASSET_CACHE).then((cache) => {
-              cache.put(request, responseToCache);
-            });
+        .then((res) => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(ASSET_CACHE).then((c) => c.put(request, clone));
           }
-          return response;
+          return res;
         })
-        .catch(() => caches.match(request)) // Fall back to cache ONLY if completely offline
+        .catch(() => caches.match(request))
     );
     return;
   }
 
- // Handle asset requests (CSS, JS, Images, Fonts) with cache-first and validation
+  /* Assets: cache-first with MIME type validation */
   if (isAssetRequest(url.pathname)) {
     event.respondWith(
-      caches.match(request).then((response) => {
-        if (response) {
-          return response;
-        }
-
-        return fetch(request)
-          .then((response) => {
-            if (response.ok) {
-              const contentType = response.headers.get('content-type') || '';
-              const isValidAsset = isValidAssetResponse(url.pathname, contentType);
-
-              if (isValidAsset) {
-                const responseToCache = response.clone();
-                caches.open(ASSET_CACHE).then((cache) => {
-                  cache.put(request, responseToCache);
-                });
-              } else {
-                console.warn(`[SW] Asset mime-type mismatch: ${url.pathname} returned ${contentType}`);
-              }
+      caches.match(request).then((cached) => {
+        if (cached) return cached;
+        return fetch(request).then((res) => {
+          if (res.ok) {
+            const ct = res.headers.get('content-type') || '';
+            if (isValidAssetResponse(url.pathname, ct)) {
+              const clone = res.clone();
+              caches.open(ASSET_CACHE).then((c) => c.put(request, clone));
+            } else {
+              console.warn(`[SW] MIME mismatch: ${url.pathname} → ${ct}`);
             }
-            return response;
-          })
-          .catch((err) => {
-            console.error(`[SW] Fetch failed for ${url.pathname}:`, err);
-            return new Response('', { status: 503, statusText: 'Service Unavailable' });
-          });
+          }
+          return res;
+        }).catch(() => new Response('', { status: 503 }));
       })
     );
     return;
   }
 
-  // Handle document requests (HTML) with network-first strategy
-  if (isDocumentRequest(url.pathname) || url.pathname === '/') {
+  /* Documents: network-first, fall back to cache */
+  if (isDocumentRequest(url.pathname)) {
     event.respondWith(
       fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            const responseToCache = response.clone();
-            caches.open(DOCUMENT_CACHE).then((cache) => {
-              cache.put(request, responseToCache);
-            });
+        .then((res) => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(DOCUMENT_CACHE).then((c) => c.put(request, clone));
           }
-          return response;
+          return res;
         })
-        .catch(() => {
-          return caches.match(request).then((response) => {
-            return response || new Response('Offline — cached page unavailable', { status: 503, statusText: 'Service Unavailable' });
-          });
-        })
+        .catch(() =>
+          caches.match(request).then(
+            (cached) => cached || new Response('Offline — cached page unavailable', { status: 503 })
+          )
+        )
     );
-    return;
   }
 });
-
-/**
- * Validates that asset responses have correct MIME types
- * Prevents MIME type mismatch errors (X-Content-Type-Options: nosniff)
- */
-function isValidAssetResponse(pathname, contentType) {
-  const isCss = pathname.endsWith('.css');
-  const isJs = pathname.endsWith('.js');
-  const isJson = pathname.endsWith('.json');
-  const isImage = /\.(png|jpg|jpeg|gif|svg|webp)$/i.test(pathname);
-  const isFont = /\.(woff|woff2|ttf|eot)$/i.test(pathname);
-
-  if (isCss) {
-    return contentType.includes('text/css');
-  }
-  if (isJs) {
-    return contentType.includes('javascript') || contentType.includes('application/javascript');
-  }
-  if (isJson) {
-    return contentType.includes('json');
-  }
-  if (isImage) {
-    return contentType.includes('image');
-  }
-  if (isFont) {
-    return contentType.includes('font') || contentType.includes('application/octet-stream');
-  }
-
-  return true; // Accept any other type
-}
