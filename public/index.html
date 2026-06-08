@@ -463,14 +463,35 @@
               </div>
 
               <div class="form-step" data-step="4">
-                <label for="cf-message" class="form-step-label">
+                <label for="cf-engagement" class="form-step-label">
                   <span class="form-step-number">04</span>
+                  <span class="form-step-question">What kind of opportunity is this?</span>
+                </label>
+                <div class="select-wrapper">
+                  <select id="cf-engagement" name="engagement_type" class="form-step-input form-step-select" required aria-describedby="cf-engagement-error">
+                    <option value="" disabled selected hidden>Select an option...</option>
+                    <option value="full-time">Full-Time Remote Role</option>
+                    <option value="contract">Contract / Freelance Project</option>
+                    <option value="open-source">Open-Source Collaboration</option>
+                    <option value="other">Just wanted to say hi!</option>
+                  </select>
+                </div>
+                <span class="field-error" id="cf-engagement-error" role="alert"></span>
+                <div class="form-step-actions">
+                  <button type="button" class="form-step-back" data-back="3">← Back</button>
+                  <button type="button" class="form-step-next" data-next="5">Continue <span class="form-step-next-arrow">→</span></button>
+                </div>
+              </div>
+
+              <div class="form-step" data-step="5">
+                <label for="cf-message" class="form-step-label">
+                  <span class="form-step-number">05</span>
                   <span class="form-step-question">Tell me more...</span>
                 </label>
                 <textarea id="cf-message" name="message" class="form-step-input form-step-textarea" placeholder="Role details, tech stack, team size, remote policy..." rows="4" required minlength="20" maxlength="5000" aria-describedby="cf-message-error"></textarea>
                 <span class="field-error" id="cf-message-error" role="alert"></span>
                 <div class="form-step-actions">
-                  <button type="button" class="form-step-back" data-back="3">← Back</button>
+                  <button type="button" class="form-step-back" data-back="4">← Back</button>
                   <button type="submit" class="form-step-submit" id="cf-submit-btn">
                     <span class="btn-text">Send Message</span>
                     <span class="btn-spinner" aria-hidden="true"></span>
@@ -487,8 +508,6 @@
                 <button type="button" class="form-step-reset" id="cf-reset-btn">Send Another</button>
               </div>
             </form>
-
-            <p class="form-powered">Delivered via <a href="https://resend.com" target="_blank" rel="noopener noreferrer">Resend</a> · Encrypted in transit</p>
           </div>
         </div>
       </div>
