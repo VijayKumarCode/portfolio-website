@@ -21,7 +21,7 @@ const ContactForm = {
   steps: [],
   fields: {},
   currentStep: 1,
-  totalSteps: 4,
+  totalSteps: 5, // Updated to match your 5 HTML form steps
 
   init() {
     this.form = document.getElementById('contact-form');
@@ -47,6 +47,10 @@ const ContactForm = {
       subject: {
         input: document.getElementById('cf-subject'),
         error: document.getElementById('cf-subject-error')
+      },
+      engagement: { // Track engagement type selections
+        input: document.getElementById('cf-engagement'),
+        error: document.getElementById('cf-engagement-error')
       },
       message: {
         input: document.getElementById('cf-message'),
@@ -100,8 +104,9 @@ const ContactForm = {
         }
       });
 
-      // Clear errors on input
-      input.addEventListener('input', () => {
+      // Clear errors on change/input
+      const eventType = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventType, () => {
         this.clearFieldError(fieldGroup);
       });
     });
@@ -125,7 +130,7 @@ const ContactForm = {
       stepEl.classList.toggle('active', isActive);
       if (isActive) {
         // Accessibility: Focus first input element in the active step
-        const input = stepEl.querySelector('input, textarea');
+        const input = stepEl.querySelector('input, textarea, select');
         input?.focus();
       }
     });
@@ -150,6 +155,8 @@ const ContactForm = {
     } else if (this.currentStep === 3) {
       isValid = this.validateField('subject');
     } else if (this.currentStep === 4) {
+      isValid = this.validateField('engagement');
+    } else if (this.currentStep === 5) {
       isValid = this.validateField('message');
     }
 
@@ -158,7 +165,7 @@ const ContactForm = {
 
   validateField(fieldName) {
     const fieldGroup = this.fields[fieldName];
-    if (!fieldGroup) return true;
+    if (!fieldGroup || !fieldGroup.input) return true;
 
     const value = fieldGroup.input.value.trim();
     let error = '';
@@ -231,11 +238,12 @@ const ContactForm = {
     });
 
     if (!isValid) {
-      // Go to first invalid step
+      // Route flow back to first found broken node
       if (!this.validateField('name')) this.goToStep(1);
       else if (!this.validateField('email')) this.goToStep(2);
       else if (!this.validateField('subject')) this.goToStep(3);
-      else if (!this.validateField('message')) this.goToStep(4);
+      else if (!this.validateField('engagement')) this.goToStep(4);
+      else if (!this.validateField('message')) this.goToStep(5);
       return;
     }
 
@@ -243,6 +251,7 @@ const ContactForm = {
       name: sanitizeInput(this.fields.name.input.value.trim()),
       email: sanitizeInput(this.fields.email.input.value.trim()),
       subject: sanitizeInput(this.fields.subject.input.value.trim()),
+      engagement_type: sanitizeInput(this.fields.engagement.input.value.trim()),
       message: sanitizeInput(this.fields.message.input.value.trim())
     };
 
