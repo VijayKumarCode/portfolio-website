@@ -60,7 +60,7 @@ const ContactForm = {
   steps: [],
   fields: {},
   currentStep: 1,
-  totalSteps: 5, // Synced to exactly match the 5 operational steps in index.html
+  totalSteps: 5, // Fully synced with the 5 operational HTML wizard containers
 
   init() {
     this.form = document.getElementById('contact-form');
@@ -137,6 +137,12 @@ const ContactForm = {
             this.form.requestSubmit();
           }
         }
+      });
+
+      // Clear structural errors immediately upon user correction
+      const eventType = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventType, () => {
+        this.clearFieldError(fieldGroup);
       });
     });
   },
