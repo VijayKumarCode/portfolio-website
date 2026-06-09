@@ -421,15 +421,15 @@
             </div>
 
             <form id="contact-form" 
-              action="https://formspree.io/f/mojzdpln" 
-              method="POST" 
-              class="contact-form-panel" 
-              novalidate 
-              aria-label="Interactive Contact Request Wizard">
+                  action="https://formspree.io/f/mojzdpln" 
+                  method="POST" 
+                  class="contact-form-panel" 
+                  novalidate 
+                  aria-label="Interactive Contact Request Wizard">
               
-              <div class="form-group honeypot" aria-hidden="true">
+              <div class="form-group honeypot" style="position: absolute; left: -9999px; top: -9999px; display: none !important; visibility: hidden;" aria-hidden="true">
                 <label for="website">Website</label>
-                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="new-password">
               </div>
 
               <div class="form-step active" data-step="1">
@@ -477,7 +477,8 @@
                   <select id="cf-engagement" name="engagement_type" class="form-step-input form-step-select" required aria-describedby="cf-engagement-error">
                     <option value="" disabled selected hidden>Select an option...</option>
                     <option value="full-time-remote">Full-Time Remote Role</option>
-                    <option value="full-time-onsite">Full-Time On-Site Role</option> <option value="contract">Contract / Freelance Project</option>
+                    <option value="full-time-onsite">Full-Time On-Site Role</option> 
+                    <option value="contract">Contract / Freelance Project</option>
                     <option value="open-source">Open-Source Collaboration</option>
                     <option value="other">Just wanted to say hi!</option>
                   </select>
@@ -534,13 +535,14 @@
 
   <button id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
 
-  <script type="module" src="/src/js/script.js"></script>
-  <script type="module" src="/src/js/contact.js"></script>
-  <script type="module" src="/src/js/home-blog.js"></script>
+  <script type="module" src="/src/js/script.js?v=1.0.1"></script>
+  <script type="module" src="/src/js/contact.js?v=1.0.1"></script>
+  <script type="module" src="/src/js/home-blog.js?v=1.0.1"></script>
 
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+      // Adding a version argument here forces the browser to check for a new service worker file immediately
+      navigator.serviceWorker.register('/sw.js?v=1.0.1', { scope: '/' })
         .then(() => console.log('[SW] Registered'))
         .catch((err) => console.warn('[SW] Failed:', err));
     }
