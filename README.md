@@ -175,21 +175,21 @@ Automated Continuous Integration via Vercel
 
     [ ] Developer Utilities Sandbox: Deploy an offline-first visual interface featuring JSON sanitizers, epoch string calculators, and bitwise layout mapping tables.
 
-🧑‍💻 About the Developer
-
+## 🧑‍💻 About the Developer
+```
 Vijay Kumar — Aspiring Software Engineer specializing in scalable application logic, system design paradigms, and performant backend development.
 
-    Primary Engineering Focus: Java, Spring Boot, Data Structures & Algorithms (DSA), High-Performance Computing, and Distributed Services.
+* **Primary Engineering Focus:** Java, Spring Boot, Data Structures & Algorithms (DSA), High-Performance Computing, and Distributed Services.
+* **Core Active Engine:** Currently designing and maintaining **Nexus**, an independent real-time multiplayer gaming platform implementing high-concurrency WebSocket channels, STOMP networks, and transactional database schemas.
 
-    Core Active Engine: Currently designing and maintaining Nexus, an independent real-time multiplayer gaming platform implementing high-concurrency WebSocket channels, STOMP networks, and transactional database schemas.
-
-Interface Platform	Secure Resource Access Endpoint
-Branding Hub	vijaykumarcode.space
-Source Repositories	@VijayKumarCode
-Professional Network	linkedin.com/in/vijaykumarcode
-Social Channel	@VijayKumarCode
-Developer Communications	vkumar.kumar31@gmail.com
-
+| Interface Platform | Secure Resource Access Endpoint |
+| :--- | :--- |
+| **Branding Hub** | [vijaykumarcode.space](https://vijaykumarcode.space) |
+| **Source Repositories** | [@VijayKumarCode](https://github.com/VijayKumarCode) |
+| **Professional Network** | [linkedin.com/in/vijaykumarcode](https://linkedin.com/in/vijaykumarcode) |
+| **Social Channel** | [@VijayKumarCode](https://x.com/VijayKumarCode) |
+| **Developer Communications** | <vkumar.kumar31@gmail.com> |
+```
 License
 
 This repository is open-source software licensed under the terms of the MIT License.
