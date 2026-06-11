@@ -15,7 +15,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- INLINE THEME ENGINE: Prevents Flash of Unstyled Content (FOUC) -->
     <script>
       (function () {
       const savedTheme = localStorage.getItem('portfolio-theme');
@@ -617,13 +616,11 @@
           </a>
         </div>
 
-        <!-- FIXED: Layout asymmetry grouped naturally to the right -->
         <div class="nav-right">
           <a href="blog.html" class="nav-btn" aria-label="Go to Engineering Log">
             <span>Engineering Log</span>
           </a>
 
-          <!-- UPGRADE: Segmented Mechanical sliding toggle track container -->
           <button id="theme-toggle" class="theme-track" aria-label="Toggle dark/light theme" title="Toggle theme">
             <span class="theme-thumb" aria-hidden="true"></span>
 
@@ -642,7 +639,6 @@
             </div>
 
             <div class="track-icon-box icon-box-sparkle">
-              <!-- Sleek, solid geometry 4-point minimalist premium star -->
               <svg class="track-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 3c0 4.5 4.5 9 9 9-4.5 0-9 4.5-9 9 0-4.5-4.5-9-9-9 4.5 0 9-4.5 9-9z" fill="currentColor"/>
               </svg>
@@ -793,6 +789,29 @@
 
           <article class="project">
             <div class="project-header">
+              <div class="project-name">Portfolio Website &mdash; Engineering Log</div>
+              <div class="project-links">
+                <span class="project-link live-badge" aria-label="Live deployment">Live</span>
+                <a href="https://vijaykumarcode.space" class="project-link" target="_blank" rel="noopener noreferrer">vijaykumarcode.space</a>
+                <a href="https://github.com/VijayKumarCode/portfolio-website" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
+            </div>
+            <div class="project-stack">HTML5 &middot; CSS3 &middot; Vanilla JavaScript &middot; PWA &middot; Cloudflare Turnstile &middot; Formspree &middot; Vercel</div>
+            <ul class="bullets">
+              <li>
+                <strong>Vanilla Core Design:</strong> Engineered a lightweight developer branding hub and automated Markdown-to-DOM personal blog using optimized web-standards without framework load cycles.
+              </li>
+              <li>
+                <strong>Serverless Decentralization:</strong> Purged legacy state endpoints; routed user interaction processing through a decoupled stack using **Cloudflare Turnstile** cryptographic tokens and a **Formspree** delivery workflow.
+              </li>
+              <li>
+                <strong>Edge Optimization:</strong> Implemented responsive structural media queries and custom PWA caching matrices configured for zero Cumulative Layout Shift (CLS) on the **Vercel CDN Edge Network**.
+              </li>
+            </ul>
+          </article>
+
+          <article class="project">
+            <div class="project-header">
               <div class="project-name">TicTacToe &mdash; Network Multiplayer Engine</div>
               <div class="project-links">
                 <a href="https://github.com/VijayKumarCode/TicTacToe_java" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -824,28 +843,6 @@
               <li>
                 Implemented Trees, Graphs, Linked Lists, and sorting algorithms
                 with documented time and space complexity analysis per solution
-              </li>
-            </ul>
-          </article>
-
-          <article class="project">
-            <div class="project-header">
-              <div class="project-name">Portfolio Website &mdash; Engineering Log</div>
-              <div class="project-links">
-                <span class="project-link live-badge" aria-label="Live deployment">Live</span>
-                <a href="https://vijaykumarcode.space" class="project-link" target="_blank" rel="noopener noreferrer">vijaykumarcode.space</a>
-                <a href="https://github.com/VijayKumarCode/portfolio-website" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-              </div>
-            </div>
-            <div class="project-stack">HTML &middot; CSS &middot; JavaScript &middot; Spring Boot &middot; Vercel &middot; Render</div>
-            <ul class="bullets">
-              <li>
-                Built and deployed a full portfolio with blog system, contact form,
-                and responsive design using vanilla HTML/CSS/JS &mdash; no frameworks
-              </li>
-              <li>
-                Backend contact API on Spring Boot with Brevo email integration,
-                deployed on Render with environment-driven configuration
               </li>
             </ul>
           </article>
@@ -882,7 +879,6 @@
 
     </div>
 
-    <!-- RUNTIME TRACK DOM INTERACTION INTERLOCK -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
       const themeToggleBtn = document.getElementById('theme-toggle');
