@@ -259,6 +259,20 @@ const ContactForm = {
 
     if (formHasErrors) return;
 
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 💡 PINPOINT INJECTION 1: TURNSTILE VERIFICATION GATE
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    const turnstileToken = this.form.querySelector('[name="cf-turnstile-response"]')?.value;
+    if (!turnstileToken) {
+      if (this.fields.message) {
+        this.showFieldError(
+          this.fields.message, 
+          'Security verification is finalizing. Please wait a brief moment and click send again.'
+        );
+      }
+      return;
+    }
+
     if (this.fields.honeypot && this.fields.honeypot.value) {
       this.showSuccessState();
       return;
@@ -267,12 +281,16 @@ const ContactForm = {
     this.setLoading(true);
     const targetEndpoint = this.form.getAttribute('action');
 
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 💡 PINPOINT INJECTION 2: APPEND SECURITY TOKEN TO JSON PAYLOAD
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     const payload = {
       name: sanitizeInput(this.fields.name.input.value),
       email: this.fields.email.input.value.trim(),
       subject: sanitizeInput(this.fields.subject.input.value),
       engagement_type: this.fields.engagement.input.value,
-      message: sanitizeInput(this.fields.message.input.value)
+      message: sanitizeInput(this.fields.message.input.value),
+      'cf-turnstile-response': turnstileToken
     };
 
     try {
@@ -287,6 +305,11 @@ const ContactForm = {
 
       if (response.ok) {
         this.showSuccessState();
+        
+        // Auto-reset runtime token context upon successful transmission
+        if (typeof turnstile !== 'undefined') {
+          turnstile.reset();
+        }
       } else {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `Server responded with status code: ${response.status}`);
@@ -316,13 +339,21 @@ const ContactForm = {
     this.goToStep('success');
   },
 
-  handleReset() {
+handleReset() {
     this.form.reset();
+    
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // 💡 PINPOINT INJECTION 3: RESET WIDGET SESSION
+    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    if (typeof turnstile !== 'undefined') {
+      turnstile.reset();
+    }
+
     Object.values(this.fields).forEach(fieldGroup => {
-      if (fieldGroup.input) this.clearFieldError(fieldGroup);
+      if (fieldGroup && fieldGroup.input) this.clearFieldError(fieldGroup);
     });
-    this.goToStep(1);
-  }
-};
+      this.goToStep(1);
+    }
+  };
 
 document.addEventListener('DOMContentLoaded', () => ContactForm.init());
